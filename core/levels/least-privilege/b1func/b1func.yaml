@@ -2,16 +2,11 @@ imports:
 - path: service_account.jinja
 - path: cloud_function.jinja
 - path: iam_policy.jinja
-- path: bucket_acl.jinja
+
 
 resources:
 - name: b1-access
   type: service_account.jinja
-- name: b1-bucket
-  type: bucket_acl.jinja
-  properties:
-    nonce: {{ nonce }}
-    predefined_acl: private
 - name: b1-func
   type: cloud_function.jinja
   properties:

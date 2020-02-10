@@ -16,7 +16,7 @@ FUNCTION_LOCATION = 'us-central1'
 def create():
     # Create randomized bucket name to avoid namespace conflict
     nonce = str(random.randint(100000000000, 999999999999))
-    bucket_name = f'{RESOURCE_PREFIX}-bucket-{nonce}'
+    
 
     # Set role of default cloud function account
     credentials, project_id = google.auth.default()
@@ -44,12 +44,8 @@ def create():
     iam_api.projects().serviceAccounts().setIamPolicy(
         resource=f'projects/{project_id}/serviceAccounts/b1-func-{nonce}-sa@{project_id}.iam.gserviceaccount.com', body=policy_body).execute()
 
-    # Insert secret into bucket
-    storage_client = storage.Client()
-    bucket = storage_client.get_bucket(bucket_name)
-    secret_blob = storage.Blob('secret.txt', bucket)
-    secret = levels.make_secret(LEVEL_PATH)
-    secret_blob.upload_from_string(secret)
+    
+   
 
     # Create service account key file
     sa_key = iam.generate_service_account_key(f'{RESOURCE_PREFIX}-access')
