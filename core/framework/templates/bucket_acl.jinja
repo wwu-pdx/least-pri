@@ -1,0 +1,24 @@
+{% set BUCKET_NAME = env['name'] +  "-" + properties["nonce"]|string %}
+
+resources:
+- type: storage.v1.bucket
+  name: {{ BUCKET_NAME }}
+  properties:
+    {% if properties['predefined_acl'] %}
+    predefinedAcl: {{ properties['predefined_acl'] }}
+    {% elif properties['acl_entries'] %}
+    acl: 
+    {% for acl_entry in properties['acl_entries'] %}
+    - bucket: {{ BUCKET_NAME }}
+      entity: user-$(ref.{{ acl_entry['service_account_id'] }}.email)
+      role: {{ acl_entry['role'] }}
+    {% endfor %}
+    defaultObjectAcl:
+    {% for acl_entry in properties['acl_entries'] %}
+    - entity: user-$(ref.{{ acl_entry['service_account_id'] }}.email)
+      role: {{ acl_entry['role'] }}
+    {% endfor %}
+    {% endif %}
+    projection: full
+    location: US
+    storageClass: STANDARD
