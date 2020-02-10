@@ -5,14 +5,14 @@ imports:
 - path: bucket_acl.jinja
 
 resources:
-- name: a5-access
+- name: b1-access
   type: service_account.jinja
-- name: a5-bucket
+- name: b1-bucket
   type: bucket_acl.jinja
   properties:
     nonce: {{ nonce }}
     predefined_acl: private
-- name: a5-func
+- name: b1-func
   type: cloud_function.jinja
   properties:
     region: us-central1
@@ -21,12 +21,12 @@ resources:
     upload_url: {{ func_upload_url }}
     policyBindings:
     - role: roles/cloudfunctions.invoker
-      service_account_id: a5-access
+      service_account_id: b1-access
 - name: iam_policy
   type: iam_policy.jinja
   properties:
     bindings:
-    - service_account_id: a5-access
+    - service_account_id: b1-access
       role:
         name: custom
         custom_nonce: {{ nonce }}
@@ -36,7 +36,7 @@ resources:
         - cloudfunctions.functions.sourceCodeSet
         - cloudfunctions.functions.update
         - cloudfunctions.operations.get
-    - service_account_id: a5-func-{{ nonce }}-sa
+    - service_account_id: b1-func-{{ nonce }}-sa
       role:
         name: custom
         custom_nonce: {{ nonce }}

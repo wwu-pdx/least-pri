@@ -8,8 +8,8 @@ from google.cloud import storage
 from core.framework import levels
 from core.framework.cloudhelpers import deployments, iam, cloudfunctions
 
-LEVEL_PATH = 'thunder/a5power'
-RESOURCE_PREFIX = 'a5'
+LEVEL_PATH = 'least-privilege/b1func'
+RESOURCE_PREFIX = 'b1'
 FUNCTION_LOCATION = 'us-central1'
 
 
@@ -30,8 +30,7 @@ def create():
     template_files = [
         'core/framework/templates/service_account.jinja',
         'core/framework/templates/cloud_function.jinja',
-        'core/framework/templates/iam_policy.jinja',
-        'core/framework/templates/bucket_acl.jinja']
+        'core/framework/templates/iam_policy.jinja',]
     deployments.insert(LEVEL_PATH, template_files=template_files,
                        config_template_args=config_template_args)
 
@@ -40,10 +39,10 @@ def create():
     iam_api = discovery.build('iam', 'v1', credentials=credentials)
     policy_body = {"policy": {
         "bindings": [{
-            "members": [f"serviceAccount:a5-access@{project_id}.iam.gserviceaccount.com"],
+            "members": [f"serviceAccount:b1-access@{project_id}.iam.gserviceaccount.com"],
             "role": "roles/iam.serviceAccountUser"}]}}
     iam_api.projects().serviceAccounts().setIamPolicy(
-        resource=f'projects/{project_id}/serviceAccounts/a5-func-{nonce}-sa@{project_id}.iam.gserviceaccount.com', body=policy_body).execute()
+        resource=f'projects/{project_id}/serviceAccounts/b1-func-{nonce}-sa@{project_id}.iam.gserviceaccount.com', body=policy_body).execute()
 
     # Insert secret into bucket
     storage_client = storage.Client()
@@ -57,7 +56,7 @@ def create():
     print(f'Level creation complete for: {LEVEL_PATH}')
     start_message = (
         f'Use the compromised service account credentials stored in {RESOURCE_PREFIX}-access.json to find the secret, '
-        'which is located in a file called secret.txt in a private bucket on the project.')
+        '')
     levels.write_start_info(
         LEVEL_PATH, start_message, file_name=f'{RESOURCE_PREFIX}-access.json', file_content=sa_key)
     print(
