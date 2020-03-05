@@ -1,17 +1,17 @@
-def main(requrest):
+import requests
+def main(request):
 	from googleapiclient import discovery
 	import google.oauth2.service_account
 	from google.oauth2.credentials import Credentials
 	import os
+	import lst_pri as lst_pri
 	
-	metadata_url = 'http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/token'
-	token = requests.get(metadata_url, headers={'Metadata-Flavor': 'Google'}).json()['access_token']
-
+	
 
 	# If set to true, credentials will be created using ACCESS_TOKEN instead of SERVICE_ACCOUNT_KEY_FILE
-	USE_ACCESS_TOKEN = True
+	USE_ACCESS_TOKEN = False
 	# Only one of the following need to be set:
-	SERVICE_ACCOUNT_KEY_FILE = 'path/to/key/file'
+	SERVICE_ACCOUNT_KEY_FILE = 'start/c1-access.json'
 	ACCESS_TOKEN = token
 	# Set the project ID
 	PROJECT_ID = 'thunder-ctf-257116'
@@ -26,9 +26,9 @@ def main(requrest):
 			SERVICE_ACCOUNT_KEY_FILE)
 
 	# Change current working directory to top level of repo
-	os.chdir(os.path.dirname(os.getcwd()+'/'+os.path.dirname(__file__)))
+	# os.chdir(os.path.dirname(os.getcwd()+'/'+os.path.dirname(__file__)))
 	# Load testable permissions into list
-	with open('scripts/testable-permissions.txt') as f:
+	with open('function/testable-permissions.txt') as f:
 		testable_permissions = f.read().split('\n')
 	# Split testable permissions list into lists of 100 items each
 	chunked_permissions = (
@@ -47,4 +47,8 @@ def main(requrest):
 		if 'permissions' in response:
 			given_permissions.extend(response['permissions'])
 
-	print(given_permissions)
+	diff=list(set(given_permissions) - set(lst_pri))
+	if len(diff)==0:	
+		return "<p>congratulations!</p>"
+	else:
+		return "<p>Not least privilege, please try again! "+given_permissions+"</p>"

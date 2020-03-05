@@ -1,0 +1,36 @@
+<h3>Setup:</h3>
+<p>Your virtual environment must be active to use thunder.py:</p>
+<pre>source ../env-tctf/bin/activate</pre>
+<pre>python3 thunder.py create leastprivilege/b1func</pre>
+<p>Activate the service account given to you. You MUST do this, or the level will not work as intended.</p>
+<pre>gcloud auth activate-service-account --key-file=start/b1-access.json</pre>
+<h3>Intro:</h3>
+<p>Use the compromised service account credentials given to you and your owner's account to find the least-privilege</p>
+---
+<p>Test the permissions of the given credentials using the test-permissions.py script.</p>
+---
+<p>The credentials have the permission cloudfunctions.functions.list</p>
+---
+<p>List the cloud functions in the project:</p>
+<pre>gcloud functions list</pre>
+---
+<p>Try calling the function using the service account's access token:</p>
+<pre>curl https://[location]-[project-id].cloudfunctions.net/[function-name] -H "Authorization: Bearer $(gcloud auth print-identity-token)"</pre>
+---
+<p>The function print out the permissions associated with service account.</p>
+---
+<p>Switch to your owner's account</p>
+<pre>gcloud config set account [ACCOUNT]</pre>
+---
+<p>Find out service account</p>
+<pre>gcloud auth list</pre>
+---
+<p>Change iam policy binding</p>
+
+<pre>gcloud projects remove-iam-policy-binding PROJECT_ID --member=SERVICE_ACCOUNT --role=ROLE</pre>
+---
+
+<p>Reactivate service account and call function. Repeat the process until it prints out 'Congratulations'</p>
+
+---
+<p>Level writeup will be available soon</p>

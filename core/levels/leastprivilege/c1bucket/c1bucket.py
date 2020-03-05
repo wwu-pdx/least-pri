@@ -8,8 +8,8 @@ from google.cloud import storage
 from core.framework import levels
 from core.framework.cloudhelpers import deployments, iam, cloudfunctions
 
-LEVEL_PATH = 'leastprivilege/b1func'
-RESOURCE_PREFIX = 'b1'
+LEVEL_PATH = 'leastprivilege/c1func'
+RESOURCE_PREFIX = 'c1'
 FUNCTION_LOCATION = 'us-central1'
 
 
@@ -30,7 +30,7 @@ def create():
     template_files = [
         'core/framework/templates/service_account.jinja',
         'core/framework/templates/cloud_function.jinja',
-        'core/framework/templates/iam_policy.jinja',]
+        'core/framework/templates/iam_policy.jinja','core/framework/templates/bucket_acl.jinja']
     deployments.insert(LEVEL_PATH, template_files=template_files,
                        config_template_args=config_template_args)
 
@@ -39,10 +39,10 @@ def create():
     iam_api = discovery.build('iam', 'v1', credentials=credentials)
     policy_body = {"policy": {
         "bindings": [{
-            "members": [f"serviceAccount:b1-access@{project_id}.iam.gserviceaccount.com"],
+            "members": [f"serviceAccount:c1-access@{project_id}.iam.gserviceaccount.com"],
             "role": "roles/iam.serviceAccountUser"}]}}
     iam_api.projects().serviceAccounts().setIamPolicy(
-        resource=f'projects/{project_id}/serviceAccounts/b1-func-{nonce}-sa@{project_id}.iam.gserviceaccount.com', body=policy_body).execute()
+        resource=f'projects/{project_id}/serviceAccounts/c1-func-{nonce}-sa@{project_id}.iam.gserviceaccount.com', body=policy_body).execute()
 
     
    
