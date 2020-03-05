@@ -8,7 +8,7 @@ from google.cloud import storage
 from core.framework import levels
 from core.framework.cloudhelpers import deployments, iam, cloudfunctions
 
-LEVEL_PATH = 'leastprivilege/c1func'
+LEVEL_PATH = 'leastprivilege/c1bucket'
 RESOURCE_PREFIX = 'c1'
 FUNCTION_LOCATION = 'us-central1'
 
