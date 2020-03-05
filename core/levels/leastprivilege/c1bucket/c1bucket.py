@@ -16,6 +16,7 @@ FUNCTION_LOCATION = 'us-central1'
 def create():
     # Create randomized bucket name to avoid namespace conflict
     nonce = str(random.randint(100000000000, 999999999999))
+    bucket_name = f'{RESOURCE_PREFIX}-bucket-{nonce}'
     
 
     # Set role of default cloud function account
