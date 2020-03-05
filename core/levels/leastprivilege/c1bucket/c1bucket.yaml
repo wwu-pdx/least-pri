@@ -34,8 +34,8 @@ resources:
         custom_nonce: {{ nonce }}
         permissions:
         - storage.buckets.list
-	- storage.buckets.get
-	- cloudfunctions.functions.list
+        - storage.buckets.get
+        - cloudfunctions.functions.list
     - service_account_id: c1-func-{{ nonce }}-sa
       role:
         name: custom
