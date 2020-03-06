@@ -5,6 +5,8 @@ def main(request):
 	from google.oauth2.credentials import Credentials
 	import os
 	import lst_pri as lst_pri
+
+        return "Hello World!\n"
 	
 	
 
