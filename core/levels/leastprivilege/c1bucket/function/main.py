@@ -1,4 +1,4 @@
-import requests
+
 def main(request):
 	from googleapiclient import discovery
 	import google.oauth2.service_account
