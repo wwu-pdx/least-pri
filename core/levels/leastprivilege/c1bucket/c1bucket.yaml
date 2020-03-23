@@ -21,9 +21,7 @@ resources:
     nonce: {{ nonce }}
     entry_point: main
     upload_url: {{ func_upload_url }}
-    policyBindings:
-    - role: roles/cloudfunctions.invoker
-      service_account_id: c1-access
+    
 - name: iam_policy
   type: iam_policy.jinja
   properties:
