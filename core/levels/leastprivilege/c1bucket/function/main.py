@@ -5,27 +5,20 @@ def main(request):
 	from google.oauth2.credentials import Credentials
 	import os
 	import lst_pri as lst_pri
-
+	import google.auth
+	credentials, project_id = google.auth.default()
 	
 	
-	
-
-	# If set to true, credentials will be created using ACCESS_TOKEN instead of SERVICE_ACCOUNT_KEY_FILE
-	USE_ACCESS_TOKEN = False
 	# Only one of the following need to be set:
 	SERVICE_ACCOUNT_KEY_FILE = 'start/c1-access.json'
-	ACCESS_TOKEN = token
+	
+	
 	# Set the project ID
-	PROJECT_ID = 'thunder-ctf-257116'
+	PROJECT_ID = project_id
 
 
-	if USE_ACCESS_TOKEN:
-		# Create credentials using access token
-		credentials = Credentials(token=ACCESS_TOKEN)
-	else:
-		# Create credentials using service account key file
-		credentials = google.oauth2.service_account.Credentials.from_service_account_file(
-			SERVICE_ACCOUNT_KEY_FILE)
+	credentials = google.oauth2.service_account.Credentials.from_service_account_file(
+		SERVICE_ACCOUNT_KEY_FILE)
 
 	# Change current working directory to top level of repo
 	# os.chdir(os.path.dirname(os.getcwd()+'/'+os.path.dirname(__file__)))
