@@ -10,15 +10,14 @@ def main(request):
 	
 	
 	# Only one of the following need to be set:
-	SERVICE_ACCOUNT_KEY_FILE = 'start/c1-access.json'
-	
+	SERVICE_ACCOUNT_KEY_FILE = os.getcwd()+'/start/c1-access.json'
+
 	
 	# Set the project ID
-	PROJECT_ID = project_id
+	PROJECT_ID = 'thunder-ctf-257116'
 
 
-	credentials = google.oauth2.service_account.Credentials.from_service_account_file(
-		SERVICE_ACCOUNT_KEY_FILE)
+	credentials = google.oauth2.service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_KEY_FILE)
 
 	# Change current working directory to top level of repo
 	# os.chdir(os.path.dirname(os.getcwd()+'/'+os.path.dirname(__file__)))
