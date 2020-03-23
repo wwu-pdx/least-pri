@@ -36,14 +36,7 @@ def create():
                        config_template_args=config_template_args)
 
     print("Level setup started for: " + LEVEL_PATH)
-    # Allow player to use cloud function's service account
-    iam_api = discovery.build('iam', 'v1', credentials=credentials)
-    policy_body = {"policy": {
-        "bindings": [{
-            "members": [f"serviceAccount:c1-access@{project_id}.iam.gserviceaccount.com"],
-            "role": "roles/iam.serviceAccountUser"}]}}
-    iam_api.projects().serviceAccounts().setIamPolicy(
-        resource=f'projects/{project_id}/serviceAccounts/c1-func-{nonce}-sa@{project_id}.iam.gserviceaccount.com', body=policy_body).execute()
+    
 
     
     # Insert secret into bucket
