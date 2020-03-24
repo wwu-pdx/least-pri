@@ -43,7 +43,7 @@ def main(request):
 	re='\n'.join(str(x) for x in given_permissions)
 	
 
-	diff=list(set(given_permissions) - set(lst_pri))
+
 	if set(given_permissions) == set(lst_pri):
 		return "<p>congratulations!</p>"
 	else:
