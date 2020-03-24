@@ -26,7 +26,7 @@ def create():
     
     print("Level initialization finished for: " + LEVEL_PATH)
     # Insert deployment
-    config_template_func = {'nonce': nonce, 'func_upload_url': func_upload_url}
+    config_template_args = {'nonce': nonce, 'func_upload_url': func_upload_url}
 
     template_files = [
         'core/framework/templates/service_account.jinja',
