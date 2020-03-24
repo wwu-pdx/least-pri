@@ -78,11 +78,14 @@ def create():
     print(f'Level creation complete for: {LEVEL_PATH}')
     
     start_message = (
-        f'List bucket content to find the secret')
+        f'Find the minimum privilage to list a bucket')
     levels.write_start_info(
         LEVEL_PATH, start_message, file_name='', file_content='')
+    print(f'use cmd below to update deploy/update function')
     print(f'gcloud functions deploy c1-func-access-{nonce} --source=core/levels/leastprivilege/c1bucket/functionaccess')
     print(f'gcloud functions deploy c1-func-edit-{nonce} --source=core/levels/leastprivilege/c1bucket/functionedit')
+    print(f'use code below to edit iam permissions')
+    print(f'gcloud iam roles update c1_access_role_{nonce} --project={project_id} --permissions=permission1,permission2')
     
     
    

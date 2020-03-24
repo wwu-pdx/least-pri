@@ -48,6 +48,6 @@ def main(request):
 
 	
 	if ''.join(given_permissions) == ''.join(lst_pri):
-		return "Congratulations!"
+		return "Congratulations!\n Your current testable permissions are:\n ["+re+"]"
 	else:
-		return "Not least privilege, please try again!\n Your current permissions are:\n ["+re+"]"
+		return "Not least privilege, please try again!\n Your current testable permissions are:\n ["+re+"]"
