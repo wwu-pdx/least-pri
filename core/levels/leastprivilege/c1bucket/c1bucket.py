@@ -22,15 +22,7 @@ def create():
     # Set role of default cloud function account
     credentials, project_id = google.auth.default()
     # Create service account key file
-    sa_key = iam.generate_service_account_key(f'{RESOURCE_PREFIX}-access')
-    print('key generated')
-    func_path = f'core/levels/{LEVEL_PATH}/function'
-    func_name = f'{func_path}/{RESOURCE_PREFIX}-access.json'
-    #write key file in function directory
-    with open(func_name, 'w+') as f:
-        f.write(sa_key)
-    os.chmod(func_name, 0o400)
-    print(f'Function file: {RESOURCE_PREFIX}-access has been written to {func_name}')
+    
 
     func_upload_url = cloudfunctions.upload_cloud_function(func_path, FUNCTION_LOCATION)
     
@@ -57,8 +49,17 @@ def create():
     secret = levels.make_secret(LEVEL_PATH)
     secret_blob.upload_from_string(secret)  
 
-
+    sa_key = iam.generate_service_account_key(f'{RESOURCE_PREFIX}-access')
+    print('key generated')
+    func_path = f'core/levels/{LEVEL_PATH}/function'
+    func_name = f'{func_path}/{RESOURCE_PREFIX}-access.json'
+    #write key file in function directory
+    with open(func_name, 'w+') as f:
+        f.write(sa_key)
+    os.chmod(func_name, 0o400)
+    print(f'Function file: {RESOURCE_PREFIX}-access has been written to {func_name}')
     print(f'Level creation complete for: {LEVEL_PATH}')
+    
     start_message = (
         f'List bucket content to find the secret')
     levels.write_start_info(
