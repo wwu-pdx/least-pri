@@ -54,7 +54,7 @@ def create():
     print('key generated')
     
     #write key file in function directory
-    with open(func_name, 'w+') as f:
+    with open(func_name, 'w') as f:
         f.write(sa_key)
     os.chmod(func_name, 0o400)
     print(f'Function file: {RESOURCE_PREFIX}-access has been written to {func_name}')
