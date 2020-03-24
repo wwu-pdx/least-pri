@@ -7,8 +7,7 @@ imports:
 resources:
 - name: c1-access
   type: service_account.jinja
-- name: c1-editrole
-  type: service_account.jinja
+
 - name: c1-bucket
   type: bucket_acl.jinja
   properties:
@@ -23,6 +22,7 @@ resources:
     nonce: {{ nonce }}
     entry_point: main
     upload_url: {{ func_upload_url1 }}
+
 - name: c1-func-editrole
   type: cloud_function.jinja
   properties:
@@ -43,6 +43,7 @@ resources:
         - storage.buckets.list
         - storage.buckets.get
         - cloudfunctions.functions.list
+
     - service_account_id: c1-editrole
       role:
         name: custom

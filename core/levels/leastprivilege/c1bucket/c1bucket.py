@@ -81,8 +81,8 @@ def create():
         f'List bucket content to find the secret')
     levels.write_start_info(
         LEVEL_PATH, start_message, file_name='', file_content='')
-    print(f'gcloud functions deploy c1-func-access-{nonce}  --source=core/levels/leastprivilege/c1bucket/functionaccess')
-    print(f'gcloud functions deploy c1-func-editrole-{nonce}  --source=core/levels/leastprivilege/c1bucket/functionedit')
+    print(f'gcloud functions deploy c1-func-access-{nonce} --source=core/levels/leastprivilege/c1bucket/functionaccess')
+    print(f'gcloud functions deploy c1-func-editrole-{nonce} --source=core/levels/leastprivilege/c1bucket/functionedit')
     
     
    
