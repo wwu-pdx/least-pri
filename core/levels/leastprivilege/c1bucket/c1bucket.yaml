@@ -6,6 +6,8 @@ imports:
 resources:
 - name: c1-access
   type: service_account.jinja
+- name: c1-check
+  type: service_account.jinja
 - name: c1-bucket
   type: bucket_acl.jinja
   properties:
