@@ -21,7 +21,17 @@ def create():
 
     # Set role of default cloud function account
     credentials, project_id = google.auth.default()
+    # Create service account key file
+    sa_key = iam.generate_service_account_key(f'{RESOURCE_PREFIX}-access')
+    print('key generated')
     func_path = f'core/levels/{LEVEL_PATH}/function'
+    func_name = f'{func_path}/{RESOURCE_PREFIX}-access.json'
+    #write key file in function directory
+    with open(func_name, 'w+') as f:
+        f.write(sa_key)
+    os.chmod(func_name, 0o400)
+    print(f'Function file: {RESOURCE_PREFIX}-access has been written to {func_name}')
+
     func_upload_url = cloudfunctions.upload_cloud_function(func_path, FUNCTION_LOCATION)
     
     print("Level initialization finished for: " + LEVEL_PATH)
@@ -56,20 +66,7 @@ def create():
     print(f'Instruction for the level can be accessed at thunder-ctf.cloud/levels/{LEVEL_PATH}.html')
     
     
-    # Create service account key file
-    sa_key = iam.generate_service_account_key(f'{RESOURCE_PREFIX}-access')
-    print('key generated')
-    #write key file in function directory
-    func_name = f'core/levels/{LEVEL_PATH}/function/{RESOURCE_PREFIX}-access.json'
-    with open(func_name, 'w+') as f:
-        f.write(sa_key)
-    os.chmod(func_name, 0o400)
-    print(f'Function file: {RESOURCE_PREFIX}-access has been written to {func_name}')
-    #func_upload_url = cloudfunctions.upload_cloud_function(func_path, FUNCTION_LOCATION)
-    template_func = ['core/framework/templates/cloud_function.jinja']
-    config_template_func = {'nonce': nonce, 'func_upload_url': func_upload_url}
-    deployments.insert(LEVEL_PATH, template_files=template_func,config_template_args=config_template_func)
-    print(f'Function deployed')
+   
 
 def destroy():
     # Delete starting files
