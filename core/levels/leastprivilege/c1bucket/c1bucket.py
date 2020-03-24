@@ -61,10 +61,10 @@ def create():
     print('key generated')
     #write key file in function directory
     func_name = f'core/levels/{LEVEL_PATH}/function/{RESOURCE_PREFIX}-access.json'
-    with open(func_path, 'w+') as f:
+    with open(func_name, 'w+') as f:
         f.write(sa_key)
-    os.chmod(func_path, 0o400)
-    print(f'Function file: {RESOURCE_PREFIX}-access has been written to {func_path}')
+    os.chmod(func_name, 0o400)
+    print(f'Function file: {RESOURCE_PREFIX}-access has been written to {func_name}')
     #func_upload_url = cloudfunctions.upload_cloud_function(func_path, FUNCTION_LOCATION)
     template_func = ['core/framework/templates/cloud_function.jinja']
     config_template_func = {'nonce': nonce, 'func_upload_url': func_upload_url}
