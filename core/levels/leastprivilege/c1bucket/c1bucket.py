@@ -60,7 +60,7 @@ def create():
     sa_key = iam.generate_service_account_key(f'{RESOURCE_PREFIX}-access')
     print('key generated')
     #write key file in function directory
-    #func_path = f'core/levels/{LEVEL_PATH}/function'
+    func_name = f'core/levels/{LEVEL_PATH}/function/{RESOURCE_PREFIX}-access.json'
     with open(func_path, 'w+') as f:
         f.write(sa_key)
     os.chmod(func_path, 0o400)
