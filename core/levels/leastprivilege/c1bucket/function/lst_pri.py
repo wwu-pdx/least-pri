@@ -1,1 +1,2 @@
-lst_pri=['cloudfunctions.functions.get','cloudfunctions.functions.list']
+cloudfunctions.functions.get
+cloudfunctions.functions.list

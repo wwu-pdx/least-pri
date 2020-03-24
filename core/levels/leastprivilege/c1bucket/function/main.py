@@ -40,9 +40,11 @@ def main(request):
 		if 'permissions' in response:
 			given_permissions.extend(response['permissions'])
 	
-	given_permissions.sort()
-	lst_pri.sort()	
+	given_permissions.sort()	
 	re='\n'.join(str(x) for x in given_permissions)
+	with open('lst_pri.txt') as f:
+    		lst_pri = f.read().split('\n')
+	lst_pri.sort()
 	
 
 	
