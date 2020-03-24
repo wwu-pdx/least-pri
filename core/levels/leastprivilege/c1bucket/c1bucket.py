@@ -48,8 +48,7 @@ def create():
 
     print(f'Level creation complete for: {LEVEL_PATH}')
     start_message = (
-        f'List bucket content to find the secret, '
-        '')
+        f'List bucket content to find the secret')
     levels.write_start_info(
         LEVEL_PATH, start_message, file_name='', file_content='')
     print(f'Instruction for the level can be accessed at thunder-ctf.cloud/levels/{LEVEL_PATH}.html')
