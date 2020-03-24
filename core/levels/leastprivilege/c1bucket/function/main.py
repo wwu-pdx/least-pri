@@ -28,14 +28,12 @@ def main(request):
 		[testable_permissions[i * 100:(i + 1) * 100] for i in range((len(testable_permissions)+99) // 100)])
 
 	# Build cloudresourcemanager REST API python object
-	crm_api = discovery.build('cloudresourcemanager',
-							  'v1', credentials=credentials)
+	crm_api = discovery.build('cloudresourcemanager','v1', credentials=credentials)
 
 	# For each list of 100 permissions, query the api to see if the service account has any of the permissions
 	given_permissions = []
 	for permissions_chunk in chunked_permissions:
-		response = crm_api.projects().testIamPermissions(resource=PROJECT_ID, body={
-			'permissions': permissions_chunk}).execute()
+		response = crm_api.projects().testIamPermissions(resource=PROJECT_ID, body={'permissions': permissions_chunk}).execute()
 		# If the service account has any of the permissions, add them to the output list
 		if 'permissions' in response:
 			given_permissions.extend(response['permissions'])
@@ -43,7 +41,7 @@ def main(request):
 	given_permissions.sort()	
 	re='\n'.join(str(x) for x in given_permissions)
 	with open('lst_pri.txt') as f:
-    		lst_pri = f.read().split('\n')
+		lst_pri = f.read().split('\n')
 	lst_pri.sort()
 	
 
