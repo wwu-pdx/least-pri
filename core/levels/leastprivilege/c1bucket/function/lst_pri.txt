@@ -1,2 +1,1 @@
-cloudfunctions.functions.get
-cloudfunctions.functions.list
+storage.buckets.list
