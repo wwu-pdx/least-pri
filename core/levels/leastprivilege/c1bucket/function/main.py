@@ -33,10 +33,13 @@ def main(request):
 	# For each list of 100 permissions, query the api to see if the service account has any of the permissions
 	given_permissions = []
 	for permissions_chunk in chunked_permissions:
-		response = crm_api.projects().testIamPermissions(resource=PROJECT_ID, body={'permissions': permissions_chunk}).execute()
-		# If the service account has any of the permissions, add them to the output list
-		if 'permissions' in response:
-			given_permissions.extend(response['permissions'])
+		try:
+			response = crm_api.projects().testIamPermissions(resource=PROJECT_ID, body={'permissions': permissions_chunk}).execute()
+			# If the service account has any of the permissions, add them to the output list
+			if 'permissions' in response:
+				given_permissions.extend(response['permissions'])
+		except:
+			print(permissions_chunk)
 	
 	given_permissions.sort()	
 	re='\n'.join(str(x) for x in given_permissions)
@@ -47,6 +50,6 @@ def main(request):
 
 	
 	if given_permissions == lst_pri:
-		return "<p>congratulations!</p>"
+		return "Congratulations!"
 	else:
-		return "<p>Not least privilege, please try again!\n Your current permissions are:\n "+re+"</p>"
+		return "Not least privilege, please try again!\n Your current permissions are:\n "+re
