@@ -25,16 +25,15 @@ def create():
     
     func_path = f'core/levels/{LEVEL_PATH}/function'
     func_name = f'{func_path}/{RESOURCE_PREFIX}-access.json'
-    func_upload_url = cloudfunctions.upload_cloud_function(func_path, FUNCTION_LOCATION)
+    #func_upload_url = cloudfunctions.upload_cloud_function(func_path, FUNCTION_LOCATION)
     
     print("Level initialization finished for: " + LEVEL_PATH)
     # Insert deployment
-    config_template_args = {'nonce': nonce, 'func_upload_url': func_upload_url}
+    config_template_args = {'nonce': nonce}
 
     template_files = [
         'core/framework/templates/service_account.jinja',
         'core/framework/templates/iam_policy.jinja',
-        'core/framework/templates/cloud_function.jinja',
         'core/framework/templates/bucket_acl.jinja']
     deployments.insert(LEVEL_PATH, template_files=template_files,
                        config_template_args=config_template_args)

@@ -21,7 +21,7 @@ def main(request):
 	# Change current working directory to top level of repo
 	# os.chdir(os.path.dirname(os.getcwd()+'/'+os.path.dirname(__file__)))
 	# Load testable permissions into list
-	with open('function/testable-permissions.txt') as f:
+	with open('testable-permissions.txt') as f:
 		testable_permissions = f.read().split('\n')
 	# Split testable permissions list into lists of 100 items each
 	chunked_permissions = (
