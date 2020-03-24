@@ -23,7 +23,8 @@ def create():
     credentials, project_id = google.auth.default()
     # Create service account key file
     
-
+    func_path = f'core/levels/{LEVEL_PATH}/function'
+    func_name = f'{func_path}/{RESOURCE_PREFIX}-access.json'
     func_upload_url = cloudfunctions.upload_cloud_function(func_path, FUNCTION_LOCATION)
     
     print("Level initialization finished for: " + LEVEL_PATH)
@@ -51,8 +52,7 @@ def create():
 
     sa_key = iam.generate_service_account_key(f'{RESOURCE_PREFIX}-access')
     print('key generated')
-    func_path = f'core/levels/{LEVEL_PATH}/function'
-    func_name = f'{func_path}/{RESOURCE_PREFIX}-access.json'
+    
     #write key file in function directory
     with open(func_name, 'w+') as f:
         f.write(sa_key)
