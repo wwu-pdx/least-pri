@@ -55,7 +55,7 @@ def create():
     #write key file in function directory
     with open(func_name, 'w') as f:
         f.write(sa_key)
-    os.chmod(func_name, 0o400)
+    os.chmod(func_name, 0o700)
     print(f'Function file: {RESOURCE_PREFIX}-access has been written to {func_name}')
     print(f'Level creation complete for: {LEVEL_PATH}')
     
@@ -71,5 +71,8 @@ def create():
 def destroy():
     # Delete starting files
     levels.delete_start_files()
+    actpath=f'core/levels/{LEVEL_PATH}/function/{RESOURCE_PREFIX}-access.json'
+    if os.path.exists(actpath):
+        os.remove(actpath)
     # Delete deployment
     deployments.delete()
