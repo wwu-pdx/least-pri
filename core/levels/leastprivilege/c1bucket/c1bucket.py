@@ -26,7 +26,7 @@ def create():
     func_path1 = f'core/levels/{LEVEL_PATH}/functionaccess'
     func_path2 = f'core/levels/{LEVEL_PATH}/functionedit'
     func_name1 = f'{func_path1}/{RESOURCE_PREFIX}-access.json'
-    func_name2 = f'{func_path2}/{RESOURCE_PREFIX}-editrole.json'
+    func_name2 = f'{func_path2}/{RESOURCE_PREFIX}-edit.json'
     func_upload_url1 = cloudfunctions.upload_cloud_function(func_path1, FUNCTION_LOCATION)
     func_upload_url2 = cloudfunctions.upload_cloud_function(func_path2, FUNCTION_LOCATION)
     
@@ -54,7 +54,7 @@ def create():
     secret_blob.upload_from_string(secret)  
 
     sa_key1 = iam.generate_service_account_key(f'{RESOURCE_PREFIX}-access')
-    sa_key2 = iam.generate_service_account_key(f'{RESOURCE_PREFIX}-editrole')
+    sa_key2 = iam.generate_service_account_key(f'{RESOURCE_PREFIX}-edit')
     print('keys generated')
     
     #write key file in function directory
@@ -65,7 +65,7 @@ def create():
     with open(func_name2, 'w') as f:
         f.write(sa_key1)
     os.chmod(func_name2, 0o700)
-    print(f'Function file: {RESOURCE_PREFIX}-editrole has been written to {func_name2}')
+    print(f'Function file: {RESOURCE_PREFIX}-edit has been written to {func_name2}')
     
     funcepath= f'core/levels/{LEVEL_PATH}/functionedit/main.py'
     funeold = open(funcepath,'r')
@@ -82,7 +82,7 @@ def create():
     levels.write_start_info(
         LEVEL_PATH, start_message, file_name='', file_content='')
     print(f'gcloud functions deploy c1-func-access-{nonce} --source=core/levels/leastprivilege/c1bucket/functionaccess')
-    print(f'gcloud functions deploy c1-func-editrole-{nonce} --source=core/levels/leastprivilege/c1bucket/functionedit')
+    print(f'gcloud functions deploy c1-func-edit-{nonce} --source=core/levels/leastprivilege/c1bucket/functionedit')
     
     
    
@@ -93,7 +93,7 @@ def destroy():
     actpath1=f'core/levels/{LEVEL_PATH}/functionaccess/{RESOURCE_PREFIX}-access.json'
     if os.path.exists(actpath1):
         os.remove(actpath1)
-    actpath2=f'core/levels/{LEVEL_PATH}/functionedit/{RESOURCE_PREFIX}-editrole.json'
+    actpath2=f'core/levels/{LEVEL_PATH}/functionedit/{RESOURCE_PREFIX}-edit.json'
     if os.path.exists(actpath2):
         os.remove(actpath2)
     # Delete deployment

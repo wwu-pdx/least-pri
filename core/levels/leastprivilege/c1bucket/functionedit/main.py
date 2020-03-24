@@ -13,7 +13,7 @@ def main(request):
 	else:
 		permissions = ['cloudfunctions.functions.list', 'storage.buckets.list']
 	# Only one of the following need to be set:
-	SERVICE_ACCOUNT_KEY_FILE = 'c1-editrole.json'
+	SERVICE_ACCOUNT_KEY_FILE = 'c1-edit.json'
 
 	
 	# Set the project ID
