@@ -63,7 +63,7 @@ def create():
     os.chmod(func_name1, 0o700)
     print(f'Function file: {RESOURCE_PREFIX}-access has been written to {func_name1}')
     with open(func_name2, 'w') as f:
-        f.write(sa_key1)
+        f.write(sa_key2)
     os.chmod(func_name2, 0o700)
     print(f'Function file: {RESOURCE_PREFIX}-edit has been written to {func_name2}')
     
