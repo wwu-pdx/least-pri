@@ -13,6 +13,7 @@ resources:
   type: bucket_acl.jinja
   properties:
     nonce: {{ nonce }}
+    predefined_acl: publicRead
     
 
 - name: c1-func-access

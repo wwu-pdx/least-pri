@@ -74,6 +74,7 @@ def create():
     neweold = open(funcepath,'w')
     neweold.write(text)
     neweold.close()
+
     print(f'Level creation complete for: {LEVEL_PATH}')
     
     start_message = (
