@@ -22,16 +22,15 @@ def create():
     # Set role of default cloud function account
     credentials, project_id = google.auth.default()
     
-    func_upload_url = cloudfunctions.upload_cloud_function(
-        f'core/levels/{LEVEL_PATH}/function', FUNCTION_LOCATION)
+    
     print("Level initialization finished for: " + LEVEL_PATH)
     # Insert deployment
-    config_template_args = {'nonce': nonce,
-                            'func_upload_url': func_upload_url}
+    config_template_args = {'nonce': nonce}
+
     template_files = [
         'core/framework/templates/service_account.jinja',
-        'core/framework/templates/cloud_function.jinja',
-        'core/framework/templates/iam_policy.jinja','core/framework/templates/bucket_acl.jinja']
+        'core/framework/templates/iam_policy.jinja',
+        'core/framework/templates/bucket_acl.jinja']
     deployments.insert(LEVEL_PATH, template_files=template_files,
                        config_template_args=config_template_args)
 
@@ -46,17 +45,29 @@ def create():
     secret = levels.make_secret(LEVEL_PATH)
     secret_blob.upload_from_string(secret)  
 
-    # Create service account key file
-    sa_key = iam.generate_service_account_key(f'{RESOURCE_PREFIX}-access')
+
     print(f'Level creation complete for: {LEVEL_PATH}')
     start_message = (
-        f'Use the compromised service account credentials stored in {RESOURCE_PREFIX}-access.json to find the secret, '
+        f'List bucket content to find the secret, '
         '')
     levels.write_start_info(
-        LEVEL_PATH, start_message, file_name=f'{RESOURCE_PREFIX}-access.json', file_content=sa_key)
-    print(
-        f'Instruction for the level can be accessed at thunder-ctf.cloud/levels/{LEVEL_PATH}.html')
-
+        LEVEL_PATH, start_message, file_name='', file_content='')
+    print(f'Instruction for the level can be accessed at thunder-ctf.cloud/levels/{LEVEL_PATH}.html')
+    
+    
+    # Create service account key file
+    sa_key = iam.generate_service_account_key(f'{RESOURCE_PREFIX}-access')
+    #write key file in function directory
+    func_path = f'core/levels/{LEVEL_PATH}/function'
+    with open(func_path, 'w+') as f:
+            f.write(sa_key)
+        os.chmod(func_path, 0o400)
+        print(f'Function file: {RESOURCE_PREFIX}-access has been written to {func_path}')
+    func_upload_url = cloudfunctions.upload_cloud_function(func_path, FUNCTION_LOCATION)
+    template_func = ['core/framework/templates/cloud_function.jinja']
+    config_template_func = {'nonce': nonce, 'func_upload_url': func_upload_url}
+    deployments.insert(LEVEL_PATH, template_files=template_func,config_template_args=config_template_func)
+    print(f'Function deployed')
 
 def destroy():
     # Delete starting files

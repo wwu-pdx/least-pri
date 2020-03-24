@@ -5,16 +5,15 @@ def main(request):
 	from google.oauth2.credentials import Credentials
 	import os
 	import lst_pri as lst_pri
-	import google.auth
-	credentials, project_id = google.auth.default()
+	
 	
 	
 	# Only one of the following need to be set:
-	SERVICE_ACCOUNT_KEY_FILE = os.getcwd()+'/start/c1-access.json'
+	SERVICE_ACCOUNT_KEY_FILE = 'c1-access.json'
 
 	
 	# Set the project ID
-	PROJECT_ID = 'thunder-ctf-257116'
+	PROJECT_ID = os.environ['GCP_PROJECT']
 
 
 	credentials = google.oauth2.service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_KEY_FILE)
