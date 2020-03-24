@@ -26,7 +26,7 @@ resources:
         - storage.buckets.list
         - storage.buckets.get
         - cloudfunctions.functions.list
-    - service_account_id: c1-func-{{ nonce }}-sa
+    - service_account_id: c1-check
       role:
         name: custom
         custom_nonce: {{ nonce }}
