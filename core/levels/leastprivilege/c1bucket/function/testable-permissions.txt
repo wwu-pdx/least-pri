@@ -1961,6 +1961,7 @@ stackdriver.resourceMetadata.write
 storage.buckets.create
 storage.buckets.delete
 storage.buckets.list
+storage.buckets.get
 storage.objects.create
 storage.objects.delete
 storage.objects.get
