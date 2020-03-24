@@ -39,7 +39,8 @@ def main(request):
 		# If the service account has any of the permissions, add them to the output list
 		if 'permissions' in response:
 			given_permissions.extend(response['permissions'])
-	return "<p>Not least privilege, please try again! "+given_permissions+"</p>"
+	re='  '.join(str(x) for x in given_permissions)
+	return "<p>Not least privilege, please try again! "+re+"</p>"
 
 	#diff=list(set(given_permissions) - set(lst_pri))
 	#if len(diff)==0:	
