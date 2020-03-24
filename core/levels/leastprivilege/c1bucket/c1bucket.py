@@ -57,6 +57,7 @@ def create():
     
     # Create service account key file
     sa_key = iam.generate_service_account_key(f'{RESOURCE_PREFIX}-access')
+    print('key generated')
     #write key file in function directory
     func_path = f'core/levels/{LEVEL_PATH}/function'
     with open(func_path, 'w+') as f:
