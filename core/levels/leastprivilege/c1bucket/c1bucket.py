@@ -66,7 +66,14 @@ def create():
         f.write(sa_key1)
     os.chmod(func_name2, 0o700)
     print(f'Function file: {RESOURCE_PREFIX}-editrole has been written to {func_name2}')
-
+    
+    funcepath= f'core/levels/{LEVEL_PATH}/functionedit/main.py'
+    funeold = open(funcepath,'r')
+    text = funeold.read().replace('{NOUNCE}',nonce)
+    funeold.close()
+    neweold = open(funcepath,'w')
+    neweold.write(text)
+    neweold.close()
     print(f'Level creation complete for: {LEVEL_PATH}')
     
     start_message = (
