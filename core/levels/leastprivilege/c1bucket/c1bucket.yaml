@@ -16,6 +16,14 @@ resources:
     - service_account_id: c1-access
       role: OWNER
 
+- name: c1-func
+  type: cloud_function.jinja
+  properties:
+    region: us-central1
+    nonce: {{ nonce }}
+    entry_point: main
+    upload_url: {{ func_upload_url }}
+
 - name: iam_policy
   type: iam_policy.jinja
   properties:
