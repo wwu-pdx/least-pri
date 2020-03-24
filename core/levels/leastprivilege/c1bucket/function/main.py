@@ -44,7 +44,7 @@ def main(request):
 	
 
 	diff=list(set(given_permissions) - set(lst_pri))
-	if set(given_permissions) = set(lst_pri):
+	if set(given_permissions) == set(lst_pri):
 		return "<p>congratulations!</p>"
 	else:
 		return "<p>Not least privilege, please try again!\n Your current permissions are:\n "+re+"</p>"
