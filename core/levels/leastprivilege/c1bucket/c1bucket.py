@@ -23,13 +23,16 @@ def create():
     credentials, project_id = google.auth.default()
     # Create service account key file
     
-    func_path = f'core/levels/{LEVEL_PATH}/function'
-    func_name = f'{func_path}/{RESOURCE_PREFIX}-access.json'
-    func_upload_url = cloudfunctions.upload_cloud_function(func_path, FUNCTION_LOCATION)
+    func_path1 = f'core/levels/{LEVEL_PATH}/functionaccess'
+    func_path2 = f'core/levels/{LEVEL_PATH}/functionedit'
+    func_name1 = f'{func_path1}/{RESOURCE_PREFIX}-access.json'
+    func_name2 = f'{func_path2}/{RESOURCE_PREFIX}-editrole.json'
+    func_upload_url1 = cloudfunctions.upload_cloud_function(func_path1, FUNCTION_LOCATION)
+    func_upload_url2 = cloudfunctions.upload_cloud_function(func_path2, FUNCTION_LOCATION)
     
     print("Level initialization finished for: " + LEVEL_PATH)
     # Insert deployment
-    config_template_args = {'nonce': nonce,'func_upload_url':func_upload_url}
+    config_template_args = {'nonce': nonce,'func_upload_url1':func_upload_url1,'func_upload_url2':func_upload_url2}
 
     template_files = [
         'core/framework/templates/service_account.jinja',
@@ -50,21 +53,28 @@ def create():
     secret = levels.make_secret(LEVEL_PATH)
     secret_blob.upload_from_string(secret)  
 
-    sa_key = iam.generate_service_account_key(f'{RESOURCE_PREFIX}-access')
-    print('key generated')
+    sa_key1 = iam.generate_service_account_key(f'{RESOURCE_PREFIX}-access')
+    sa_key2 = iam.generate_service_account_key(f'{RESOURCE_PREFIX}-editrole')
+    print('keys generated')
     
     #write key file in function directory
-    with open(func_name, 'w') as f:
-        f.write(sa_key)
-    os.chmod(func_name, 0o700)
-    print(f'Function file: {RESOURCE_PREFIX}-access has been written to {func_name}')
+    with open(func_name1, 'w') as f:
+        f.write(sa_key1)
+    os.chmod(func_name1, 0o700)
+    print(f'Function file: {RESOURCE_PREFIX}-access has been written to {func_name1}')
+    with open(func_name2, 'w') as f:
+        f.write(sa_key1)
+    os.chmod(func_name2, 0o700)
+    print(f'Function file: {RESOURCE_PREFIX}-editrole has been written to {func_name2}')
+
     print(f'Level creation complete for: {LEVEL_PATH}')
     
     start_message = (
         f'List bucket content to find the secret')
     levels.write_start_info(
         LEVEL_PATH, start_message, file_name='', file_content='')
-    print(f'Instruction for the level can be accessed at thunder-ctf.cloud/levels/{LEVEL_PATH}.html')
+    print(f'gcloud functions deploy c1-func-access-{nonce}  --source=core/levels/leastprivilege/c1bucket/functionaccess')
+    print(f'gcloud functions deploy c1-func-editrole-{nonce}  --source=core/levels/leastprivilege/c1bucket/functionedit')
     
     
    
@@ -72,8 +82,11 @@ def create():
 def destroy():
     # Delete starting files
     levels.delete_start_files()
-    actpath=f'core/levels/{LEVEL_PATH}/function/{RESOURCE_PREFIX}-access.json'
-    if os.path.exists(actpath):
-        os.remove(actpath)
+    actpath1=f'core/levels/{LEVEL_PATH}/functionaccess/{RESOURCE_PREFIX}-access.json'
+    if os.path.exists(actpath1):
+        os.remove(actpath1)
+    actpath2=f'core/levels/{LEVEL_PATH}/functionedit/{RESOURCE_PREFIX}-editrole.json'
+    if os.path.exists(actpath2):
+        os.remove(actpath2)
     # Delete deployment
     deployments.delete()

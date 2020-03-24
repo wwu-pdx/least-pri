@@ -6,8 +6,6 @@ def main(request):
 	import os
 	
 	
-	
-	
 	# Only one of the following need to be set:
 	SERVICE_ACCOUNT_KEY_FILE = 'c1-access.json'
 
@@ -42,7 +40,7 @@ def main(request):
 			print(permissions_chunk)
 	
 	given_permissions.sort()	
-	re='\n'.join(str(x) for x in given_permissions)
+	re=',\n'.join(str(x) for x in given_permissions)
 	with open('lst_pri.txt') as f:
 		lst_pri = f.read().split('\n')
 	lst_pri.sort()
@@ -52,4 +50,4 @@ def main(request):
 	if given_permissions == lst_pri:
 		return "Congratulations!"
 	else:
-		return "Not least privilege, please try again!\n Your current permissions are:\n "+re
+		return "Not least privilege, please try again!\n Your current permissions are:\n ["+re+"]"
