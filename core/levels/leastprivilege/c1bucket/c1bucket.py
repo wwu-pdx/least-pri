@@ -54,20 +54,20 @@ def create():
     print(f'Instruction for the level can be accessed at thunder-ctf.cloud/levels/{LEVEL_PATH}.html')
     
     
-    # Create service account key file
-    sa_key = iam.generate_service_account_key(f'{RESOURCE_PREFIX}-access')
-    print('key generated')
-    #write key file in function directory
-    func_path = f'core/levels/{LEVEL_PATH}/function'
-    with open(func_path, 'w+') as f:
-        f.write(sa_key)
-    os.chmod(func_path, 0o400)
-    print(f'Function file: {RESOURCE_PREFIX}-access has been written to {func_path}')
-    func_upload_url = cloudfunctions.upload_cloud_function(func_path, FUNCTION_LOCATION)
-    template_func = ['core/framework/templates/cloud_function.jinja']
-    config_template_func = {'nonce': nonce, 'func_upload_url': func_upload_url}
-    deployments.insert(LEVEL_PATH, template_files=template_func,config_template_args=config_template_func)
-    print(f'Function deployed')
+    # # Create service account key file
+    # sa_key = iam.generate_service_account_key(f'{RESOURCE_PREFIX}-access')
+    # print('key generated')
+    # #write key file in function directory
+    # func_path = f'core/levels/{LEVEL_PATH}/function'
+    # with open(func_path, 'w+') as f:
+        # f.write(sa_key)
+    # os.chmod(func_path, 0o400)
+    # print(f'Function file: {RESOURCE_PREFIX}-access has been written to {func_path}')
+    # func_upload_url = cloudfunctions.upload_cloud_function(func_path, FUNCTION_LOCATION)
+    # template_func = ['core/framework/templates/cloud_function.jinja']
+    # config_template_func = {'nonce': nonce, 'func_upload_url': func_upload_url}
+    # deployments.insert(LEVEL_PATH, template_files=template_func,config_template_args=config_template_func)
+    # print(f'Function deployed')
 
 def destroy():
     # Delete starting files
