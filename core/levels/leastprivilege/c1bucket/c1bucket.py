@@ -39,7 +39,7 @@ def create():
     
     print("Level initialization finished for: " + LEVEL_PATH)
     # Insert deployment
-    config_template_args = {'nonce': nonce,'func_upload_url1':func_upload_url1,'func_upload_url2':func_upload_url2,'fvar1': fvar1,'fvar2': fvar2}
+    config_template_args = {'nonce': nonce,'func_upload_url1':func_upload_url1,'func_upload_url2':func_upload_url2,'fvar1': fvar1.decode("utf-8"),'fvar2': fvar2.decode("utf-8") }
 
     template_files = [
         'core/framework/templates/service_account.jinja',
