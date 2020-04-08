@@ -32,4 +32,4 @@ def main(request):
 	role_body = {'includedPermissions': permissions}
 
 	re = service.projects().roles().patch(name=name, body=role_body).execute()
-	return re
+	return str(re)

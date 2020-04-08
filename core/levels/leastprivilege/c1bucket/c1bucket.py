@@ -85,7 +85,8 @@ def create():
     print(f'gcloud functions deploy c1-func-access-{nonce} --source=core/levels/leastprivilege/c1bucket/functionaccess')
     print(f'gcloud functions deploy c1-func-edit-{nonce} --source=core/levels/leastprivilege/c1bucket/functionedit')
     print(f'use code below to edit iam permissions')
-    print(f'gcloud iam roles update c1_access_role_{nonce} --project={project_id} --permissions=permission1,permission2')
+    print(f'gcloud iam roles update c1_access_role_{nonce} --project={project_id} --permissions=permission1,permission2\nOR')
+    print(f'gcloud iam roles update c1_access_role_{nonce} --data \'{\"permissions\":[\"permission1\",\"permission2\"]}\'')
     
     
    
