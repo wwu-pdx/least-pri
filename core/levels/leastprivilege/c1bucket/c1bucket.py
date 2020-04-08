@@ -81,14 +81,12 @@ def create():
         f'Find the minimum privilage to list a bucket and access function c1-func-access-{nonce} to check if you have the correct answer')
     levels.write_start_info(
         LEVEL_PATH, start_message, file_name='', file_content='')
-    print(f'Step 1.Please use cmd below to update functions and get http trigger url')
-    print(f'gcloud functions deploy c1-func-access-{nonce} --source=core/levels/leastprivilege/c1bucket/functionaccess')
-    print(f'gcloud functions deploy c1-func-edit-{nonce} --source=core/levels/leastprivilege/c1bucket/functionedit')
-    print(f'Step 2.Use cmd below to edit iam permissions of c1_access')
-    print(f'gcloud iam roles update c1_access_role_{nonce} --project={project_id} --permissions=permission1,permission2\nOR')
-    print(f'gcloud functions call c1-func-edit-{nonce} --data \'{{\"permissions\":[\"permission1\",\"permission2\"]}}\'')
-    print(f'Step 3.Call c1-func-access-{nonce} with cmd \n gcloud functions call c1-func-access-{nonce} \n OR') 
-    print(f'use url generated in step 1')
+    print(f'Step 1.Please use cmd below to update functions and get http trigger url\n gcloud functions deploy c1-func-access-{nonce} --source=core/levels/leastprivilege/c1bucket/functionaccess \n gcloud functions deploy c1-func-edit-{nonce} --source=core/levels/leastprivilege/c1bucket/functionedit')
+    
+    print(f'Step 2.Use cmd below to edit iam permissions of c1_access \n gcloud iam roles update c1_access_role_{nonce} --project={project_id} --permissions=permission1,permission2\n OR \n gcloud functions call c1-func-edit-{nonce} --data \'{{\"permissions\":[\"permission1\",\"permission2\"]}}\'')
+
+    print(f'Step 3.Call c1-func-access-{nonce} with cmd \n gcloud functions call c1-func-access-{nonce} \n OR \n use url generated in step 1') 
+    
     
    
 

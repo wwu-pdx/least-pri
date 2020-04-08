@@ -33,8 +33,7 @@ resources:
     nonce: {{ nonce }}
     entry_point: main
     upload_url: {{ func_upload_url2 }}
-    env_variables:
-    - NONCE: {{ nonce }}
+    env_variables: {"NONCE":{nonce}}
 
 - name: iam_policy
   type: iam_policy.jinja
