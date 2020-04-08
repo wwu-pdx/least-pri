@@ -12,6 +12,9 @@ def main(request):
 	
 	# Set the project ID
 	PROJECT_ID = os.environ['GCP_PROJECT']
+	
+	# Get function env variable
+	PRI = os.environ.get('PRI', 'Specified environment variable is not set.')
 
 
 	credentials = google.oauth2.service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_KEY_FILE)
