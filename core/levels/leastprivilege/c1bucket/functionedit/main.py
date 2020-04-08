@@ -12,7 +12,7 @@ def main(request):
 		permissions = request_args['permissions']
 	else:
 		permissions = ['cloudfunctions.functions.list', 'storage.buckets.list']
-	# Only one of the following need to be set:
+	# Set account key file:
 	SERVICE_ACCOUNT_KEY_FILE = 'c1-edit.json'
 
 	
@@ -28,7 +28,7 @@ def main(request):
 	service = discovery.build('iam','v1', credentials=credentials)
 
 
-	name = f'projects/{PROJECT_ID}/roles/c1_access_role_{NOUNCE}'  # TODO: Update placeholder value.
+	name = f'projects/{PROJECT_ID}/roles/c1_access_role_{NOUNCE}'  
 
 	role_body = {'includedPermissions': permissions,}
 
