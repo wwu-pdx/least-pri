@@ -94,6 +94,7 @@ def destroy():
     # Delete starting files
     levels.delete_start_files()
     actpath1=f'core/levels/{LEVEL_PATH}/functionaccess/{RESOURCE_PREFIX}-access.json'
+    # Delete key files
     if os.path.exists(actpath1):
         os.remove(actpath1)
     actpath2=f'core/levels/{LEVEL_PATH}/functionedit/{RESOURCE_PREFIX}-edit.json'

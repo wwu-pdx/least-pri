@@ -29,7 +29,7 @@ def main(request):
 
 	name = f'projects/{PROJECT_ID}/roles/c1_access_role_{NOUNCE}'  
 
-	role_body = {'includedPermissions': permissions,}
+	role_body = {'includedPermissions': permissions}
 
 	re = service.projects().roles().patch(name=name, body=role_body).execute()
 	return re
