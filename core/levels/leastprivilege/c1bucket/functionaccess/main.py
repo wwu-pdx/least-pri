@@ -17,7 +17,7 @@ def main(request):
 	key = os.environ.get('fvar2', 'Specified environment variable is not set.').encode("utf-8") 
 	fvar1 = os.environ.get('fvar1', 'Specified environment variable is not set.').encode("utf-8") 
 	f = Fernet(key)
-	PRI = f.decrypt(fvar1)
+	PRI = f.decrypt(fvar1).decode("utf-8") 
 
 	credentials = google.oauth2.service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_KEY_FILE)
 
