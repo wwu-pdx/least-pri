@@ -20,7 +20,6 @@ def main(request):
 	PROJECT_ID = os.environ['GCP_PROJECT']
 	
 
-
 	credentials = google.oauth2.service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_KEY_FILE)
 
 
