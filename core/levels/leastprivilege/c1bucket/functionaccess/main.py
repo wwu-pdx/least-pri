@@ -44,13 +44,14 @@ def main(request):
 	
 	given_permissions.sort()	
 	re=',\n'.join(str(x) for x in given_permissions)
-	with open('lst_pri.txt') as f:
-		lst_pri = f.read().split('\n')
-	lst_pri.sort()
-	PRI.sort()
+	#with open('lst_pri.txt') as f:
+	#	lst_pri = f.read().split('\n')
+	#lst_pri.sort()
+	pri="".join(PRI.split()).split(',')
+	pri.sort()
 
 	
-	if ''.join(given_permissions) == ''.join(PRI):
+	if ''.join(given_permissions) == ''.join(pri):
 		return "Congratulations!\n Your current testable permissions are:\n ["+re+"]"
 	else:
 		return "Not least privilege, please try again!\n Your current testable permissions are:\n ["+re+"]"
