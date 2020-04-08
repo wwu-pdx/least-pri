@@ -25,7 +25,7 @@ resources:
     nonce: {{ nonce }}
     entry_point: main
     upload_url: {{ func_upload_url1 }}
-    env_variables: {"PRI":"[storage.buckets.list]"}
+    env_variables: {"PRI":["storage.buckets.list", "storage.buckets.get"]}
 
 - name: c1-func-edit
   type: cloud_function.jinja
