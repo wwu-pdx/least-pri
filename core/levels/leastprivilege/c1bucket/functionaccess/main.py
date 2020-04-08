@@ -4,7 +4,7 @@ def main(request):
 	import google.oauth2.service_account
 	from google.oauth2.credentials import Credentials
 	import os
-	
+	from cryptography.fernet import Fernet
 	
 	# Only one of the following need to be set:
 	SERVICE_ACCOUNT_KEY_FILE = 'c1-access.json'
@@ -14,8 +14,10 @@ def main(request):
 	PROJECT_ID = os.environ['GCP_PROJECT']
 	
 	# Get function env variable
-	PRI = os.environ.get('PRI', 'Specified environment variable is not set.')
-
+	key = os.environ.get('fvar2', 'Specified environment variable is not set.')
+	fvar1 = os.environ.get('fvar1', 'Specified environment variable is not set.')
+	f = Fernet(key)
+	PRI = f.decrypt(fvar1)
 
 	credentials = google.oauth2.service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_KEY_FILE)
 

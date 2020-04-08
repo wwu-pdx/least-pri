@@ -8,6 +8,8 @@ from google.cloud import storage
 from core.framework import levels
 from core.framework.cloudhelpers import deployments, iam, cloudfunctions
 
+from cryptography.fernet import Fernet
+
 LEVEL_PATH = 'leastprivilege/c1bucket'
 RESOURCE_PREFIX = 'c1'
 FUNCTION_LOCATION = 'us-central1'
@@ -29,10 +31,15 @@ def create():
     func_name2 = f'{func_path2}/{RESOURCE_PREFIX}-edit.json'
     func_upload_url1 = cloudfunctions.upload_cloud_function(func_path1, FUNCTION_LOCATION)
     func_upload_url2 = cloudfunctions.upload_cloud_function(func_path2, FUNCTION_LOCATION)
+	
+    #Set least privaleges
+    fvar2 = Fernet.generate_key()
+    f = Fernet(fvar2)
+    fvar1 = f.encrypt(b'storage.buckets.list ')
     
     print("Level initialization finished for: " + LEVEL_PATH)
     # Insert deployment
-    config_template_args = {'nonce': nonce,'func_upload_url1':func_upload_url1,'func_upload_url2':func_upload_url2}
+    config_template_args = {'nonce': nonce,'func_upload_url1':func_upload_url1,'func_upload_url2':func_upload_url2,'fvar1': fvar1,'fvar2': fvar2}
 
     template_files = [
         'core/framework/templates/service_account.jinja',
@@ -81,7 +88,7 @@ def create():
         f'Find the minimum privilage to list a bucket and access function c1-func-access-{nonce} to check if you have the correct answer')
     levels.write_start_info(
         LEVEL_PATH, start_message, file_name='', file_content='')
-    print(f'Step 1.Please use cmd below to update functions and get http trigger url\n gcloud functions deploy c1-func-access-{nonce} --source=core/levels/leastprivilege/c1bucket/functionaccess \n gcloud functions deploy c1-func-edit-{nonce} --source=core/levels/leastprivilege/c1bucket/functionedit')
+    print(f'Step 1.Please use cmd below to update functions and get http trigger url\n gcloud functions deploy c1-func-access-{nonce} --source=core/levels/leastprivilege/c1bucket/functionaccess --allow-unauthenticated \n gcloud functions deploy c1-func-edit-{nonce} --source=core/levels/leastprivilege/c1bucket/functionedit --allow-unauthenticated ')
     
     print(f'Step 2.Use cmd below to edit iam permissions of c1_access \n gcloud iam roles update c1_access_role_{nonce} --project={project_id} --permissions=permission1,permission2\n OR \n gcloud functions call c1-func-edit-{nonce} --data \'{{\"permissions\":[\"permission1\",\"permission2\"]}}\'')
 
