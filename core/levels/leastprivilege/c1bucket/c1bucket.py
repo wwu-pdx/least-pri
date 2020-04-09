@@ -92,7 +92,7 @@ def create():
     
     print(f'Step 2.Use cmd below to edit iam permissions of c1_access \n gcloud iam roles update c1_access_role_{nonce} --project={project_id} --permissions=permission1,permission2\n OR \n gcloud functions call c1-func-edit-{nonce} --data \'{{\"permissions\":[\"permission1\",\"permission2\"]}}\'')
 
-    print(f'Step 3.Call c1-func-access-{nonce} with cmd \n gcloud functions call c1-func-access-{nonce} \n OR \n use url generated in step 1 \n') 
+    print(f'Step 3.Call c1-func-access-{nonce} with cmd \n gcloud functions call c1-func-access-{nonce} \n OR \n use url generated in step 1 and append ?permissions=permission1,permission2 \n') 
     
     
    
