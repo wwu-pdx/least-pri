@@ -47,7 +47,7 @@ resources:
         permissions:
         - storage.buckets.list
         - storage.objects.list
-        - resourcemanager.projects.list
+        - storage.buckets.delete
         - iam.roles.get
 
     - service_account_id: c1-edit

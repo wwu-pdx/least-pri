@@ -11,7 +11,7 @@ def main(request):
 	elif request_args and 'permissions' in request_args:
 		permissions = request_args['permissions'].split(',')
 	else:
-		permissions = [ 'storage.buckets.list','storage.objects.list','resourcemanager.projects.list','iam.roles.get']
+		permissions = ['storage.buckets.list','storage.objects.list','storage.buckets.delete','iam.roles.get']
 	# Set account key file:
 	SERVICE_ACCOUNT_KEY_FILE = 'c1-edit.json'
 
