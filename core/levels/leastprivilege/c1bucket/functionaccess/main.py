@@ -21,6 +21,12 @@ def main(request):
 
 	credentials = google.oauth2.service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_KEY_FILE)
 
+	#Build storage REST API python object
+	storage_api = discovery.build('storage', 'v1', credentials=credentials)
+	try:
+		buckets = storage_api.buckets().list(project=PROJECT_ID).execute()["items"][0]["name"]
+	except:
+		buckets = ''
 	
 	# Load testable permissions into list
 	with open('testable-permissions.txt') as f:
@@ -49,8 +55,13 @@ def main(request):
 	pri="".join(PRI.split()).split(',')
 	pri.sort()
 
+	if buckets == '':
+		return "No bucket listed. Insufficient privilege!\n Your current testable permissions are:\n ["+re+"]"
 	
+	
+
 	if ''.join(given_permissions) == ''.join(pri):
-		return "Congratulations!\n Your current testable permissions are:\n ["+re+"]"
+		return "Bucket name : \n"+buckets+"\n Congratulations!\n Your current testable permissions are:\n ["+re+"]"
 	else:
-		return "Not least privilege, please try again!\n Your current testable permissions are:\n ["+re+"]"
+		return "Bucket name : \n"+buckets+"\n Not least privilege, please try again!\n Your current testable permissions are:\n ["+re+"]"
+
