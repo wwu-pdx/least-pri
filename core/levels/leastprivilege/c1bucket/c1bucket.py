@@ -75,12 +75,7 @@ def create():
     print(f'Function file: {RESOURCE_PREFIX}-edit has been written to {func_name2}')
     
     funcepath= f'core/levels/{LEVEL_PATH}/functionedit/main.py'
-    #funeold = open(funcepath,'r')
-    #text = funeold.read().replace('{NOUNCE}',nonce)
-    #funeold.close()
-    #neweold = open(funcepath,'w')
-    #neweold.write(text)
-    #neweold.close()
+    
 
     print(f'Level creation complete for: {LEVEL_PATH}')
     
@@ -90,9 +85,9 @@ def create():
         LEVEL_PATH, start_message, file_name='', file_content='')
     print(f'Step 1.Please use cmd below to update functions and get http trigger url\n gcloud functions deploy c1-func-access-{nonce} --source=core/levels/leastprivilege/c1bucket/functionaccess --allow-unauthenticated \n gcloud functions deploy c1-func-edit-{nonce} --source=core/levels/leastprivilege/c1bucket/functionedit --allow-unauthenticated ')
     
-    print(f'Step 2.Use cmd below to edit iam permissions of c1_access \n gcloud iam roles update c1_access_role_{nonce} --project={project_id} --permissions=permission1,permission2\n OR \n gcloud functions call c1-func-edit-{nonce} --data \'{{\"permissions\":[\"permission1\",\"permission2\"]}}\'')
+    print(f'Step 2.Use cmd below to edit iam permissions of c1_access \n gcloud iam roles update c1_access_role_{nonce} --project={project_id} --permissions=permission1,permission2\n OR \n gcloud functions call c1-func-edit-{nonce} --data \'{{\"permissions\":[\"permission1\",\"permission2\"]}}\' \n OR \n append ?permissions=permission1,permission2 after function url generated in Step 1 ')
 
-    print(f'Step 3.Call c1-func-access-{nonce} with cmd \n gcloud functions call c1-func-access-{nonce} \n OR \n use url generated in step 1 and append ?permissions=permission1,permission2 \n') 
+    print(f'Step 3.Call c1-func-access-{nonce} with cmd \n gcloud functions call c1-func-access-{nonce} \n OR \n through function url generated in Step 1  \n') 
     
     
    

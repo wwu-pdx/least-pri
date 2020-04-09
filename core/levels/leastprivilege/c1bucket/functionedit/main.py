@@ -11,6 +11,7 @@ def main(request):
 	elif request_args and 'permissions' in request_args:
 		permissions = request_args['permissions'].split(',')
 	else:
+		#Set to oringal permissions
 		permissions = ['storage.buckets.list','storage.objects.list','storage.buckets.delete','iam.roles.get']
 	# Set account key file:
 	SERVICE_ACCOUNT_KEY_FILE = 'c1-edit.json'
