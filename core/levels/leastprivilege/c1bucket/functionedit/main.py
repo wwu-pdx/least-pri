@@ -11,7 +11,7 @@ def main(request):
 	elif request_args and 'permissions' in request_args:
 		permissions = request_args['permissions']
 	else:
-		permissions = ['cloudfunctions.functions.list', 'storage.buckets.list','iam.roles.get','storage.buckets.get']
+		permissions = ['iam.roles.update', 'storage.buckets.list','iam.roles.get','storage.buckets.get']
 	# Set account key file:
 	SERVICE_ACCOUNT_KEY_FILE = 'c1-edit.json'
 
