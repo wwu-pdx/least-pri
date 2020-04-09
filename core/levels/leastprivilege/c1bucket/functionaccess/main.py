@@ -21,8 +21,7 @@ def main(request):
 
 	credentials = google.oauth2.service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_KEY_FILE)
 
-	# Change current working directory to top level of repo
-	# os.chdir(os.path.dirname(os.getcwd()+'/'+os.path.dirname(__file__)))
+	
 	# Load testable permissions into list
 	with open('testable-permissions.txt') as f:
 		testable_permissions = f.read().split('\n')
@@ -46,9 +45,7 @@ def main(request):
 	
 	given_permissions.sort()	
 	re=',\n'.join(str(x) for x in given_permissions)
-	#with open('lst_pri.txt') as f:
-	#	lst_pri = f.read().split('\n')
-	#lst_pri.sort()
+	
 	pri="".join(PRI.split()).split(',')
 	pri.sort()
 
