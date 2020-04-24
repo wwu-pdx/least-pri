@@ -1,31 +1,24 @@
 <!DOCTYPE html>
 <head>
-  <title>Least Privileges c1bucket</title>
+  <title>Least Privileges - c1bucket</title>
 </head>
 <body>
 <div>
 <h2>Least Privileges c1bucket</h2>
 <ul>
-  <li>Coffee</li>
-  <li>Tea</li>
-  <li>Milk</li>
+  <li>Custom role c1-access was created to list bucket in the level. However it was granted with permissions more than necessary</li>
+  <li>You can use this <a href="{{url}}">funtion</a> to check permissions of role c1-access</li>
+  <li>Go to google cloud console IAM&Admin -> Roles, find c1-access role(enabled) in the table  and edit its permissions</li>
+  <li>Refresh the <a href="{{url}}">funtion</a> to see if you get the correct least privileges</li>
 </ul>  
 </div>
 
 
-<div>
-<h3>Buckets:</h3>
+<div style="background-color:#F0F0F0">
+<h3>Bucket:</h3>
 <ol>
-{% for b in buckets %} 
-  <li>{{ b }}</li>
- {% endfor %}
+  <li>{{ bucket }}</li>
 </ol> 
   
-<h3>Privileges of c1-access</h3>
-<ol>
-{% for p in pri %} 
-  <li>{{ p }}</li>
- {% endfor %}
-</ol>   
 </div>
 </body>
