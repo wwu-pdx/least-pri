@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<head>
+  <title>Least Privileges c1bucket</title>
+</head>
+<body>
+<div>
+<h2>Least Privileges c1bucket</h2>
+<ul>
+  <li>Coffee</li>
+  <li>Tea</li>
+  <li>Milk</li>
+</ul>  
+</div>
+
+
+<div>
+<h3>Buckets:</h3>
+<ol>
+{% for b in buckets %} 
+  <li>{{ b }}</li>
+ {% endfor %}
+</ol> 
+  
+<h3>Privileges of c1-access</h3>
+<ol>
+{% for p in pri %} 
+  <li>{{ p }}</li>
+ {% endfor %}
+</ol>   
+</div>
+</body>

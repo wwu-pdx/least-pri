@@ -27,15 +27,15 @@ def main(request):
 	credentials = google.oauth2.service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_KEY_FILE)
 
 
-	# Build cloudresourcemanager REST API python object
-	service = discovery.build('iam','v1', credentials=credentials)
+	# Build iam REST API python object
+	iam_api = discovery.build('iam','v1', credentials=credentials)
 
 
 	name = f'projects/{PROJECT_ID}/roles/c1_access_role_{NONCE}'  
 
 	per=''
 	try:
-		roles = service.projects().roles().get(name=name).execute()
+		roles = iam_api.projects().roles().get(name=name).execute()
 		per=roles['name']+':  '
 		print(roles['name'])
 		for permission in roles['includedPermissions']:
