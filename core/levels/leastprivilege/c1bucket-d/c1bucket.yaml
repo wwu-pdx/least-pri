@@ -25,9 +25,6 @@ resources:
     nonce: {{ nonce }}
     entry_point: main
     upload_url: {{ func_upload_url1 }}
-    policyBindings:
-    - role: roles/cloudfunctions.invoker
-      service_account_id: allusers
     env_variables: {"fvar1":{{fvar1}},"fvar2":{{fvar2}}}
 
 - name: c1-func-edit
@@ -37,9 +34,6 @@ resources:
     nonce: {{ nonce }}
     entry_point: main
     upload_url: {{ func_upload_url2 }}
-    policyBindings:
-    - role: roles/cloudfunctions.invoker
-      service_account_id: allusers
     env_variables: {"NONCE":{{nonce}}}
 
 - name: iam_policy
