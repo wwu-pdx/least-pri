@@ -4,15 +4,15 @@ def main(request):
 	from google.oauth2.credentials import Credentials
 	import os
 	
-	request_json = request.get_json(silent=True)
-	request_args = request.args
-	if request_json and 'permissions' in request_json:
-		permissions = request_json['permissions']
-	elif request_args and 'permissions' in request_args:
-		permissions = request_args['permissions'].split(',')
-	else:
-		#Set to oringal permissions
-		permissions = ['storage.buckets.list','storage.objects.list','storage.buckets.delete','iam.roles.get']
+	# request_json = request.get_json(silent=True)
+	# request_args = request.args
+	# if request_json and 'permissions' in request_json:
+		# permissions = request_json['permissions']
+	# elif request_args and 'permissions' in request_args:
+		# permissions = request_args['permissions'].split(',')
+	# else:
+		# #Set to oringal permissions
+		# permissions = ['storage.buckets.list','storage.objects.list','storage.buckets.delete','iam.roles.get']
 	# Set account key file:
 	SERVICE_ACCOUNT_KEY_FILE = 'c1-edit.json'
 
@@ -33,10 +33,14 @@ def main(request):
 
 	name = f'projects/{PROJECT_ID}/roles/c1_access_role_{NONCE}'  
 
-	role_body = {'includedPermissions': permissions}
+	per=''
 	try:
-		re = service.projects().roles().patch(name=name, body=role_body).execute()
+		roles = service.projects().roles().get(name=name).execute()
+		per=roles['name']+':  '
+		print(roles['name'])
+		for permission in roles['includedPermissions']:
+			per += permission+'   '
+			print(permission)
 	except Exception as e: 
-		re =str(e)
-
-	return str(re)
+		per =str(e)
+	return per
