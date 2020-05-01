@@ -6,7 +6,7 @@ def main(request):
 	import os
 	from cryptography.fernet import Fernet
 
-	SERVICE_ACCOUNT_KEY_FILE = 'c1-edit.json'
+	SERVICE_ACCOUNT_KEY_FILE = 'c1-check.json'
 
 	
 	# Set the project ID
@@ -22,7 +22,7 @@ def main(request):
 	PRI = f.decrypt(fvar1).decode("utf-8") 
 	
 	pri="".join(PRI.split()).split(',')
-	pri.sort()
+	#pri.sort()
 
 	credentials = google.oauth2.service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_KEY_FILE)
 
@@ -33,23 +33,32 @@ def main(request):
 
 	name = f'projects/{PROJECT_ID}/roles/c1_access_role_{NONCE}'  
 
-	per=''
+	per=[]
 	rolename=''
 	try:
 		roles = service.projects().roles().get(name=name).execute()
 		rolename = roles['name']
 		#print(roles['name'])
-		per = roles['includedPermissions'].sort()
+		per = roles['includedPermissions']
 		# for permission in roles['includedPermissions']:
 			# per += permission+'   '
 			# #print(permission)
 	except Exception as e: 
 		per =str(e)
 	
-	msg=''
-	if ''.join(per) == ''.join(pri):
-		msg='Congratulations! You get the least privileges. '
-	else:
+	msg='Congratulations! You get the least privileges. '
+	
+	if len(per)!=len(pri):
 		msg='Not least privilege, please try again!'
+		
+	else:
+		for p in pri:
+			if p not in per:
+				msg='Not least privilege, please try again!'
+				return render_template('c1-permission.html', pri=pri, per=per, msg=msg, rn=rolename)
+	# if ''.join(per) == ''.join(pri):
+		# msg='Congratulations! You get the least privileges. '
+	# else:
+		# msg='Not least privilege, please try again!'
 
 	return render_template('c1-permission.html', pri=pri, per=per, msg=msg, rn=rolename)

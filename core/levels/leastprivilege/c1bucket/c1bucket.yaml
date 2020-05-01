@@ -8,7 +8,7 @@ resources:
 - name: c1-access
   type: service_account.jinja
 
-- name: c1-edit
+- name: c1-check
   type: service_account.jinja
 
 - name: c1-bucket
@@ -30,7 +30,7 @@ resources:
       service_account_id: allusers
     env_variables: {"NONCE":{{nonce}}}
 
-- name: c1-func-edit
+- name: c1-func-check
   type: cloud_function.jinja
   properties:
     region: us-central1
@@ -56,7 +56,7 @@ resources:
         - storage.buckets.delete
         - iam.roles.get
 
-    - service_account_id: c1-edit
+    - service_account_id: c1-check
       role:
         name: custom
         custom_nonce: {{ nonce }}

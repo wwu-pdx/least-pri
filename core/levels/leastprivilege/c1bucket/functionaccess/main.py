@@ -30,7 +30,7 @@ def main(request):
 	if buckets == '':
 		buckets = "No bucket listed. Insufficient privilege!"
 	
-	url=f'https://{FUNCTION_REGION}-{PROJECT_ID}.cloudfunctions.net/c1-func-edit-{NONCE}'
+	url=f'https://{FUNCTION_REGION}-{PROJECT_ID}.cloudfunctions.net/c1-func-check-{NONCE}'
 	
 	
 	return render_template('c1.html', bucket=buckets, url=url)

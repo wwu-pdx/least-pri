@@ -26,9 +26,9 @@ def create():
     # Create service account key file
     
     func_path1 = f'core/levels/{LEVEL_PATH}/functionaccess'
-    func_path2 = f'core/levels/{LEVEL_PATH}/functionedit'
+    func_path2 = f'core/levels/{LEVEL_PATH}/functioncheck'
     func_name1 = f'{func_path1}/{RESOURCE_PREFIX}-access.json'
-    func_name2 = f'{func_path2}/{RESOURCE_PREFIX}-edit.json'
+    func_name2 = f'{func_path2}/{RESOURCE_PREFIX}-check.json'
     func_upload_url1 = cloudfunctions.upload_cloud_function(func_path1, FUNCTION_LOCATION)
     func_upload_url2 = cloudfunctions.upload_cloud_function(func_path2, FUNCTION_LOCATION)
 	
@@ -61,7 +61,7 @@ def create():
     secret_blob.upload_from_string(secret)  
 
     sa_key1 = iam.generate_service_account_key(f'{RESOURCE_PREFIX}-access')
-    sa_key2 = iam.generate_service_account_key(f'{RESOURCE_PREFIX}-edit')
+    sa_key2 = iam.generate_service_account_key(f'{RESOURCE_PREFIX}-check')
     print('keys generated')
     
     #write key file in function directory
@@ -72,9 +72,9 @@ def create():
     with open(func_name2, 'w') as f:
         f.write(sa_key2)
     os.chmod(func_name2, 0o700)
-    print(f'Function file: {RESOURCE_PREFIX}-edit has been written to {func_name2}')
+    print(f'Function file: {RESOURCE_PREFIX}-check has been written to {func_name2}')
     
-    funcepath= f'core/levels/{LEVEL_PATH}/functionedit/main.py'
+    funcepath= f'core/levels/{LEVEL_PATH}/functioncheck/main.py'
     
 
     print(f'Level creation complete for: {LEVEL_PATH}')
@@ -83,9 +83,9 @@ def create():
         f'Find the minimum privilage to list a bucket and access function c1-func-access-{nonce} to check if you have the correct answer')
     levels.write_start_info(
         LEVEL_PATH, start_message, file_name='', file_content='')
-    print(f'Step 1.Please use cmd below to update functions and get http trigger url\n gcloud functions deploy c1-func-access-{nonce} --source=core/levels/leastprivilege/c1bucket/functionaccess --allow-unauthenticated \n gcloud functions deploy c1-func-edit-{nonce} --source=core/levels/leastprivilege/c1bucket/functionedit --allow-unauthenticated ')
+    print(f'Step 1.Please use cmd below to update functions and get http trigger url\n gcloud functions deploy c1-func-access-{nonce} --source=core/levels/leastprivilege/c1bucket/functionaccess --allow-unauthenticated \n gcloud functions deploy c1-func-check-{nonce} --source=core/levels/leastprivilege/c1bucket/functioncheck --allow-unauthenticated ')
     
-    print(f'Step 2.Use cmd below to edit iam permissions of c1_access \n gcloud iam roles update c1_access_role_{nonce} --project={project_id} --permissions=permission1,permission2\n OR \n gcloud functions call c1-func-edit-{nonce} --data \'{{\"permissions\":[\"permission1\",\"permission2\"]}}\' \n OR \n append ?permissions=permission1,permission2 after function url generated in Step 1 ')
+    print(f'Step 2.Use cmd below to check iam permissions of c1_access \n gcloud iam roles update c1_access_role_{nonce} --project={project_id} --permissions=permission1,permission2\n OR \n gcloud functions call c1-func-check-{nonce} --data \'{{\"permissions\":[\"permission1\",\"permission2\"]}}\' \n OR \n append ?permissions=permission1,permission2 after function url generated in Step 1 ')
 
     print(f'Step 3.Call c1-func-access-{nonce} with cmd \n gcloud functions call c1-func-access-{nonce} \n OR \n through function url generated in Step 1  \n') 
     
@@ -99,7 +99,7 @@ def destroy():
     # Delete key files
     if os.path.exists(actpath1):
         os.remove(actpath1)
-    actpath2=f'core/levels/{LEVEL_PATH}/functionedit/{RESOURCE_PREFIX}-edit.json'
+    actpath2=f'core/levels/{LEVEL_PATH}/functioncheck/{RESOURCE_PREFIX}-check.json'
     if os.path.exists(actpath2):
         os.remove(actpath2)
     # Delete deployment
