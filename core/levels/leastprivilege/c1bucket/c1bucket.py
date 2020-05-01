@@ -90,7 +90,7 @@ def create():
     print(f'Step 3.Call c1-func-access-{nonce} with cmd \n gcloud functions call c1-func-access-{nonce} \n OR \n through function url generated in Step 1  \n') 
     
     print(f'Use function below to access level \n') 
-    print(f'https://{FUNCTION_LOCATION}-{PROJECT_ID}.cloudfunctions.net/c1-func-access-{NONCE}') 
+    print(f'https://{FUNCTION_LOCATION}-{project_id}.cloudfunctions.net/c1-func-access-{NONCE}') 
     
     
    
