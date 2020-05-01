@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <head>
-  <title>Check Permissions - c1bucket</title>
+  <title>Check Privileges - c1bucket</title>
 </head>
 <body style="text-align:center">
-
+<h2>Check Privileges c1bucket</h2>
 
 
 <div style=" background-image: linear-gradient(to right, rgb(34, 230, 238),white,rgb(34, 230, 238));">
@@ -17,6 +17,7 @@
 {% for p in per %} 
   <li>{{ p }}</li>
  {% endfor %}
-</ol>   
+</ol>
+<span style="background-color:teal">{{err}}</span>   
 </div>
 </body>

@@ -35,6 +35,7 @@ def main(request):
 
 	per=[]
 	rolename=''
+	err =''
 	try:
 		roles = service.projects().roles().get(name=name).execute()
 		rolename = roles['name']
@@ -44,7 +45,8 @@ def main(request):
 			# per += permission+'   '
 			# #print(permission)
 	except Exception as e: 
-		per =str(e)
+		per =[]
+		err = str(e)
 	
 	msg='Congratulations! You get the least privileges. '
 	
@@ -55,10 +57,10 @@ def main(request):
 		for p in pri:
 			if p not in per:
 				msg='Not least privilege, please try again!'
-				return render_template('c1-check.html', pri=pri, per=per, msg=msg, rn=rolename)
+				return render_template('c1-check.html', pri=pri, per=per, msg=msg, rn=rolename, err=err)
 	# if ''.join(per) == ''.join(pri):
 		# msg='Congratulations! You get the least privileges. '
 	# else:
 		# msg='Not least privilege, please try again!'
 
-	return render_template('c1-check.html', pri=pri, per=per, msg=msg, rn=rolename)
+	return render_template('c1-check.html', pri=pri, per=per, msg=msg, rn=rolename, err=err)

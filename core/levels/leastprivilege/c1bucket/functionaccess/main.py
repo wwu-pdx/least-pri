@@ -21,10 +21,12 @@ def main(request):
 
 	#Build storage REST API python object
 	storage_api = discovery.build('storage', 'v1', credentials=credentials)
+	err=''
 	try:
 		buckets = storage_api.buckets().list(project=PROJECT_ID).execute()["items"][0]["name"]
 	except Exception as e:
-		buckets = str(e)
+		buckets = ''
+		err = str(e)
 
 
 	if buckets == '':
@@ -33,7 +35,7 @@ def main(request):
 	url=f'https://{FUNCTION_REGION}-{PROJECT_ID}.cloudfunctions.net/c1-func-check-{NONCE}'
 	
 	
-	return render_template('c1.html', bucket=buckets, url=url)
+	return render_template('c1.html', bucket=buckets, url=url, err=err)
 
 	
 
