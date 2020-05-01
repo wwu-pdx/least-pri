@@ -55,10 +55,10 @@ def main(request):
 		for p in pri:
 			if p not in per:
 				msg='Not least privilege, please try again!'
-				return render_template('c1-permission.html', pri=pri, per=per, msg=msg, rn=rolename)
+				return render_template('c1-check.html', pri=pri, per=per, msg=msg, rn=rolename)
 	# if ''.join(per) == ''.join(pri):
 		# msg='Congratulations! You get the least privileges. '
 	# else:
 		# msg='Not least privilege, please try again!'
 
-	return render_template('c1-permission.html', pri=pri, per=per, msg=msg, rn=rolename)
+	return render_template('c1-check.html', pri=pri, per=per, msg=msg, rn=rolename)
