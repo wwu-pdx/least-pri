@@ -55,6 +55,9 @@ resources:
         - storage.objects.list
         - storage.buckets.delete
         - iam.roles.get
+    - service_account_id: a4-access
+      role:
+        name: roles/logging.viewer
 
     - service_account_id: c1-check
       role:
