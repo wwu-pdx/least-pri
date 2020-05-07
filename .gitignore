@@ -2,4 +2,10 @@ env/
 *.pyc
 lib
 __pycache__/
+*.pyo
+*.pyc
+*.code-workspace
+*.DS_STORE
+start/*
+core/framework/config/project.txt
 
