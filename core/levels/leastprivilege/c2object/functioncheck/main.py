@@ -6,7 +6,7 @@ def main(request):
 	import os
 	from cryptography.fernet import Fernet
 
-	SERVICE_ACCOUNT_KEY_FILE = 'c1-check.json'
+	SERVICE_ACCOUNT_KEY_FILE = 'c2-check.json'
 
 	
 	# Set the project ID
@@ -29,12 +29,12 @@ def main(request):
 	service_r = discovery.build('cloudresourcemanager','v1', credentials=credentials)
 	
 	# Service account 
-	sa = f'serviceAccount:c1-access@{PROJECT_ID}.iam.gserviceaccount.com'
+	sa = f'serviceAccount:c2-access@{PROJECT_ID}.iam.gserviceaccount.com'
 
 	get_iam_policy_request_body = {}
 	
 	roles =[]
-	permissions =[]
+	per =[]
 	msg = ''
 	err=''
 	try:
@@ -43,7 +43,7 @@ def main(request):
 			if sa in r["members"]:
 				roles.append(r["role"])
 	except Exception as e: 
-		permissions =[]
+		per =[]
 		msg ='There is an error'
 		err = str(e)
 	if len(roles)>1 or PRI != roles[0]:
@@ -57,11 +57,11 @@ def main(request):
 
 	
 	try:
-		permissions = service_i.roles().get(name=roles[0]).execute()["includedPermissions"]
+		per = service_i.roles().get(name=roles[0]).execute()["includedPermissions"]
 		
 		
 	except Exception as e: 
-		permissions =[]
+		per =[]
 		err = str(e)
 	
-	return render_template('c1-check.html',  pers=permissions, msg=msg, rn=roles[0], err=err)
+	return render_template('c2-check.html',  per=per, msg=msg, rn=roles[0], err=err)
