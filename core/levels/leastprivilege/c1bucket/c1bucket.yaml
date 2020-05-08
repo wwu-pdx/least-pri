@@ -48,16 +48,7 @@ resources:
     bindings:
     - service_account_id: c1-access
       role:
-        name: custom
-        custom_nonce: {{ nonce }}
-        permissions:
-        - storage.buckets.list
-        - storage.objects.list
-        - storage.buckets.delete
-        - iam.roles.get
-    - service_account_id: c1-access
-      role:
-        name: roles/viewer
+        name: roles/editor
 
     - service_account_id: c1-check
       role:
