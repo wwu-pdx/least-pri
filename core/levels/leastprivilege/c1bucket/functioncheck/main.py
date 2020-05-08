@@ -46,10 +46,10 @@ def main(request):
 		per =[]
 		msg ='There is an error'
 		err = str(e)
-	if len(roles)!=1 or PRI not in roles:
+	if len(roles)>1 or PRI != roles[0]:
 		msg='Not least privilege role, please try again!'
 	else:
-		msg='Congratulations! You got the least privileges role. '
+		msg='Congratulations! You got the least privileges role.'
 		
 		
 	# Build iam  REST API python object
