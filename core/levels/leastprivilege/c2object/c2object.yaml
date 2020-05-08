@@ -11,7 +11,7 @@ resources:
 - name: c2-check
   type: service_account.jinja
 
-- name: c2-object
+- name: c2-bucket
   type: bucket_acl.jinja
   properties:
     nonce: {{ nonce }}
