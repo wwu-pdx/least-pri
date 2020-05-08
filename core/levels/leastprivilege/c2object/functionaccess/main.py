@@ -23,8 +23,11 @@ def main(request):
 	storage_api = discovery.build('storage', 'v1', credentials=credentials)
 	name = f'c2-bucket-{NONCE}'
 	err=''
+	bucket =''
 	try:
-		buckets = storage_api.objects().list(bucket=name).execute()["items"][0]["name"]
+		request = storage_api.objects().list(bucket=name).execute()["items"][0]
+		buckets = name + ' :  ' + request["name"]
+
 	except Exception as e:
 		buckets = 'There is an error'
 		err = str(e)
