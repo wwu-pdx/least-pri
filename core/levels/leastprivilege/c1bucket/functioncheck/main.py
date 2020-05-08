@@ -36,7 +36,6 @@ def main(request):
 	roles =[]
 	pri =[]
 	per =[]
-	role =''
 	msg = ''
 	err=''
 	try:
@@ -53,7 +52,7 @@ def main(request):
 	else:
 		msg='Congratulations! You got the least privileges role. '
 	
-	return render_template('c1-check.html',  per=per, msg=msg, rn=role[0], err=err)
+	return render_template('c1-check.html',  per=per, msg=msg, rn=roles[0], err=err)
 
 
 	# # Build cloudresourcemanager REST API python object
