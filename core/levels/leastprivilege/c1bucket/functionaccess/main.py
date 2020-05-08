@@ -25,7 +25,7 @@ def main(request):
 	try:
 		buckets = storage_api.buckets().list(project=PROJECT_ID).execute()["items"][0]["name"]
 	except Exception as e:
-		buckets = ''
+		buckets = 'There is an error'
 		err = str(e)
 
 

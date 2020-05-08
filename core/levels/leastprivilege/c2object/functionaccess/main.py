@@ -21,11 +21,12 @@ def main(request):
 
 	#Build storage REST API python object
 	storage_api = discovery.build('storage', 'v1', credentials=credentials)
+	name = f'c2-bucket-{NONCE}'
 	err=''
 	try:
-		buckets = storage_api.buckets().list(project=PROJECT_ID).execute()["items"][0]["name"]
+		buckets = storage_api.objects().list(bucket=name).execute()["items"][0]["name"]
 	except Exception as e:
-		buckets = ''
+		buckets = 'There is an error'
 		err = str(e)
 
 
