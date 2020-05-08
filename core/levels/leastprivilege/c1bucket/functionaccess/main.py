@@ -35,7 +35,7 @@ def main(request):
 	url=f'https://{FUNCTION_REGION}-{PROJECT_ID}.cloudfunctions.net/c1-func-check-{NONCE}'
 	
 	
-	return render_template('c1.html', bucket=buckets, url=url, err=err)
+	return render_template('c1-access.html', bucket=buckets, url=url, err=err)
 
 	
 

@@ -30,6 +30,20 @@ def main(request):
 	# Build cloudresourcemanager REST API python object
 	service = discovery.build('iam','v1', credentials=credentials)
 
+    #look for roles
+    # parent = f'projects/{PROJECT_ID}'  
+	# request = service.projects().roles().list(parent=parent)
+	# while True:
+	# 	response = request.execute()
+    #     return 
+	# 	for role in response.get('roles', []):
+			
+	# 		pprint(role)
+
+	# 	request = service.projects().roles().list_next(previous_request=request, previous_response=response)
+	# 	if request is None:
+	# 		break
+
 
 	name = f'projects/{PROJECT_ID}/roles/c1_access_role_{NONCE}'  
 
@@ -37,13 +51,11 @@ def main(request):
 	rolename=''
 	err =''
 	try:
-		roles = service.projects().roles().get(name=name).execute()
-		rolename = roles['name']
+		role = service.projects().roles().get(name=name).execute()
+		rolename = role['name']
 		#print(roles['name'])
-		per = roles['includedPermissions']
-		# for permission in roles['includedPermissions']:
-			# per += permission+'   '
-			# #print(permission)
+		per = role['includedPermissions']
+		
 	except Exception as e: 
 		per =[]
 		err = str(e)
@@ -58,9 +70,5 @@ def main(request):
 			if p not in per:
 				msg='Not least privilege, please try again!'
 				return render_template('c1-check.html', pri=pri, per=per, msg=msg, rn=rolename, err=err)
-	# if ''.join(per) == ''.join(pri):
-		# msg='Congratulations! You get the least privileges. '
-	# else:
-		# msg='Not least privilege, please try again!'
-
+	
 	return render_template('c1-check.html', pri=pri, per=per, msg=msg, rn=rolename, err=err)
