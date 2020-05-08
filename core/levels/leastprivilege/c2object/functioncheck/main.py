@@ -34,7 +34,7 @@ def main(request):
 	get_iam_policy_request_body = {}
 	
 	roles =[]
-	per =[]
+	permissions =[]
 	msg = ''
 	err=''
 	try:
@@ -43,7 +43,7 @@ def main(request):
 			if sa in r["members"]:
 				roles.append(r["role"])
 	except Exception as e: 
-		per =[]
+		permissions =[]
 		msg ='There is an error'
 		err = str(e)
 	if len(roles)>1 or PRI != roles[0]:
@@ -57,11 +57,11 @@ def main(request):
 
 	
 	try:
-		per = service_i.roles().get(name=roles[0]).execute()["includedPermissions"]
+		permissions = service_i.roles().get(name=roles[0]).execute()["includedPermissions"]
 		
 		
 	except Exception as e: 
-		per =[]
+		permission =[]
 		err = str(e)
 	
-	return render_template('c2-check.html',  per=per, msg=msg, rn=roles[0], err=err)
+	return render_template('c2-check.html',  pers=permissions, msg=msg, rn=roles[0], err=err)
