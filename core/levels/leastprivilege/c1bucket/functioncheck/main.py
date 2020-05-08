@@ -21,54 +21,70 @@ def main(request):
 	f = Fernet(key)
 	PRI = f.decrypt(fvar1).decode("utf-8") 
 	
-	pri="".join(PRI.split()).split(',')
-	#pri.sort()
+	#pri="".join(PRI.split()).split(',')
 
 	credentials = google.oauth2.service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_KEY_FILE)
 
-
 	# Build cloudresourcemanager REST API python object
-	service = discovery.build('iam','v1', credentials=credentials)
+	service = discovery.build('cloudresourcemanager','v1', credentials=credentials)
+	
+	# Service account 
+	sa = f'c1-check@{PROJECT_ID}.iam.gserviceaccount.com'
 
-    #look for roles
-    # parent = f'projects/{PROJECT_ID}'  
-	# request = service.projects().roles().list(parent=parent)
-	# while True:
-	# 	response = request.execute()
-    #     return 
-	# 	for role in response.get('roles', []):
-			
-	# 		pprint(role)
-
-	# 	request = service.projects().roles().list_next(previous_request=request, previous_response=response)
-	# 	if request is None:
-	# 		break
-
-
-	name = f'projects/{PROJECT_ID}/roles/c1_access_role_{NONCE}'  
-
-	per=[]
-	rolename=''
-	err =''
+	get_iam_policy_request_body = {}
+	
+	roles =[]
+	pri =[]
+	per =[]
+	role =''
+	msg = ''
+	err=''
 	try:
-		role = service.projects().roles().get(name=name).execute()
-		rolename = role['name']
-		#print(roles['name'])
-		per = role['includedPermissions']
-		
+		response = service.projects().getIamPolicy(resource=PROJECT_ID, body=get_iam_policy_request_body).execute()["bindings"]
+		for r in response:
+			if sa in r['members']:
+				roles.append(r['role'])
 	except Exception as e: 
 		per =[]
+		msg ='There is an error'
 		err = str(e)
-	
-	msg='Congratulations! You get the least privileges. '
-	
-	if len(per)!=len(pri):
-		msg='Not least privilege, please try again!'
-		
+	if len(roles)!=1 or PRI not in roles:
+		msg='Not least privilege role, please try again!'
 	else:
-		for p in pri:
-			if p not in per:
-				msg='Not least privilege, please try again!'
-				return render_template('c1-check.html', pri=pri, per=per, msg=msg, rn=rolename, err=err)
+		msg='Congratulations! You got the least privileges role. '
 	
-	return render_template('c1-check.html', pri=pri, per=per, msg=msg, rn=rolename, err=err)
+	return render_template('c1-check.html',  per=per, msg=msg, rn=role[0], err=err)
+
+
+	# # Build cloudresourcemanager REST API python object
+	# service = discovery.build('iam','v1', credentials=credentials)
+
+
+
+	# name = f'projects/{PROJECT_ID}/roles/c1_access_role_{NONCE}'  
+
+	# per=[]
+	# rolename=''
+	# err =''
+	# try:
+	# 	role = service.projects().roles().get(name=name).execute()
+	# 	rolename = role['name']
+	# 	#print(roles['name'])
+	# 	per = role['includedPermissions']
+		
+	# except Exception as e: 
+	# 	per =[]
+	# 	err = str(e)
+	
+	# msg='Congratulations! You get the least privileges. '
+	
+	# if len(per)!=len(pri):
+	# 	msg='Not least privilege, please try again!'
+		
+	# else:
+	# 	for p in pri:
+	# 		if p not in per:
+	# 			msg='Not least privilege, please try again!'
+	# 			return render_template('c1-check.html',  per=per, msg=msg, rn=rolename, err=err)
+	
+	# return render_template('c1-check.html',  per=per, msg=msg, rn=rolename, err=err)
