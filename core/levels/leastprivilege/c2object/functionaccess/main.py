@@ -31,7 +31,7 @@ def main(request):
 
 
 	if buckets == '':
-		buckets = "No bucket listed. Insufficient privilege!"
+		buckets = "No file listed. Insufficient privilege!"
 	
 	url=f'https://{FUNCTION_REGION}-{PROJECT_ID}.cloudfunctions.net/c2-func-check-{NONCE}'
 	
