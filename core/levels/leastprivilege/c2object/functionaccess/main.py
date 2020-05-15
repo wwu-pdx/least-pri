@@ -28,12 +28,8 @@ def main(request):
 		buckets = name + ' :  ' + request["name"]
 
 	except Exception as e:
-		buckets = 'There is an error'
+		buckets = 'Insufficient privilege!'
 		err = str(e)
-
-
-	if buckets == '':
-		buckets = "No file listed. Insufficient privilege!"
 	
 	url=f'https://{FUNCTION_REGION}-{PROJECT_ID}.cloudfunctions.net/{RESOURCE_PREFIX}-func-check-{NONCE}'
 	

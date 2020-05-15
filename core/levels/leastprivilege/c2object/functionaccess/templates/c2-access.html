@@ -7,10 +7,11 @@
 <h1 style="text-align:center">Least Privileges {{prefix}}object</h1>
 <ul>
   <li>A Bucket was created with the level and a txt file has been placed into the bucket</li>
-  <li>Service account {{prefix}}-access has the role with permission to list content in bucket. However that's a role with permissions more than necessary</li>
-  <li>You can use this <a href="{{url}}" target="_blank">funtion</a> to check permissions of role {{prefix}}-access</li>
+  <li>Service account {{prefix}}-access has the role with permission to list content in bucket. However it's a role with permissions more than necessary</li>
+  <li>You can use this <a href="{{url}}" target="_blank">funtion</a> to check current permissions of {{prefix}}-access</li>
   <li>Go to google cloud console IAM&Admin -> IAM -> MEMBERS, find service acount {{prefix}}-access in the list  and edit role </li>
-  <li>Refresh the <a href="{{url}}" target="_blank">funtion</a> to see if you get the correct <b>predefined role</b>with least privileges to list file in bucket</li>
+  <li>Refresh the check <a href="{{url}}" target="_blank">funtion</a> to see if you get the correct <b>predefined role</b>with least privileges to list file in bucket</li>
+  <li>To validate if there are sufficient permissions, wait a minute or two and refresh the current function.</li>
 </ul>  
 </div>
 
@@ -20,7 +21,10 @@
 <ol>
   <li>{{ bucket }}</li>
 </ol> 
- <span style="width:100%;background-color:teal;text-align:center">{{err}}</span>    
+ <span style="width:100%;background-color:teal;text-align:center">
+	<h4>Error:</h4>
+	{{err}}
+</span>    
 </div>
 
 <div style=" width:80%;margin:auto;padding:auto;" >
