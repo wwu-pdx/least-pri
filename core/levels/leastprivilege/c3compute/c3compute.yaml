@@ -19,8 +19,8 @@ resources:
     nonce: {{ nonce }}
     predefined_acl: private
 
-- name: c3-instance
-  type: ubuntu_vm.jinja
+- name: c3-container-vm
+  type: container_vm.jinja
   properties:
     zone: us-west1-b
     open_external: true

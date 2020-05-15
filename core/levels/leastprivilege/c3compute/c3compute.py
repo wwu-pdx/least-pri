@@ -48,7 +48,6 @@ def create():
         'core/framework/templates/iam_policy.jinja',
         'core/framework/templates/cloud_function.jinja',
         'core/framework/templates/container_vm.jinja',
-        'core/framework/templates/ubuntu_vm.jinja',
         'core/framework/templates/bucket_acl.jinja']
     deployments.insert(LEVEL_PATH, template_files=template_files,
                        config_template_args=config_template_args)
