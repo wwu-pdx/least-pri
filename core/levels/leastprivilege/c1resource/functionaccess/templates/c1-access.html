@@ -15,9 +15,11 @@
 
 
 <div style=" width:80%;margin:auto;padding:auto; background-image: linear-gradient(to right, rgb(34, 230, 238),white,rgb(34, 230, 238));">
-<h3>Bucket:</h3>
+<h3>Resources:</h3>
 <ol>
-  <li>{{ bucket }}</li>
+{% for r in Resources %} 
+  <li>{{ r }}</li>
+ {% endfor %}
 </ol> 
  <span style="width:100%;background-color:teal;text-align:center">{{err}}</span>    
 </div>
