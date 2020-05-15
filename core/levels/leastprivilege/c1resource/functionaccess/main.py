@@ -4,6 +4,7 @@ def main(request):
 	import google.oauth2.service_account
 	from google.oauth2.credentials import Credentials
 	import os
+	
 
 	
 	# Set the project ID
@@ -18,22 +19,22 @@ def main(request):
 
 	credentials = google.oauth2.service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_KEY_FILE)
 
-	#Build storage REST API python object
-	storage_api = discovery.build('storage', 'v1', credentials=credentials)
-	name = f'{RESOURCE_PREFIX}-bucket-{NONCE}'
+	#Build resource REST API python object
+	resource_api = discovery.build('cloudresourcemanager', 'v2', credentials=credentials)
 	err=''
-	bucket =''
+	resources=[]
 	try:
-		request = storage_api.objects().list(bucket=name).execute()["items"][0]
-		buckets = name + ' :  ' + request["name"]
-
+		response= resource_api.resources().list(deployment="thunder", project=PROJECT_ID).execute()["resources"]
+		for r in response:
+			if r["type"] in ["storage.v1.bucket", "compute.v1.instance"]:
+				resources.append(r["name"])
 	except Exception as e:
-		buckets = 'There is an error'
+		resources = ["There is an error"]
 		err = str(e)
 
 
-	if buckets == '':
-		buckets = "No file listed. Insufficient privilege!"
+	if len(resources) == 0:
+		resources = ["No bucket listed. Insufficient privilege!"]
 	
 	url=f'https://{FUNCTION_REGION}-{PROJECT_ID}.cloudfunctions.net/{RESOURCE_PREFIX}-func-check-{NONCE}'
 	

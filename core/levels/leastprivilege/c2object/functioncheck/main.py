@@ -5,15 +5,13 @@ def main(request):
 	from google.oauth2.credentials import Credentials
 	import os
 	from cryptography.fernet import Fernet
-
-	SERVICE_ACCOUNT_KEY_FILE = 'c2-check.json'
-
 	
 	# Set the project ID
 	PROJECT_ID = os.environ['GCP_PROJECT']
 	
 	# Get function env variable
 	NONCE = os.environ.get('NONCE', 'Specified environment variable is not set.')
+	RESOURCE_PREFIX = os.environ.get('RESOURCE_PREFIX', 'Specified environment variable is not set.')
 	
 
 	key = os.environ.get('fvar2', 'Specified environment variable is not set.').encode("utf-8") 
@@ -23,13 +21,14 @@ def main(request):
 	
 	#pri="".join(PRI.split()).split(',')
 
+    SERVICE_ACCOUNT_KEY_FILE = f'{RESOURCE_PREFIX}-check.json'
 	credentials = google.oauth2.service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_KEY_FILE)
 
 	# Build cloudresourcemanager REST API python object
 	service_r = discovery.build('cloudresourcemanager','v1', credentials=credentials)
 	
 	# Service account 
-	sa = f'serviceAccount:c2-access@{PROJECT_ID}.iam.gserviceaccount.com'
+	sa = f'serviceAccount:{RESOURCE_PREFIX}-access@{PROJECT_ID}.iam.gserviceaccount.com'
 
 	get_iam_policy_request_body = {}
 	
@@ -49,7 +48,7 @@ def main(request):
 	if len(roles)>1 or PRI != roles[0]:
 		msg='Not least privilege role, please try again!'
 	else:
-		msg='Congratulations! You got the least privileges role.'
+		msg='Congratulations! You got the least privilege role.'
 		
 		
 	# Build iam  REST API python object
@@ -64,4 +63,4 @@ def main(request):
 		permission =[]
 		err = str(e)
 	
-	return render_template('c2-check.html',  pers=permissions, msg=msg, rn=roles[0], err=err)
+	return render_template(f'{RESOURCE_PREFIX}-check.html',  pers=permissions, msg=msg, rn=roles[0], err=err, prefix=RESOURCE_PREFIX)

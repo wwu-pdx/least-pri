@@ -10,8 +10,8 @@ from core.framework.cloudhelpers import deployments, iam, cloudfunctions
 
 from cryptography.fernet import Fernet
 
-LEVEL_PATH = 'leastprivilege/c2object'
-RESOURCE_PREFIX = 'c2'
+LEVEL_PATH = 'leastprivilege/c1resource'
+RESOURCE_PREFIX = 'c1'
 FUNCTION_LOCATION = 'us-central1'
 
 
@@ -35,17 +35,18 @@ def create():
     #Set least privaleges
     fvar2 = Fernet.generate_key()
     f = Fernet(fvar2)
-    fvar1 = f.encrypt(b'roles/storage.objectViewer')
+    fvar1 = f.encrypt(b'roles/viewer')
     
     print("Level initialization finished for: " + LEVEL_PATH)
     # Insert deployment
-    config_template_args = {'nonce': nonce,'func_upload_url1':func_upload_url1,'func_upload_url2':func_upload_url2, 'prefix':RESOURCE_PREFIX,'fvar1': fvar1.decode("utf-8"),'fvar2': fvar2.decode("utf-8") }
+    config_template_args = {'nonce': nonce,'func_upload_url1':func_upload_url1,'func_upload_url2':func_upload_url2, 'prefix':RESOURCE_PREFIX, 'fvar1': fvar1.decode("utf-8"),'fvar2': fvar2.decode("utf-8") }
 
     template_files = [
         'core/framework/templates/service_account.jinja',
         'core/framework/templates/iam_policy.jinja',
         'core/framework/templates/cloud_function.jinja',
-        'core/framework/templates/bucket_acl.jinja']
+        'core/framework/templates/bucket_acl.jinja',
+        'core/framework/templates/ubuntu_vm.jinja']
     deployments.insert(LEVEL_PATH, template_files=template_files,
                        config_template_args=config_template_args)
 
@@ -80,10 +81,10 @@ def create():
     print(f'Level creation complete for: {LEVEL_PATH}')
     
     start_message = (
-        f'Find the minimum privilage to list a bucket and access function {RESOURCE_PREFIX}-func-access-{nonce} to check if you have the correct answer')
+        f'Find the minimum privilage role to list resources in the project and use function {RESOURCE_PREFIX}-func-access-{nonce} to check if you have the correct answer')
     levels.write_start_info(
         LEVEL_PATH, start_message, file_name='', file_content='')
-    print(f'Step 1.Please use cmd below to update functions and get http trigger url\n gcloud functions deploy {RESOURCE_PREFIX}-func-access-{nonce} --source=core/levels/leastprivilege/{RESOURCE_PREFIX}object/functionaccess --allow-unauthenticated \n gcloud functions deploy {RESOURCE_PREFIX}-func-check-{nonce} --source=core/levels/leastprivilege/{RESOURCE_PREFIX}object/functioncheck --allow-unauthenticated ')
+    print(f'Step 1.Please use cmd below to update functions and get http trigger url\n gcloud functions deploy {RESOURCE_PREFIX}-func-access-{nonce} --source=core/levels/leastprivilege/c1resource/functionaccess --allow-unauthenticated \n gcloud functions deploy {RESOURCE_PREFIX}-func-check-{nonce} --source=core/levels/leastprivilege/{RESOURCE_PREFIX}resource/functioncheck --allow-unauthenticated ')
     
     print(f'Step 2.Use cmd below to check iam permissions of {RESOURCE_PREFIX}_access \n gcloud iam roles update {RESOURCE_PREFIX}_access_role_{nonce} --project={project_id} --permissions=permission1,permission2\n OR \n gcloud functions call {RESOURCE_PREFIX}-func-check-{nonce} --data \'{{\"permissions\":[\"permission1\",\"permission2\"]}}\' \n OR \n append ?permissions=permission1,permission2 after function url generated in Step 1 ')
 

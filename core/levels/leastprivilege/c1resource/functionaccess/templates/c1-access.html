@@ -1,16 +1,15 @@
 <!DOCTYPE html>
 <head>
-  <title>Least Privileges - {{prefix}}object</title>
+  <title>Least Privileges - {{prefix}}bucket</title>
 </head>
 <body >
 <div>
-<h1 style="text-align:center">Least Privileges {{prefix}}object</h1>
+<h1 style="text-align:center">Least Privileges {{prefix}}bucket</h1>
 <ul>
-  <li>A Bucket was created with the level and a txt file has been placed into the bucket</li>
-  <li>Service account {{prefix}}-access has the role with permission to list content in bucket. However that's a role with permissions more than necessary</li>
+  <li>Custom role {{prefix}}-access was created to list bucket in the level. However it was granted with permissions more than necessary</li>
   <li>You can use this <a href="{{url}}" target="_blank">funtion</a> to check permissions of role {{prefix}}-access</li>
   <li>Go to google cloud console IAM&Admin -> IAM -> MEMBERS, find service acount {{prefix}}-access in the list  and edit role </li>
-  <li>Refresh the <a href="{{url}}" target="_blank">funtion</a> to see if you get the correct <b>predefined role</b>with least privileges to list file in bucket</li>
+  <li>Refresh the <a href="{{url}}" target="_blank">funtion</a> to see if you get the correct least privileges</li>
 </ul>  
 </div>
 
@@ -26,7 +25,7 @@
 <div style=" width:80%;margin:auto;padding:auto;" >
   <h4>Source code of function that checks what roles bind with {{prefix}}-access  :</h4>
 <pre style=" width:100%;margin:auto;padding:auto; background-color:rgb(147, 181, 182);">
-from flask import render_template
+  from flask import render_template
 def main(request):
 	from googleapiclient import discovery
 	import google.oauth2.service_account
@@ -48,6 +47,8 @@ def main(request):
 	fvar1 = os.environ.get('fvar1', 'Specified environment variable is not set.').encode("utf-8") 
 	f = Fernet(key)
 	PRI = f.decrypt(fvar1).decode("utf-8") 
+	
+	#pri="".join(PRI.split()).split(',')
 
 	credentials = google.oauth2.service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_KEY_FILE)
 
@@ -87,7 +88,7 @@ def main(request):
 		
 		
 	except Exception as e: 
-		permission =[]
+		permissions =[]
 		err = str(e)
 	
 	return render_template('{{prefix}}-check.html',  pers=permissions, msg=msg, rn=roles[0], err=err)

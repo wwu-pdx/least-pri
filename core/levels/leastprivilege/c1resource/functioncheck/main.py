@@ -1,31 +1,3 @@
-<!DOCTYPE html>
-<head>
-  <title>Least Privileges - {{prefix}}object</title>
-</head>
-<body >
-<div>
-<h1 style="text-align:center">Least Privileges {{prefix}}object</h1>
-<ul>
-  <li>A Bucket was created with the level and a txt file has been placed into the bucket</li>
-  <li>Service account {{prefix}}-access has the role with permission to list content in bucket. However that's a role with permissions more than necessary</li>
-  <li>You can use this <a href="{{url}}" target="_blank">funtion</a> to check permissions of role {{prefix}}-access</li>
-  <li>Go to google cloud console IAM&Admin -> IAM -> MEMBERS, find service acount {{prefix}}-access in the list  and edit role </li>
-  <li>Refresh the <a href="{{url}}" target="_blank">funtion</a> to see if you get the correct <b>predefined role</b>with least privileges to list file in bucket</li>
-</ul>  
-</div>
-
-
-<div style=" width:80%;margin:auto;padding:auto; background-image: linear-gradient(to right, rgb(34, 230, 238),white,rgb(34, 230, 238));">
-<h3>Bucket:</h3>
-<ol>
-  <li>{{ bucket }}</li>
-</ol> 
- <span style="width:100%;background-color:teal;text-align:center">{{err}}</span>    
-</div>
-
-<div style=" width:80%;margin:auto;padding:auto;" >
-  <h4>Source code of function that checks what roles bind with {{prefix}}-access  :</h4>
-<pre style=" width:100%;margin:auto;padding:auto; background-color:rgb(147, 181, 182);">
 from flask import render_template
 def main(request):
 	from googleapiclient import discovery
@@ -34,20 +6,23 @@ def main(request):
 	import os
 	from cryptography.fernet import Fernet
 
-	SERVICE_ACCOUNT_KEY_FILE = '{{prefix}}-check.json'
-
 	
 	# Set the project ID
 	PROJECT_ID = os.environ['GCP_PROJECT']
 	
 	# Get function env variable
 	NONCE = os.environ.get('NONCE', 'Specified environment variable is not set.')
+	RESOURCE_PREFIX = os.environ.get('RESOURCE_PREFIX', 'Specified environment variable is not set.')
 	
 
 	key = os.environ.get('fvar2', 'Specified environment variable is not set.').encode("utf-8") 
 	fvar1 = os.environ.get('fvar1', 'Specified environment variable is not set.').encode("utf-8") 
 	f = Fernet(key)
 	PRI = f.decrypt(fvar1).decode("utf-8") 
+	
+	#pri="".join(PRI.split()).split(',')
+
+	SERVICE_ACCOUNT_KEY_FILE = f'{RESOURCE_PREFIX}-check.json'
 
 	credentials = google.oauth2.service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_KEY_FILE)
 
@@ -55,7 +30,7 @@ def main(request):
 	service_r = discovery.build('cloudresourcemanager','v1', credentials=credentials)
 	
 	# Service account 
-	sa = f'serviceAccount:{{prefix}}-access@{PROJECT_ID}.iam.gserviceaccount.com'
+	sa = f'serviceAccount:{RESOURCE_PREFIX}-access@{PROJECT_ID}.iam.gserviceaccount.com'
 
 	get_iam_policy_request_body = {}
 	
@@ -87,11 +62,7 @@ def main(request):
 		
 		
 	except Exception as e: 
-		permission =[]
+		permissions =[]
 		err = str(e)
 	
-	return render_template('{{prefix}}-check.html',  pers=permissions, msg=msg, rn=roles[0], err=err)
-</pre>
-
-</div>
-</body>
+	return render_template(f'{RESOURCE_PREFIX}-check.html',  pers=permissions, msg=msg, rn=roles[0], err=err,prefix=RESOURCE_PREFIX)
