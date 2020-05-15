@@ -24,9 +24,6 @@ resources:
   properties:
     zone: us-west1-b
     open_external: true
-    startup_script: |
-      #!/bin/bash
-      sudo apt update
     open_http: true
     container_manifest: |
       apiVersion: v1
