@@ -25,20 +25,15 @@ resources:
     startup_script: |
       #!/bin/bash
       sudo apt update
-    - name: b1-container-vm
-  type: container_vm.jinja
-  properties:
-    zone: us-west1-b
-    open_external: true
     open_http: true
     container_manifest: |
       apiVersion: v1
       kind: Pod
       metadata:
-        name: b1
+        name: c3
       spec:
         containers:
-          - name: b1
+          - name: c3
             image: docker.io/wwupdx/websec-b2:latest
             imagePullPolicy: Always
             env:
