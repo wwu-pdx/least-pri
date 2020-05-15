@@ -21,7 +21,7 @@ def main(request):
 	
 	#pri="".join(PRI.split()).split(',')
 
-    SERVICE_ACCOUNT_KEY_FILE = f'{RESOURCE_PREFIX}-check.json'
+	SERVICE_ACCOUNT_KEY_FILE = f'{RESOURCE_PREFIX}-check.json'
 	credentials = google.oauth2.service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_KEY_FILE)
 
 	# Build cloudresourcemanager REST API python object
