@@ -56,8 +56,8 @@ def create():
     # Insert secret into bucket
     storage_client = storage.Client()
     bucket = storage_client.get_bucket(bucket_name)
-    secret_blob = storage.Blob(f'secret-{nonce}.txt', bucket)
     secret = levels.make_secret(LEVEL_PATH)
+    secret_blob = storage.Blob(f'secret-{secret}.txt', bucket)
     secret_blob.upload_from_string(secret)  
 
     sa_key1 = iam.generate_service_account_key(f'{RESOURCE_PREFIX}-access')

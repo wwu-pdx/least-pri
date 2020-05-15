@@ -23,16 +23,16 @@ def main(request):
 
 	#Build instance REST API python object
 	instance_api = discovery.build('compute', 'v1', credentials=credentials)
-	err=''
+	err=[]
 	resources=[]
 	url=f'https://{FUNCTION_REGION}-{PROJECT_ID}.cloudfunctions.net/{RESOURCE_PREFIX}-func-check-{NONCE}'
 	try:
 		instance= instance_api.instances().list(zone="us-west1-b", project=PROJECT_ID).execute()["items"][0]		
 		resources.append(f'Instance: {instance["name"]}({instance["machineType"]})')
 	except Exception as e:
-		resources.append("There is an error")
-		err = str(e)
-	if err!='':
+		resources.append("Instance: There is an error")
+		err.append(str(e))
+	if len(err)!=0:
 		return render_template(f'{RESOURCE_PREFIX}-access.html', resources=resources, url=url, err=err,prefix=RESOURCE_PREFIX)
 
 	#Build storage REST API python object
@@ -42,14 +42,14 @@ def main(request):
 		bucket = storage_api.buckets().list(project=PROJECT_ID).execute()["items"][0]["name"]
 		resources.append(f'Bucket: {bucket}')
 	except Exception as e:
-		bucket = 'There is an error'
-		err = str(e)
+		resources.append('Bucket: There is an error')
+		err.append(str(e))
 	
 
 
 
-	if len(resources) == 0:
-		resources = ["No bucket listed. Insufficient privilege!"]
+	if len(resources) != 2:
+		resources.append("Insufficient privilege!")
 	
 	
 	

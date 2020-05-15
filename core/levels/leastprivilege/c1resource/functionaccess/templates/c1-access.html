@@ -19,9 +19,16 @@
 <ol>
 {% for r in resources %} 
   <li>{{ r }}</li>
- {% endfor %}
+{% endfor %}
 </ol> 
- <span style="width:100%;background-color:teal;text-align:center">{{err}}</span>    
+ <span style="width:100%;background-color:teal;text-align:center">
+<ol>
+{% for e in err %} 
+  <li>{{ e }}</li>
+{% endfor %}
+</ol>
+
+</span>
 </div>
 
 <div style=" width:80%;margin:auto;padding:auto;" >
