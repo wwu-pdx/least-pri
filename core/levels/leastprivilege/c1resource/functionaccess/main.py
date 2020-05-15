@@ -19,24 +19,39 @@ def main(request):
 
 	credentials = google.oauth2.service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_KEY_FILE)
 
-	#Build resource REST API python object
-	resource_api = discovery.build('cloudresourcemanager', 'v2', credentials=credentials)
+	
+
+	#Build instance REST API python object
+	instance_api = discovery.build('compute', 'v1', credentials=credentials)
 	err=''
 	resources=[]
+	url=f'https://{FUNCTION_REGION}-{PROJECT_ID}.cloudfunctions.net/{RESOURCE_PREFIX}-func-check-{NONCE}'
 	try:
-		response= resource_api.resources().list(deployment="thunder", project=PROJECT_ID).execute()["resources"]
-		for r in response:
-			if r["type"] in ["storage.v1.bucket", "compute.v1.instance"]:
-				resources.append(r["name"])
+		instance= instance_api.instances().list(zone="us-west1-b", project=PROJECT_ID).execute()["items"][0]		
+		resources.append(f'Instance: {instance["name"]}({instance["machineType"]})')
 	except Exception as e:
-		resources = ["There is an error"]
+		resources.append("There is an error")
 		err = str(e)
+	if err!='':
+		return render_template(f'{RESOURCE_PREFIX}-access.html', resources=resources, url=url, err=err,prefix=RESOURCE_PREFIX)
+
+	#Build storage REST API python object
+	storage_api = discovery.build('storage', 'v1', credentials=credentials)
+	bucket=''
+	try:
+		bucket = storage_api.buckets().list(project=PROJECT_ID).execute()["items"][0]["name"]
+		resources.append(f'Bucket: {bucket}')
+	except Exception as e:
+		bucket = 'There is an error'
+		err = str(e)
+	
+
 
 
 	if len(resources) == 0:
 		resources = ["No bucket listed. Insufficient privilege!"]
 	
-	url=f'https://{FUNCTION_REGION}-{PROJECT_ID}.cloudfunctions.net/{RESOURCE_PREFIX}-func-check-{NONCE}'
+	
 	
 	
 	return render_template(f'{RESOURCE_PREFIX}-access.html', resources=resources, url=url, err=err,prefix=RESOURCE_PREFIX)
