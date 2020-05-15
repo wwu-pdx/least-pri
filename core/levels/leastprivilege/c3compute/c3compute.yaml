@@ -3,6 +3,8 @@ imports:
 - path: cloud_function.jinja
 - path: iam_policy.jinja
 - path: bucket_acl.jinja
+- path: container_vm.jinja
+
 
 resources:
 - name: c3-access
