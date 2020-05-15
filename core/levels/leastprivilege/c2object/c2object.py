@@ -35,7 +35,7 @@ def create():
     #Set least privaleges
     fvar2 = Fernet.generate_key()
     f = Fernet(fvar2)
-    fvar1 = f.encrypt(b'roles/storage.admin')
+    fvar1 = f.encrypt(b'roles/storage.objectViewer')
     
     print("Level initialization finished for: " + LEVEL_PATH)
     # Insert deployment
