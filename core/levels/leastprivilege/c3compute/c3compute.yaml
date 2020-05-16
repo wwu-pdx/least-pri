@@ -3,7 +3,7 @@ imports:
 - path: cloud_function.jinja
 - path: iam_policy.jinja
 - path: bucket_acl.jinja
-- path: container_vm.jinja
+- path: ubuntu_vm.jinja
 
 
 resources:
@@ -19,29 +19,11 @@ resources:
     nonce: {{ nonce }}
     predefined_acl: private
 
-- name: c3-container-vm
-  type: container_vm.jinja
+- name: c3-instance
+  type: ubuntu_vm.jinja
   properties:
     zone: us-west1-b
     open_external: true
-    open_http: true
-    container_manifest: |
-      apiVersion: v1
-      kind: Pod
-      metadata:
-        name: c3
-      spec:
-        containers:
-          - name: c3
-            image: docker.io/wwupdx/websec-b2:latest
-            imagePullPolicy: Always
-            env:
-              - name: USERNAME
-                value: admin
-              - name: PASSWORD
-                value: {{secret}}
-              - name: PORT
-                value: 80
 
 - name: c3-func-access
   type: cloud_function.jinja

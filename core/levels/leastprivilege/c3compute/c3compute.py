@@ -35,7 +35,7 @@ def create():
     #Set least privaleges
     fvar2 = Fernet.generate_key()
     f = Fernet(fvar2)
-    fvar1 = f.encrypt(b'roles/storage.objectViewer')
+    fvar1 = f.encrypt(b'roles/compute.viewer')
 
     secret = levels.make_secret(LEVEL_PATH)
     
@@ -47,14 +47,14 @@ def create():
         'core/framework/templates/service_account.jinja',
         'core/framework/templates/iam_policy.jinja',
         'core/framework/templates/cloud_function.jinja',
-        'core/framework/templates/container_vm.jinja',
+        'core/framework/templates/ubuntu_vm.jinja',
         'core/framework/templates/bucket_acl.jinja']
     deployments.insert(LEVEL_PATH, template_files=template_files,
                        config_template_args=config_template_args)
 
     print("Level setup started for: " + LEVEL_PATH)
     
-
+    
     
     # Insert secret into bucket
     storage_client = storage.Client()

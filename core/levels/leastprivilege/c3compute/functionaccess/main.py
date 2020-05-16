@@ -18,23 +18,25 @@ def main(request):
 
 	credentials = google.oauth2.service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_KEY_FILE)
 
-	#Build storage REST API python object
-	storage_api = discovery.build('storage', 'v1', credentials=credentials)
-	name = f'{RESOURCE_PREFIX}-bucket-{NONCE}'
-	err=''
-	bucket =''
+	#Build instance REST API python object
+	instance_api = discovery.build('compute', 'v1', credentials=credentials)
+	err=[]
+	resources=[]
+	url=f'https://{FUNCTION_REGION}-{PROJECT_ID}.cloudfunctions.net/{RESOURCE_PREFIX}-func-check-{NONCE}'
 	try:
-		request = storage_api.objects().list(bucket=name).execute()["items"][0]
-		buckets = name + ' :  ' + request["name"]
-
+		instance= instance_api.instances().list(zone="us-west1-b", project=PROJECT_ID).execute()["items"][0]		
+		resources.append(instance["name"])
+		resources.append(instance["machineType"])
+		resources.append(instance["networkInterfaces"][0]["accessConfigs"][0]["natIP"])
 	except Exception as e:
-		buckets = 'Insufficient privilege!'
-		err = str(e)
+		resources.append("Instance: Insufficient privilege!")
+		err.append(str(e))
+	
 	
 	url=f'https://{FUNCTION_REGION}-{PROJECT_ID}.cloudfunctions.net/{RESOURCE_PREFIX}-func-check-{NONCE}'
 	
 	
-	return render_template(f'{RESOURCE_PREFIX}-access.html', bucket=buckets, url=url, err=err,prefix=RESOURCE_PREFIX)
+	return render_template(f'{RESOURCE_PREFIX}-access.html', resources=resources, url=url, err=err,prefix=RESOURCE_PREFIX)
 
 	
 
