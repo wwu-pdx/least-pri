@@ -23,14 +23,15 @@
 	<li>{{ r }}</li>
   {% endfor %}
   </ul> 
-   <span style="width:100%;background-color:teal;text-align:center">
-  <h4>Error:</h4>
-  <ul>
-  {% for e in err %} 
-	<li>{{ e }}</li>
-  {% endfor %}
-  </ul>
-  
+   <span style="width:100%;background-color:teal">
+	{% if err|length>0 %} 
+	<h4>Error:</h4>
+	<ul>
+		{% for e in err %} 
+		  <li>{{ e }}</li>
+		{% endfor %}
+	</ul>
+	{% endif %}
   </span>
   </div>
   

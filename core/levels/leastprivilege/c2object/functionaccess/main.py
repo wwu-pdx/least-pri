@@ -21,20 +21,21 @@ def main(request):
 	#Build storage REST API python object
 	storage_api = discovery.build('storage', 'v1', credentials=credentials)
 	name = f'{RESOURCE_PREFIX}-bucket-{NONCE}'
-	err=''
-	bucket =''
+	err=[]
+	resources = []
 	try:
 		request = storage_api.objects().list(bucket=name).execute()["items"][0]
-		buckets = name + ' :  ' + request["name"]
+		bucket = name + ' :  ' + request["name"]
+		resources.append(bucket)
 
 	except Exception as e:
-		buckets = 'Insufficient privilege!'
-		err = str(e)
+		resources.append('Insufficient privilege!') =
+		err.append(str(e))
 	
 	url=f'https://{FUNCTION_REGION}-{PROJECT_ID}.cloudfunctions.net/{RESOURCE_PREFIX}-func-check-{NONCE}'
 	
 	
-	return render_template(f'{RESOURCE_PREFIX}-access.html', bucket=buckets, url=url, err=err,prefix=RESOURCE_PREFIX)
+	return render_template(f'{RESOURCE_PREFIX}-access.html', resources=resources, url=url, err=err,prefix=RESOURCE_PREFIX)
 
 	
 
