@@ -25,9 +25,9 @@ def main(request):
 	url=f'https://{FUNCTION_REGION}-{PROJECT_ID}.cloudfunctions.net/{RESOURCE_PREFIX}-func-check-{NONCE}'
 	try:
 		instance= instance_api.instances().list(zone="us-west1-b", project=PROJECT_ID).execute()["items"][0]		
-		resources.append(f'Instance: {instance["name"]}')
+		resources.append(f'Name: {instance["name"]}')
 		resources.append(f'Machine Type: {instance["machineType"]}')
-		resources.append(f'NatIP{instance["networkInterfaces"][0]["accessConfigs"][0]["natIP"]}')
+		resources.append(f'NatIP: {instance["networkInterfaces"][0]["accessConfigs"][0]["natIP"]}')
 	except Exception as e:
 		resources.append("Instance: Insufficient privilege!")
 		err.append(str(e))
