@@ -101,10 +101,10 @@ def create():
 
 def destroy():
     #Delete datastore
-    print(f'Deleted entities keys {ENTITY_KEYS}')
+    print(f'Deleting entities keys {ENTITY_KEYS}')
     client = datastore.Client()
     client.delete_multi(ENTITY_KEYS)
-
+    print(f'Deleting json key files')
     # Delete starting files
     levels.delete_start_files()
     actpath1=f'core/levels/{LEVEL_PATH}/functionaccess/{RESOURCE_PREFIX}-access.json'
