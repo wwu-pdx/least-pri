@@ -25,8 +25,8 @@ def main(request):
 	err=[]
 	resources = []
 	try:
-		
-		for entry in client.list_entries():
+		filters = "resource.type = (gce_instance OR gcs_bucket)"
+		for entry in client.list_entries(order_by="DESCENDING",page_size=5, filters=filters):
 			resources.append(entry)
 
 	except Exception as e:
