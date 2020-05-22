@@ -1,7 +1,4 @@
 from flask import render_template
-NONCE = '{{nonce}}'
-RESOURCE_PREFIX = '{{resource_prefix}}'
-LEVEL_NAME = '{{level_name}}'
 def main(request):
 	from googleapiclient import discovery
 	import google.oauth2.service_account
@@ -13,7 +10,9 @@ def main(request):
 	PROJECT_ID = os.environ['GCP_PROJECT']
 	
 	# Get function env variable
-	
+	NONCE = os.environ.get('NONCE', 'Specified environment variable is not set.')
+	RESOURCE_PREFIX = os.environ.get('RESOURCE_PREFIX', 'Specified environment variable is not set.')
+	LEVEL_NAME = os.environ.get('LEVEL_NAME', 'Specified environment variable is not set.')
 
 	key = os.environ.get('fvar2', 'Specified environment variable is not set.').encode("utf-8") 
 	fvar1 = os.environ.get('fvar1', 'Specified environment variable is not set.').encode("utf-8") 
