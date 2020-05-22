@@ -58,10 +58,10 @@ def create():
     client = datastore.Client()
     for entity in entities:
         entity_key = client.key(kind)
-        ENTITY_KEYS.append(entity_key)
         task = datastore.Entity(key=entity_key)
         task.update(entity)
         client.put(task)
+        ENTITY_KEYS.append(entity.key)
     print('Datastore entity created')
 
     sa_key1 = iam.generate_service_account_key(f'{RESOURCE_PREFIX}-access')
