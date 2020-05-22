@@ -103,7 +103,7 @@ def destroy():
     #Delete datastore
     print(f'Deleting entities ')
     client = datastore.Client()
-    query = client.query(kind=KIND).keys_only()
+    query = client.query(kind=KIND)
     entities = query.fetch()
     for entity in entities:
         client.delete(entity.key)
