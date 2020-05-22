@@ -3,23 +3,16 @@ imports:
 - path: cloud_function.jinja
 - path: iam_policy.jinja
 - path: bucket_acl.jinja
-- path: ubuntu_vm.jinja
-
 
 resources:
-- name: c3-access
+- name: c5-access
   type: service_account.jinja
 
-- name: c3-check
+- name: c5-check
   type: service_account.jinja
+    
 
-- name: c3-instance
-  type: ubuntu_vm.jinja
-  properties:
-    zone: us-west1-b
-    open_external: true
-
-- name: c3-func-access
+- name: c5-func-access
   type: cloud_function.jinja
   properties:
     region: us-central1
@@ -29,9 +22,9 @@ resources:
     policyBindings:
     - role: roles/cloudfunctions.invoker
       service_account_id: allusers
-    env_variables: {"NONCE":{{nonce}},"RESOURCE_PREFIX":{{prefix}}}
+    env_variables: {"NONCE":{{nonce}},"RESOURCE_PREFIX":{{resource_prefix}},"LEVEL_NAME":{{level_name}}}
 
-- name: c3-func-check
+- name: c5-func-check
   type: cloud_function.jinja
   properties:
     region: us-central1
@@ -41,17 +34,17 @@ resources:
     policyBindings:
     - role: roles/cloudfunctions.invoker
       service_account_id: allusers
-    env_variables: {"fvar1":{{fvar1}},"fvar2":{{fvar2}},"NONCE":{{nonce}},"RESOURCE_PREFIX":{{prefix}}} 
+    env_variables: {"fvar1":{{fvar1}},"fvar2":{{fvar2}},"NONCE":{{nonce}},"RESOURCE_PREFIX":{{resource_prefix}},"LEVEL_NAME":{{level_name}}}
 
 - name: iam_policy
   type: iam_policy.jinja
   properties:
     bindings:
-    - service_account_id: c3-access
+    - service_account_id: c5-access
       role:
-        name: roles/compute.admin
+        name: roles/datastore.owner
 
-    - service_account_id: c3-check
+    - service_account_id: c5-check
       role:
         name: roles/iam.roleViewer
         

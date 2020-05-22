@@ -4,16 +4,18 @@ import os
 import google.auth
 from googleapiclient import discovery
 from google.cloud import storage
+from google.cloud import datastore
 
 from core.framework import levels
 from core.framework.cloudhelpers import deployments, iam, cloudfunctions
 
 from cryptography.fernet import Fernet
 
-LEVEL_PATH = 'leastprivilege/c3compute'
-RESOURCE_PREFIX = 'c3'
+LEVEL_PATH = 'leastprivilege/c5datastore'
+RESOURCE_PREFIX = 'c5'
 FUNCTION_LOCATION = 'us-central1'
-
+LEVEL_NAME ='datastore'
+ENTITY_KEYS =[]
 
 def create():
     # Create randomized bucket name to avoid namespace conflict
@@ -35,29 +37,36 @@ def create():
     #Set least privaleges
     fvar2 = Fernet.generate_key()
     f = Fernet(fvar2)
-    fvar1 = f.encrypt(b'roles/compute.viewer')
-
-    secret = levels.make_secret(LEVEL_PATH)
+    fvar1 = f.encrypt(b'roles/datastore.viewer')
     
     print("Level initialization finished for: " + LEVEL_PATH)
     # Insert deployment
-    config_template_args = {'nonce': nonce,'func_upload_url1':func_upload_url1,'func_upload_url2':func_upload_url2, 'prefix':RESOURCE_PREFIX,'fvar1': fvar1.decode("utf-8"),'fvar2': fvar2.decode("utf-8") }
+    config_template_args = {'nonce': nonce,'func_upload_url1':func_upload_url1,'func_upload_url2':func_upload_url2, 'fvar1': fvar1.decode("utf-8"),'fvar2': fvar2.decode("utf-8"),'level_name': LEVEL_NAME,'nonce': nonce,'resource_prefix':RESOURCE_PREFIX }
 
     template_files = [
         'core/framework/templates/service_account.jinja',
         'core/framework/templates/iam_policy.jinja',
-        'core/framework/templates/cloud_function.jinja',
-        'core/framework/templates/ubuntu_vm.jinja']
+        'core/framework/templates/cloud_function.jinja']
     deployments.insert(LEVEL_PATH, template_files=template_files,
                        config_template_args=config_template_args)
 
     print("Level setup started for: " + LEVEL_PATH)
     
-
+    # Create and insert data in datastore
+    entities =[{'name': 'admin','password': 'admin1234','active': True},{'name': 'editor','password': '1111','active': True}]
+    kind=f'Users-{nonce}'
+    client = datastore.Client()
+    for entity in entities:
+        entity_key = client.key(kind)
+        ENTITY_KEYS.append(entity_key)
+        task = datastore.Entity(key=entity_key)
+        task.update(entity)
+        client.put(entity)
+    print('Datastore entity created')
 
     sa_key1 = iam.generate_service_account_key(f'{RESOURCE_PREFIX}-access')
     sa_key2 = iam.generate_service_account_key(f'{RESOURCE_PREFIX}-check')
-    print('keys generated')
+    print('Keys generated')
     
     #write key file in function directory
     with open(func_name1, 'w') as f:
@@ -78,7 +87,7 @@ def create():
         f'Find the minimum privilage to list a bucket and access function {RESOURCE_PREFIX}-func-access-{nonce} to check if you have the correct answer')
     levels.write_start_info(
         LEVEL_PATH, start_message, file_name='', file_content='')
-    print(f'Step 1.Please use cmd below to update functions and get http trigger url\n gcloud functions deploy {RESOURCE_PREFIX}-func-access-{nonce} --source=core/levels/leastprivilege/{RESOURCE_PREFIX}compute/functionaccess --allow-unauthenticated \n gcloud functions deploy {RESOURCE_PREFIX}-func-check-{nonce} --source=core/levels/leastprivilege/{RESOURCE_PREFIX}compute/functioncheck --allow-unauthenticated ')
+    print(f'Step 1.Please use cmd below to update functions and get http trigger url\n gcloud functions deploy {RESOURCE_PREFIX}-func-access-{nonce} --source=core/levels/{LEVEL_PATH}/functionaccess --allow-unauthenticated \n gcloud functions deploy {RESOURCE_PREFIX}-func-check-{nonce} --source=core/levels/{LEVEL_PATH}/functioncheck --allow-unauthenticated ')
     
     print(f'Step 2.Use cmd below to check iam permissions of {RESOURCE_PREFIX}_access \n gcloud iam roles update {RESOURCE_PREFIX}_access_role_{nonce} --project={project_id} --permissions=permission1,permission2\n OR \n gcloud functions call {RESOURCE_PREFIX}-func-check-{nonce} --data \'{{\"permissions\":[\"permission1\",\"permission2\"]}}\' \n OR \n append ?permissions=permission1,permission2 after function url generated in Step 1 ')
 
@@ -91,6 +100,10 @@ def create():
    
 
 def destroy():
+    #Delete datastore
+    client = datastore.Client()
+    client.delete_multi(ENTITY_KEYS)
+
     # Delete starting files
     levels.delete_start_files()
     actpath1=f'core/levels/{LEVEL_PATH}/functionaccess/{RESOURCE_PREFIX}-access.json'
