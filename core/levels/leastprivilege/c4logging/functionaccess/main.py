@@ -5,7 +5,7 @@ def main(request):
 	from google.oauth2.credentials import Credentials
 	from google.cloud import logging
 	import os
-
+    import json
 	
 	# Set the project ID
 	PROJECT_ID = os.environ['GCP_PROJECT']
@@ -27,7 +27,7 @@ def main(request):
 	try:
 		filter = "resource.type = (gce_instance OR gcs_bucket)"
 		for entry in client.list_entries(order_by="timestamp desc",page_size=1, filter_=filter):
-			resources.append(entry)
+			resources.append(json.dumps(json.loads(entry), indent=2))
 
 	except Exception as e:
 		resources.append('Insufficient privilege!') 
