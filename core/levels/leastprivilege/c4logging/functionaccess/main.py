@@ -5,7 +5,7 @@ def main(request):
 	from google.oauth2.credentials import Credentials
 	from google.cloud import logging
 	import os
-    import json
+	import json
 	
 	# Set the project ID
 	PROJECT_ID = os.environ['GCP_PROJECT']
