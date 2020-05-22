@@ -26,7 +26,7 @@ def main(request):
 	resources = []
 	try:
 		filter = "resource.type = (gce_instance OR gcs_bucket)"
-		for entry in client.list_entries(order_by="timestamp desc",page_size=5, filter_=filter)[0:10]:
+		for entry in client.list_entries(order_by="timestamp desc",page_size=1, filter_=filter):
 			resources.append(entry)
 
 	except Exception as e:
