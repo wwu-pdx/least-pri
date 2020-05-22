@@ -30,7 +30,7 @@ def create():
     func_path2 = f'core/levels/{LEVEL_PATH}/functioncheck'
     func_name1 = f'{func_path1}/{RESOURCE_PREFIX}-access.json'
     func_name2 = f'{func_path2}/{RESOURCE_PREFIX}-check.json'
-    func_template_args = {'level_name': LEVEL_NAME,'nonce': nonce,'resource_prefix':RESOURCE_PREFIX}
+    func_template_args = {'level_name': LEVEL_NAME,'nonce': nonce,'resource_prefix':RESOURCE_PREFIX }
     func_upload_url1 = cloudfunctions.upload_cloud_function(func_path1, FUNCTION_LOCATION, template_args=func_template_args)
     func_upload_url2 = cloudfunctions.upload_cloud_function(func_path2, FUNCTION_LOCATION, template_args=func_template_args)
 	

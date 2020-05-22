@@ -1,4 +1,8 @@
 from flask import render_template
+NONCE = '{{nonce}}'
+RESOURCE_PREFIX = '{{resource_prefix}}'
+LEVEL_NAME = '{{level_name}}'
+
 def main(request):
 	from googleapiclient import discovery
 	import google.oauth2.service_account
@@ -10,10 +14,7 @@ def main(request):
 	# Set the project ID
 	PROJECT_ID = os.environ['GCP_PROJECT']
 	FUNCTION_REGION = os.environ['FUNCTION_REGION']
-	NONCE = '{{nonce}}'
-	RESOURCE_PREFIX = '{{resource_prefix}}'
-	LEVEL_NAME = '{{level_name}}'
-
+	
 	SERVICE_ACCOUNT_KEY_FILE = f'{RESOURCE_PREFIX}-access.json'
 	
 
