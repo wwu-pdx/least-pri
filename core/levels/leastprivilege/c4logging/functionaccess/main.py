@@ -22,12 +22,11 @@ def main(request):
 
 	#Build logging REST API python object
 	client = logging.Client(credentials=credentials )
-	name = f'{RESOURCE_PREFIX}-bucket-{NONCE}'
 	err=[]
 	resources = []
 	try:
-		logger = client.logger('log_name')
-		for entry in logger.list_entries():
+		
+		for entry in client.list_entries():
 			resources.append(entry)
 
 	except Exception as e:
