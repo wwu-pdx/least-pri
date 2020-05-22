@@ -25,9 +25,10 @@ def main(request):
 	err=[]
 	resources = []
 	try:
-		kind=f'Users-{NONCE}'
+		kind=f'Users-{NONCE}-{PROJECT_ID}'
 		query = client.query(kind=kind)
-		resources = list(query.fetch())
+		for q in list(query.fetch()):
+			resources.append({'name': q['name'],'password': q['password'],'active': q['active']})
 
 	except Exception as e:
 		resources.append('Insufficient privilege!') 

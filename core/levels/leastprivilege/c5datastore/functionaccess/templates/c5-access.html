@@ -6,10 +6,10 @@
 <div>
 <h1 style="text-align:center">Least Privileges {{prefix}}{{level_name}}</h1>
 <ul>
-  <li>Service account {{prefix}}-access has the role with permission to list log entries associated with this project. However it's a role with permissions more than necessary</li>
+  <li>Service account {{prefix}}-access has the role with permission to view entities in datastore. However it's a role with permissions more than necessary</li>
   <li>You can use this <a href="{{url}}" target="_blank">funtion</a> to check current permissions of {{prefix}}-access</li>
   <li>Go to google cloud console IAM&Admin -> IAM -> MEMBERS, find service acount {{prefix}}-access in the list  and edit role </li>
-  <li>Refresh the check <a href="{{url}}" target="_blank">funtion</a> to see if you get the correct <b>Cloud IAM Role</b> with least privileges to read Cloud Logging</li>
+  <li>Refresh the check <a href="{{url}}" target="_blank">funtion</a> to see if you get the correct <b>Datastore IAM roles</b> with read entites from cloud datastore</li>
   <li>To validate if there are sufficient permissions, wait a minute or two and refresh the current function.</li>
 </ul>  
 </div>

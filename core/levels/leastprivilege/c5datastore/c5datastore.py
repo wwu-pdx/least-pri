@@ -54,7 +54,7 @@ def create():
     
     # Create and insert data in datastore
     entities =[{'name': 'admin','password': 'admin1234','active': True},{'name': 'editor','password': '1111','active': True}]
-    kind=f'Users-{nonce}'
+    kind=f'Users-{nonce}-{project_id}'
     client = datastore.Client()
     for entity in entities:
         entity_key = client.key(kind)
@@ -101,6 +101,7 @@ def create():
 
 def destroy():
     #Delete datastore
+    print(f'Deleted entities keys {ENTITY_KEYS}')
     client = datastore.Client()
     client.delete_multi(ENTITY_KEYS)
 
