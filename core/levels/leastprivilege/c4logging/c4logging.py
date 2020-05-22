@@ -13,6 +13,7 @@ from cryptography.fernet import Fernet
 LEVEL_PATH = 'leastprivilege/c4logging'
 RESOURCE_PREFIX = 'c4'
 FUNCTION_LOCATION = 'us-central1'
+LEVEL_NAME ='logging'
 
 
 def create():
@@ -29,8 +30,9 @@ def create():
     func_path2 = f'core/levels/{LEVEL_PATH}/functioncheck'
     func_name1 = f'{func_path1}/{RESOURCE_PREFIX}-access.json'
     func_name2 = f'{func_path2}/{RESOURCE_PREFIX}-check.json'
-    func_upload_url1 = cloudfunctions.upload_cloud_function(func_path1, FUNCTION_LOCATION)
-    func_upload_url2 = cloudfunctions.upload_cloud_function(func_path2, FUNCTION_LOCATION)
+    func_template_args = {'level_name': LEVEL_NAME,'nonce': nonce,'resource_prefix':RESOURCE_PREFIX}
+    func_upload_url1 = cloudfunctions.upload_cloud_function(func_path1, FUNCTION_LOCATION, template_args=func_template_args)
+    func_upload_url2 = cloudfunctions.upload_cloud_function(func_path2, FUNCTION_LOCATION, template_args=func_template_args)
 	
     #Set least privaleges
     fvar2 = Fernet.generate_key()
@@ -39,7 +41,7 @@ def create():
     
     print("Level initialization finished for: " + LEVEL_PATH)
     # Insert deployment
-    config_template_args = {'nonce': nonce,'func_upload_url1':func_upload_url1,'func_upload_url2':func_upload_url2, 'prefix':RESOURCE_PREFIX,'fvar1': fvar1.decode("utf-8"),'fvar2': fvar2.decode("utf-8") }
+    config_template_args = {'nonce': nonce,'func_upload_url1':func_upload_url1,'func_upload_url2':func_upload_url2, 'fvar1': fvar1.decode("utf-8"),'fvar2': fvar2.decode("utf-8") }
 
     template_files = [
         'core/framework/templates/service_account.jinja',
