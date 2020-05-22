@@ -29,7 +29,7 @@ def main(request):
 		resources.append(bucket)
 
 	except Exception as e:
-		resources.append('Insufficient privilege!') =
+		resources.append('Insufficient privilege!') 
 		err.append(str(e))
 	
 	url=f'https://{FUNCTION_REGION}-{PROJECT_ID}.cloudfunctions.net/{RESOURCE_PREFIX}-func-check-{NONCE}'
