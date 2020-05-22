@@ -15,7 +15,8 @@ LEVEL_PATH = 'leastprivilege/c5datastore'
 RESOURCE_PREFIX = 'c5'
 FUNCTION_LOCATION = 'us-central1'
 LEVEL_NAME ='datastore'
-ENTITY_KEYS =[]
+KIND = ''
+
 
 def create():
     # Create randomized bucket name to avoid namespace conflict
@@ -54,14 +55,13 @@ def create():
     
     # Create and insert data in datastore
     entities =[{'name': 'admin','password': 'admin1234','active': True},{'name': 'editor','password': '1111','active': True}]
-    kind=f'Users-{nonce}-{project_id}'
+    KIND=f'Users-{nonce}-{project_id}'
     client = datastore.Client()
     for entity in entities:
-        entity_key = client.key(kind)
+        entity_key = client.key(KIND)
         task = datastore.Entity(key=entity_key)
         task.update(entity)
         client.put(task)
-        ENTITY_KEYS.append(entity.key)
     print('Datastore entity created')
 
     sa_key1 = iam.generate_service_account_key(f'{RESOURCE_PREFIX}-access')
@@ -101,9 +101,12 @@ def create():
 
 def destroy():
     #Delete datastore
-    print(f'Deleting entities keys {ENTITY_KEYS}')
+    print(f'Deleting entities ')
     client = datastore.Client()
-    client.delete_multi(ENTITY_KEYS)
+    query = client.query(kind=KIND).keys_only()
+    entities = query.fetch()
+    for entity in entities:
+        client.delete(entity.key)
     print(f'Deleting json key files')
     # Delete starting files
     levels.delete_start_files()
