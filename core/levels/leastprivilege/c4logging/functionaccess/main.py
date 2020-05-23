@@ -18,21 +18,20 @@ def main(request):
 	SERVICE_ACCOUNT_KEY_FILE = f'{RESOURCE_PREFIX}-access.json'
 	
 
-
-	credentials = google.oauth2.service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_KEY_FILE)
-
+	
 	
 	
 	err=[]
 	resources = []
 	try:
 		#Build logging REST API python object
+		credentials = google.oauth2.service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_KEY_FILE)
 		client = logging.Client(credentials=credentials )
-		logname = f"projects/{PROJECT_ID}/logs/cloudaudit.googleapis.com%2Factivity"
+		logname = "cloudaudit.googleapis.com%2Factivity"
 		filter ="logging.admin"
-		logger = client.logger(logname)
+		logger = client.logger(logname)	
 		entry = list(logger.list_entries(order_by=DESCENDING, filter_=filter))[0]
-		resources.append(entry.to_api_repr())
+		resources.append(entry)
 
 	except Exception as e:
 		resources.append('Insufficient privilege!') 
