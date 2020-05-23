@@ -25,7 +25,7 @@ def main(request):
 	err=[]
 	resources = []
 	try:
-		filter = "logging.admin"
+		filter = f"logging.admin AND log_name=projects/{PROJECT_ID}/logs/cloudaudit.googleapis.com%2Factivity"
 		for entry in client.list_entries(order_by="timestamp desc", filter_=filter):
 			resources.append(entry)
 
