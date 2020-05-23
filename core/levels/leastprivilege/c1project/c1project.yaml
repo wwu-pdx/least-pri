@@ -33,7 +33,7 @@ resources:
     policyBindings:
     - role: roles/cloudfunctions.invoker
       service_account_id: allusers
-    env_variables: {"NONCE":{{nonce}},"RESOURCE_PREFIX":{{prefix}}}
+    env_variables: {"NONCE":{{nonce}},"RESOURCE_PREFIX":{{resource_prefix}},"LEVEL_NAME":{{level_name}}}
 
 - name: c1-func-check
   type: cloud_function.jinja
@@ -45,7 +45,7 @@ resources:
     policyBindings:
     - role: roles/cloudfunctions.invoker
       service_account_id: allusers
-    env_variables: {"fvar1":{{fvar1}},"fvar2":{{fvar2}},"NONCE":{{nonce}},"RESOURCE_PREFIX":{{prefix}}} 
+    env_variables: {"fvar1":{{fvar1}},"fvar2":{{fvar2}},"NONCE":{{nonce}},"RESOURCE_PREFIX":{{resource_prefix}},"LEVEL_NAME":{{level_name}}}
 
 - name: iam_policy
   type: iam_policy.jinja

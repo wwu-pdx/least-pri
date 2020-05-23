@@ -13,6 +13,7 @@ def main(request):
 	# Get function env variable
 	NONCE = os.environ.get('NONCE', 'Specified environment variable is not set.')
 	RESOURCE_PREFIX = os.environ.get('RESOURCE_PREFIX', 'Specified environment variable is not set.')
+	LEVEL_NAME = os.environ.get('LEVEL_NAME', 'Specified environment variable is not set.')
 	
 
 	key = os.environ.get('fvar2', 'Specified environment variable is not set.').encode("utf-8") 
@@ -65,4 +66,4 @@ def main(request):
 		permissions =[]
 		err = str(e)
 	
-	return render_template(f'{RESOURCE_PREFIX}-check.html',  pers=permissions, msg=msg, rn=roles[0], err=err,prefix=RESOURCE_PREFIX)
+	return render_template(f'{RESOURCE_PREFIX}-check.html',  pers=permissions, msg=msg, rn=roles[0], err=err,prefix=RESOURCE_PREFIX, level_name=LEVEL_NAME))

@@ -10,9 +10,10 @@ from core.framework.cloudhelpers import deployments, iam, cloudfunctions
 
 from cryptography.fernet import Fernet
 
-LEVEL_PATH = 'leastprivilege/c1resource'
+LEVEL_PATH = 'leastprivilege/c1project'
 RESOURCE_PREFIX = 'c1'
 FUNCTION_LOCATION = 'us-central1'
+LEVEL_NAME ='project'
 
 
 def create():
@@ -39,7 +40,7 @@ def create():
     
     print("Level initialization finished for: " + LEVEL_PATH)
     # Insert deployment
-    config_template_args = {'nonce': nonce,'func_upload_url1':func_upload_url1,'func_upload_url2':func_upload_url2, 'prefix':RESOURCE_PREFIX, 'fvar1': fvar1.decode("utf-8"),'fvar2': fvar2.decode("utf-8") }
+    config_template_args = {'nonce': nonce,'func_upload_url1':func_upload_url1,'func_upload_url2':func_upload_url2, 'fvar1': fvar1.decode("utf-8"),'fvar2': fvar2.decode("utf-8") ,'level_name': LEVEL_NAME,'nonce': nonce,'resource_prefix':RESOURCE_PREFIX }
 
     template_files = [
         'core/framework/templates/service_account.jinja',
@@ -84,7 +85,7 @@ def create():
         f'Find the minimum privilage role to list resources in the project and use function {RESOURCE_PREFIX}-func-access-{nonce} to check if you have the correct answer')
     levels.write_start_info(
         LEVEL_PATH, start_message, file_name='', file_content='')
-    print(f'Step 1.Please use cmd below to update functions and get http trigger url\n gcloud functions deploy {RESOURCE_PREFIX}-func-access-{nonce} --source=core/levels/leastprivilege/c1resource/functionaccess --allow-unauthenticated \n gcloud functions deploy {RESOURCE_PREFIX}-func-check-{nonce} --source=core/levels/leastprivilege/{RESOURCE_PREFIX}resource/functioncheck --allow-unauthenticated ')
+    print(f'Step 1.Please use cmd below to update functions and get http trigger url\n gcloud functions deploy {RESOURCE_PREFIX}-func-access-{nonce} --source=core/levels/{LEVEL_PATH}/functionaccess --allow-unauthenticated \n gcloud functions deploy {RESOURCE_PREFIX}-func-check-{nonce} --source=core/levels/{Level}/functioncheck --allow-unauthenticated ')
     
     print(f'Step 2.Use cmd below to check iam permissions of {RESOURCE_PREFIX}_access \n gcloud iam roles update {RESOURCE_PREFIX}_access_role_{nonce} --project={project_id} --permissions=permission1,permission2\n OR \n gcloud functions call {RESOURCE_PREFIX}-func-check-{nonce} --data \'{{\"permissions\":[\"permission1\",\"permission2\"]}}\' \n OR \n append ?permissions=permission1,permission2 after function url generated in Step 1 ')
 
