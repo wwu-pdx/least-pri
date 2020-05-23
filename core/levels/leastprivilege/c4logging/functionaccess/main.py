@@ -4,6 +4,7 @@ def main(request):
 	import google.oauth2.service_account
 	from google.oauth2.credentials import Credentials
 	from google.cloud import logging
+	from google.cloud.logging import DESCENDING
 	import os
 	
 	
@@ -27,9 +28,9 @@ def main(request):
 	try:
 		logname = f"projects/{PROJECT_ID}/logs/cloudaudit.googleapis.com%2Factivity"
 		filter ="logging.admin"
-		client = logging.Client(order_by="timestamp desc", filter_=filter)
+		client = logging.Client()
 		logger = client.logger(logname)
-		entry = list(logger.list_entries())[0]
+		entry = list(logger.list_entries(order_by=DESCENDING, filter_=filter))[0]
 		resources.append(entry.to_api_repr())
 
 	except Exception as e:
