@@ -4,7 +4,6 @@ def main(request):
 	import google.oauth2.service_account
 	from google.oauth2.credentials import Credentials
 	from google.cloud import logging
-	from google.protobuf import text_format
 	import os
 	
 	
@@ -26,9 +25,12 @@ def main(request):
 	err=[]
 	resources = []
 	try:
-		filter = f"logging.admin AND log_name=projects/{PROJECT_ID}/logs/cloudaudit.googleapis.com%2Factivity"
-		entry = list(client.list_entries(order_by="timestamp desc", filter_=filter))[0]
-		resources.append(text_format(entry))
+		logname = f"projects/{PROJECT_ID}/logs/cloudaudit.googleapis.com%2Factivity"
+		filter ="logging.admin"
+		client = logging.Client(order_by="timestamp desc", filter_=filter)
+		logger = client.logger(logname)
+		entry = list(logger.list_entries())[0]
+		resources.append(entry.to_api_repr())
 
 	except Exception as e:
 		resources.append('Insufficient privilege!') 
