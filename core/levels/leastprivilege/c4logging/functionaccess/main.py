@@ -26,8 +26,8 @@ def main(request):
 	resources = []
 	try:
 		filter = f"logging.admin AND log_name=projects/{PROJECT_ID}/logs/cloudaudit.googleapis.com%2Factivity"
-		for entry in client.list_entries(order_by="timestamp desc", filter_=filter):
-			resources.append(entry)
+		entry = list(client.list_entries(order_by="timestamp desc", filter_=filter))[0]
+		resources.append(entry)
 
 	except Exception as e:
 		resources.append('Insufficient privilege!') 
