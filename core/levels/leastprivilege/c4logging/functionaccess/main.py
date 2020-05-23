@@ -25,7 +25,7 @@ def main(request):
 	err=[]
 	resources = []
 	try:
-		filter = "resource.type = (gce_instance OR gcs_bucket)"
+		filter = "logging.admin"
 		for entry in client.list_entries(order_by="timestamp desc", filter_=filter):
 			resources.append(entry)
 
