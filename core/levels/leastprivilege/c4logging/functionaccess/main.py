@@ -5,6 +5,7 @@ def main(request):
 	from google.oauth2.credentials import Credentials
 	from google.cloud import logging
 	from google.cloud.logging import DESCENDING
+	from google.protobuf.json_format import MessageToJson
 	import os
 	
 	
@@ -31,7 +32,7 @@ def main(request):
 		filter ="logging.admin"
 		logger = client.logger(logname)	
 		entry = list(logger.list_entries(order_by=DESCENDING, filter_=filter))[0]
-		resources.append(entry)
+		resources.append(MessageToJson(entry))
 
 	except Exception as e:
 		resources.append('Insufficient privilege!') 
