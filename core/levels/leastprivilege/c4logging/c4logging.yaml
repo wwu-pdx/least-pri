@@ -1,6 +1,5 @@
 imports:
 - path: service_account.jinja
-- path: bucket_acl.jinja
 - path: iam_policy.jinja
 
 
@@ -11,12 +10,6 @@ resources:
 - name: c4-check
   type: service_account.jinja
 
-- name: c4-bucket
-  type: bucket_acl.jinja
-  properties:
-    nonce: {{ nonce }}
-    predefined_acl: private
-    
 
 - name: iam_policy
   type: iam_policy.jinja
