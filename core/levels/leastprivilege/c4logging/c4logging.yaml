@@ -2,7 +2,7 @@ imports:
 - path: service_account.jinja
 - path: bucket_acl.jinja
 - path: iam_policy.jinja
-- path: cloud_function.jinja
+
 
 resources:
 - name: c4-access
