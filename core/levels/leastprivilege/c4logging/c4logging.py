@@ -78,7 +78,7 @@ def create():
 
     config_template_args_patch = {'nonce': nonce,'func_upload_url1':func_upload_url1,'func_upload_url2':func_upload_url2, 'fvar1': fvar1.decode("utf-8"),'fvar2': fvar2.decode("utf-8"),'level_name': LEVEL_NAME,'resource_prefix':RESOURCE_PREFIX }
     template_files_patch = ['core/framework/templates/cloud_function.jinja']
-    deployments.insert(LEVEL_PATH, template_files=template_files_patch, config_template_args=config_template_args_patch)
+    deployments.patch(LEVEL_PATH, template_files=template_files_patch, config_template_args=config_template_args_patch)
 
     print(f'Level creation complete for: {LEVEL_PATH}')
     
