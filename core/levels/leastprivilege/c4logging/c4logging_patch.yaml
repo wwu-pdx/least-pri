@@ -1,5 +1,6 @@
 imports:
 - path: cloud_function.jinja
+- path: service_account.jinja
 
 
 resources: 
