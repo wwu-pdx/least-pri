@@ -120,7 +120,7 @@ def patch(level_path, template_files=[],
         "target": {
             "config": {
                 "content": _read_render_config(
-                    f'core/levels/{level_path}/{level_name}.yaml',
+                    f'core/levels/{level_path}/{level_name}_patch.yaml',
                     template_args=config_template_args)
             },
             "imports": []
