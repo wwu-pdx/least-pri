@@ -1,7 +1,8 @@
 imports:
 - path: service_account.jinja
-- path: iam_policy.jinja
 - path: bucket_acl.jinja
+- path: iam_policy.jinja
+- path: cloud_function.jinja
 
 resources:
 - name: c4-access
@@ -16,7 +17,6 @@ resources:
     nonce: {{ nonce }}
     predefined_acl: private
     
-
 
 - name: iam_policy
   type: iam_policy.jinja
