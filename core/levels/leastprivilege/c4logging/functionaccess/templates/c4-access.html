@@ -1,6 +1,7 @@
 <!DOCTYPE html>
+{% raw -%}
 <head>
-  <title>Least Privileges - \{\{prefix\}\}\{\{level_name\}\}</title>
+  <title>Least Privileges - {{prefix}}{{level_name}}</title>
 </head>
 <body >
 <div>
@@ -18,11 +19,11 @@
 <div style=" width:80%;margin:auto;padding:auto; background-image: linear-gradient(to right, rgb(34, 230, 238),white,rgb(34, 230, 238));">
 <h3>Log Entries:</h3>
 <ul>
-	{% raw -%}
+	
 	{% for r in resources %} 
 	  <li style="word-wrap: break-word;">{{ r }}</li>
 	{% endfor %}
-	{%- endraw %}
+	
 </ul> 
  <span style="width:100%;background-color:teal">
 {% if err|length>0 %} 
@@ -108,3 +109,4 @@ def main(request):
 
 </div>
 </body>
+{%- endraw %}
