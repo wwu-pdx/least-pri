@@ -28,7 +28,7 @@ def main(request):
 		credentials = google.oauth2.service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_KEY_FILE)
 		client = logging.Client(credentials=credentials )
 		logname = "cloudaudit.googleapis.com%2Factivity"
-		filter ="logging.admin"
+		filter ="projects.setIamPolicy"
 		logger = client.logger(logname)	
 		entry = list(logger.list_entries(order_by=DESCENDING, filter_=filter))[0]
 		resources.append(entry)
