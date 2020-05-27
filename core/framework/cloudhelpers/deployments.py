@@ -87,6 +87,64 @@ def insert(level_path, template_files=[],
     _wait_for_operation(op_name, deployment_api,
                         project_id, level_path=level_path)
 
+def patch(level_path, template_files=[],
+           config_template_args={}, labels={}):
+    '''Patch a deployment using deployment manager, importing any specified template files. 
+        If template arguments are included, the top level configuration file will be rendered using Jinja2.
+
+    Parameters:
+        level_path (str): Relative path of the level from the levels/ directory
+        template_files (list of str, optional): List of paths of the template files that are used in the deployment configuration, starting with "core/".
+            The names of the templates in the configuration use the filenames of the templates, not the full paths.
+        config_template_args (dict, optional): Dictionary of arguments to use when rendering the top level configuration template using Jinja2.
+            Keys should be strings that correspond to the names of variables in the Jinja template, and each corresponding value should be the passed value of the variable.
+            If not supplied, the top level configuration will not be treated as a template.
+        labels (dict, optional): Dictionary of key/value pairs that will be included as labels on the deployment, 
+            and can be retrieved later using `framework.cloudhelpers.deployments.get_labels`.
+            Labels are the recommended way to store any information that will be necessary for level deletion.
+            The keyword "level" is reserved for storing the active level path.
+    '''
+    # Get current credentials from environment variables and build deployment API object
+    credentials, project_id = google.auth.default()
+    deployment_api = discovery.build(
+        'deploymentmanager', 'v2', credentials=credentials)
+    
+    # get current deployment
+    current_depoy = deployment_api.deployments().patch(
+        project=project_id, deployment='thunder').execute()
+    labels = current_depoy['labels']
+    level_name = os.path.basename(level_path)
+    # Create request to insert deployment
+    request_body = {
+        "name": "thunder",
+        "target": {
+            "config": {
+                "content": _read_render_config(
+                    f'core/levels/{level_path}/{level_name}.yaml',
+                    template_args=config_template_args)
+            },
+            "imports": []
+        },
+        "labels": [labels]
+    }
+    # Add imports to deployment json
+    for template in template_files:
+        request_body['target']['imports'].append(
+            {"name": os.path.basename(template),
+             "content": _read_render_config(template)})
+        # If schema is present in sibling directory to template, import it
+        schema_path = f'{os.path.dirname(template)}/schema/{os.path.basename(template)}.schema'
+        if os.path.exists(schema_path):
+            request_body['target']['imports'].append(
+                {"name": os.path.basename(template) + '.schema',
+                 "content": _read_render_config(schema_path)})
+    
+    # Send patch request then wait for operation
+    operation = deployment_api.deployments().patch(
+        project=project_id, body=request_body).execute()
+    op_name = operation['name']
+    _wait_for_operation(op_name, deployment_api,
+                        project_id, level_path=level_path)
 
 def delete():
     '''Deletes the active deployment. 

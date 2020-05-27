@@ -24,14 +24,8 @@ def create():
 
     # Set role of default cloud function account
     credentials, project_id = google.auth.default()
-    # Create service account key file
     
-    func_path1 = f'core/levels/{LEVEL_PATH}/functionaccess'
-    func_path2 = f'core/levels/{LEVEL_PATH}/functioncheck'
-    func_name1 = f'{func_path1}/{RESOURCE_PREFIX}-access.json'
-    func_name2 = f'{func_path2}/{RESOURCE_PREFIX}-check.json'
-    func_upload_url1 = cloudfunctions.upload_cloud_function(func_path1, FUNCTION_LOCATION)
-    func_upload_url2 = cloudfunctions.upload_cloud_function(func_path2, FUNCTION_LOCATION)
+    
 	
     #Set least privaleges
     fvar2 = Fernet.generate_key()
@@ -40,12 +34,11 @@ def create():
     
     print("Level initialization finished for: " + LEVEL_PATH)
     # Insert deployment
-    config_template_args = {'nonce': nonce,'func_upload_url1':func_upload_url1,'func_upload_url2':func_upload_url2, 'fvar1': fvar1.decode("utf-8"),'fvar2': fvar2.decode("utf-8"),'level_name': LEVEL_NAME,'resource_prefix':RESOURCE_PREFIX }
-
+    config_template_args = {'nonce': nonce}
     template_files = [
         'core/framework/templates/service_account.jinja',
         'core/framework/templates/iam_policy.jinja',
-        'core/framework/templates/cloud_function.jinja',
+        #'core/framework/templates/cloud_function.jinja',
         'core/framework/templates/bucket_acl.jinja']
     deployments.insert(LEVEL_PATH, template_files=template_files,
                        config_template_args=config_template_args)
@@ -63,7 +56,6 @@ def create():
 
     sa_key1 = iam.generate_service_account_key(f'{RESOURCE_PREFIX}-access')
     sa_key2 = iam.generate_service_account_key(f'{RESOURCE_PREFIX}-check')
-    print('keys generated')
     
     #write key file in function directory
     with open(func_name1, 'w') as f:
@@ -75,8 +67,18 @@ def create():
     os.chmod(func_name2, 0o700)
     print(f'Function file: {RESOURCE_PREFIX}-check has been written to {func_name2}')
     
-    funcepath= f'core/levels/{LEVEL_PATH}/functioncheck/main.py'
+    #funcepath= f'core/levels/{LEVEL_PATH}/functioncheck/main.py'
     
+    func_path1 = f'core/levels/{LEVEL_PATH}/functionaccess'
+    func_path2 = f'core/levels/{LEVEL_PATH}/functioncheck'
+    func_name1 = f'{func_path1}/{RESOURCE_PREFIX}-access.json'
+    func_name2 = f'{func_path2}/{RESOURCE_PREFIX}-check.json'
+    func_upload_url1 = cloudfunctions.upload_cloud_function(func_path1, FUNCTION_LOCATION)
+    func_upload_url2 = cloudfunctions.upload_cloud_function(func_path2, FUNCTION_LOCATION)
+
+    config_template_args_patch = {'nonce': nonce,'func_upload_url1':func_upload_url1,'func_upload_url2':func_upload_url2, 'fvar1': fvar1.decode("utf-8"),'fvar2': fvar2.decode("utf-8"),'level_name': LEVEL_NAME,'resource_prefix':RESOURCE_PREFIX }
+    template_files_patch = ['core/framework/templates/cloud_function.jinja']
+    deployments.insert(LEVEL_PATH, template_files=template_files_patch, config_template_args=config_template_args_patch)
 
     print(f'Level creation complete for: {LEVEL_PATH}')
     
