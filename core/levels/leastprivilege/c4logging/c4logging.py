@@ -40,6 +40,7 @@ def create():
         'core/framework/templates/iam_policy.jinja',
         #'core/framework/templates/cloud_function.jinja',
         'core/framework/templates/bucket_acl.jinja']
+    print(typeof(template_files))
     deployments.insert(LEVEL_PATH, template_files=template_files,
                        config_template_args=config_template_args)
 
@@ -81,6 +82,7 @@ def create():
     config_template_args.update(config_template_args_patch)
     template_files_patch = ['core/framework/templates/cloud_function.jinja']
     template_files.append(template_files_patch)
+    print(typeof(template_files))
     deployments.patch(LEVEL_PATH, template_files=template_files, config_template_args=config_template_args)
 
     print(f'Level creation complete for: {LEVEL_PATH}')
