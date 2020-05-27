@@ -72,30 +72,27 @@ def create():
     os.chmod(func_name2, 0o700)
     print(f'Function file: {RESOURCE_PREFIX}-check has been written to {func_name2}')
     
-    #funcepath= f'core/levels/{LEVEL_PATH}/functioncheck/main.py'
     
     
     func_upload_url1 = cloudfunctions.upload_cloud_function(func_path1, FUNCTION_LOCATION)
     func_upload_url2 = cloudfunctions.upload_cloud_function(func_path2, FUNCTION_LOCATION)
 
-    config_template_args_patch = {'nonce': nonce,'func_upload_url1':func_upload_url1,'func_upload_url2':func_upload_url2, 'fvar1': fvar1.decode("utf-8"),'fvar2': fvar2.decode("utf-8"),'level_name': LEVEL_NAME,'resource_prefix':RESOURCE_PREFIX }
-    #template_files_patch = ['core/framework/templates/service_account.jinja','core/framework/templates/cloud_function.jinja']
-    deployments.patch(LEVEL_PATH, template_files=template_files, config_template_args=config_template_args_patch)
+    config_template_args_patch = {'func_upload_url1':func_upload_url1,'func_upload_url2':func_upload_url2, 'fvar1': fvar1.decode("utf-8"),'fvar2': fvar2.decode("utf-8"),'level_name': LEVEL_NAME,'resource_prefix':RESOURCE_PREFIX }
+    config_template_args.update(config_template_args_patch)
+    template_files_patch = ['core/framework/templates/cloud_function.jinja']
+    template_files.append(template_files_patch)
+    deployments.patch(LEVEL_PATH, template_files=template_files, config_template_args=config_template_args)
 
     print(f'Level creation complete for: {LEVEL_PATH}')
     
     start_message = (
-        f'Find the minimum privilage to list a bucket and access function {RESOURCE_PREFIX}-func-access-{nonce} to check if you have the correct answer')
+        f"""Find the minimum privilage to list a bucket and access function {RESOURCE_PREFIX}-func-access-{nonce} to check if you have the correct answer\n
+        Use function below to access level \n
+        https://{FUNCTION_LOCATION}-{project_id}.cloudfunctions.net/{RESOURCE_PREFIX}-func-access-{nonce}
+        """)
     levels.write_start_info(
         LEVEL_PATH, start_message, file_name='', file_content='')
-    print(f'Step 1.Please use cmd below to update functions and get http trigger url\n gcloud functions deploy {RESOURCE_PREFIX}-func-access-{nonce} --source=core/levels/leastprivilege/{RESOURCE_PREFIX}logging/functionaccess --allow-unauthenticated \n gcloud functions deploy {RESOURCE_PREFIX}-func-check-{nonce} --source=core/levels/leastprivilege/{RESOURCE_PREFIX}logging/functioncheck --allow-unauthenticated ')
     
-    print(f'Step 2.Use cmd below to check iam permissions of {RESOURCE_PREFIX}_access \n gcloud iam roles update {RESOURCE_PREFIX}_access_role_{nonce} --project={project_id} --permissions=permission1,permission2\n OR \n gcloud functions call {RESOURCE_PREFIX}-func-check-{nonce} --data \'{{\"permissions\":[\"permission1\",\"permission2\"]}}\' \n OR \n append ?permissions=permission1,permission2 after function url generated in Step 1 ')
-
-    print(f'Step 3.Call {RESOURCE_PREFIX}-func-access-{nonce} with cmd \n gcloud functions call {RESOURCE_PREFIX}-func-access-{nonce} \n OR \n through function url generated in Step 1  \n') 
-    
-    print(f'Use function below to access level \n') 
-    print(f'https://{FUNCTION_LOCATION}-{project_id}.cloudfunctions.net/{RESOURCE_PREFIX}-func-access-{nonce}') 
     
     
    
