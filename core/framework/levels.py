@@ -119,7 +119,7 @@ def write_start_info(level_path, message, file_name=None, file_content=None):
 
 def delete_start_files():
     '''Deletes the start files of a level. This function should be called upon level destruction.'''
-    if os.path.exists('start') and os.path.isdir('start'):
+    if os.path.exists('start'):
         try:
             shutil.rmtree('start')
         except Exception:
