@@ -56,6 +56,11 @@ def create():
 
     sa_key1 = iam.generate_service_account_key(f'{RESOURCE_PREFIX}-access')
     sa_key2 = iam.generate_service_account_key(f'{RESOURCE_PREFIX}-check')
+
+    func_path1 = f'core/levels/{LEVEL_PATH}/functionaccess'
+    func_path2 = f'core/levels/{LEVEL_PATH}/functioncheck'
+    func_name1 = f'{func_path1}/{RESOURCE_PREFIX}-access.json'
+    func_name2 = f'{func_path2}/{RESOURCE_PREFIX}-check.json'
     
     #write key file in function directory
     with open(func_name1, 'w') as f:
@@ -69,10 +74,7 @@ def create():
     
     #funcepath= f'core/levels/{LEVEL_PATH}/functioncheck/main.py'
     
-    func_path1 = f'core/levels/{LEVEL_PATH}/functionaccess'
-    func_path2 = f'core/levels/{LEVEL_PATH}/functioncheck'
-    func_name1 = f'{func_path1}/{RESOURCE_PREFIX}-access.json'
-    func_name2 = f'{func_path2}/{RESOURCE_PREFIX}-check.json'
+    
     func_upload_url1 = cloudfunctions.upload_cloud_function(func_path1, FUNCTION_LOCATION)
     func_upload_url2 = cloudfunctions.upload_cloud_function(func_path2, FUNCTION_LOCATION)
 
