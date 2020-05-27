@@ -143,7 +143,7 @@ def patch(level_path, template_files=[],
     
     # Send patch request then wait for operation
     operation = deployment_api.deployments().patch(
-        project=project_id, deployment='thunder, body=request_body).execute()
+        project=project_id, deployment='thunder', body=request_body).execute()
     op_name = operation['name']
     _wait_for_operation(op_name, deployment_api,
                         project_id, level_path=level_path)
