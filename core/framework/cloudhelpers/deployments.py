@@ -113,10 +113,12 @@ def patch(level_path, template_files=[],
     current_depoy = deployment_api.deployments().patch(
         project=project_id, deployment='thunder').execute()
     labels = current_depoy['labels']
+    fingerprint = current_depoy['fingerprint']
     level_name = os.path.basename(level_path)
     # Create request to insert deployment
     request_body = {
         "name": "thunder",
+        "fingerprint": fingerprint
         "target": {
             "config": {
                 "content": _read_render_config(
