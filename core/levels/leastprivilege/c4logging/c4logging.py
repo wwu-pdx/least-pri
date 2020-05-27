@@ -74,13 +74,12 @@ def create():
 
     print(f'Level creation complete for: {LEVEL_PATH}')
     
-    start_message = (
+    print(
         f"""
         Use function entrypoint below to access level \n
         https://{FUNCTION_LOCATION}-{project_id}.cloudfunctions.net/{RESOURCE_PREFIX}-func-access-{nonce}
         """)
-    levels.write_start_info(
-        LEVEL_PATH, start_message, file_name='', file_content='')
+    
     
     
     
