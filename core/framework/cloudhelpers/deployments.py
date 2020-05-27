@@ -110,7 +110,7 @@ def patch(level_path, template_files=[],
         'deploymentmanager', 'v2', credentials=credentials)
     
     # get current deployment
-    current_depoy = deployment_api.deployments().patch(
+    current_depoy = deployment_api.deployments().get(
         project=project_id, deployment='thunder').execute()
     labels = current_depoy['labels']
     fingerprint = current_depoy['fingerprint']
@@ -143,7 +143,7 @@ def patch(level_path, template_files=[],
     
     # Send patch request then wait for operation
     operation = deployment_api.deployments().patch(
-        project=project_id, body=request_body).execute()
+        project=project_id, deployment='thunder, body=request_body).execute()
     op_name = operation['name']
     _wait_for_operation(op_name, deployment_api,
                         project_id, level_path=level_path)
