@@ -118,7 +118,7 @@ def patch(level_path, template_files=[],
     # Create request to insert deployment
     request_body = {
         "name": "thunder",
-        "fingerprint": fingerprint
+        "fingerprint": fingerprint,
         "target": {
             "config": {
                 "content": _read_render_config(
