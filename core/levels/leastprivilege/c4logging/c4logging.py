@@ -33,8 +33,8 @@ def create():
     config_template_args = {'nonce': nonce}
     template_files = [
         'core/framework/templates/service_account.jinja',
-        'core/framework/templates/iam_policy.jinja'
-        #'core/framework/templates/cloud_function.jinja']
+        'core/framework/templates/iam_policy.jinja']
+        
     
     deployments.insert(LEVEL_PATH, template_files=template_files,
                        config_template_args=config_template_args)
