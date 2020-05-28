@@ -70,9 +70,7 @@ def insert(level_path, template_files=[],
         "name": "thunder",
         "target": {
             "config": {
-                "content": _read_render_config(
-                    f'core/levels/{level_path}/{level_name}.yaml',
-                    template_args=config_template_args)
+                "content": content
             },
             "imports": []
         },
