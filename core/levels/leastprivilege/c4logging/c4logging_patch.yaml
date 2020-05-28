@@ -1,4 +1,4 @@
-{% extends "c4logging.yaml" %}
+{% extends 'core/levels/leastprivilege/c4logging/c4logging.yaml' %}
 
 - name: c4-func-access
   type: cloud_function.jinja
