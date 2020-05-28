@@ -11,7 +11,8 @@ def main(request):
 	FUNCTION_REGION = os.environ['FUNCTION_REGION']
 	NONCE = os.environ.get('NONCE', 'Specified environment variable is not set.')
 	RESOURCE_PREFIX = os.environ.get('RESOURCE_PREFIX', 'Specified environment variable is not set.')
-
+	LEVEL_NAME = os.environ.get('LEVEL_NAME', 'Specified environment variable is not set.')
+	
 	SERVICE_ACCOUNT_KEY_FILE = f'{RESOURCE_PREFIX}-access.json'
 	
 
@@ -36,7 +37,7 @@ def main(request):
 	url=f'https://{FUNCTION_REGION}-{PROJECT_ID}.cloudfunctions.net/{RESOURCE_PREFIX}-func-check-{NONCE}'
 	
 	
-	return render_template(f'{RESOURCE_PREFIX}-access.html', resources=resources, url=url, err=err,prefix=RESOURCE_PREFIX)
+	return render_template(f'{RESOURCE_PREFIX}-access.html', resources=resources, url=url, err=err,prefix=RESOURCE_PREFIX, level_name=LEVEL_NAME)
 
 	
 
