@@ -25,3 +25,4 @@ resources:
         name: roles/iam.roleViewer
         
 
+{% block resource %}{% endblock %}
