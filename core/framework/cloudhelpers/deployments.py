@@ -12,13 +12,26 @@ from .. import levels
 import yaml
 
 
-def _read_render_config(file_name, template_args={}):
-    with open(file_name) as f:
-        content = f.read()
-    if not template_args == {}:
-        return jinja2.Template(content).render(**template_args)
+def _read_render_config(file_name, template_args={}, laodpath=None):
+
+
+    if !laodpath:
+        loader = jinja2.FileSystemLoader(searchpath=loadpath)
+        env = jinja2.Environment(loader=loader)
+        content = env.get_template(file_name)
+        if not template_args == {}:
+            return content.render(**template_args)
+        else:
+            return content
+
     else:
-        return content
+
+        with open(file_name) as f:
+            content = f.read()
+        if not template_args == {}:
+            return jinja2.Template(content).render(**template_args)
+        else:
+            return content
 
 
 def insert(level_path, template_files=[],
@@ -121,8 +134,10 @@ def patch(level_path, template_files=[],
                     template_args=config_template_args)
     print(content)
     content_patch = _read_render_config(
-                    f'core/levels/{level_path}/{level_name}_patch.yaml',
-                    template_args=config_template_args)
+                    f'{level_name}_patch.yaml',
+                    template_args=config_template_args,
+                    loadpath =  f'core/levels/{level_path}/'
+                )
     print(content_patch)
     
     # Create request to insert deployment
