@@ -13,6 +13,7 @@ from cryptography.fernet import Fernet
 LEVEL_PATH = 'leastprivilege/c3compute'
 RESOURCE_PREFIX = 'c3'
 FUNCTION_LOCATION = 'us-central1'
+LEVEL_NAME = 'compute'
 
 
 def create():

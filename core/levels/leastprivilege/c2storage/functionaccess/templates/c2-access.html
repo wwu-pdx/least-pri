@@ -39,10 +39,11 @@
 <div style=" width:80%;margin:auto;padding:auto;" >
   <h4>Source code of function that checks what roles bind with {{prefix}}-access :</h4>
 <pre style=" width:100%;margin:auto;padding:auto; background-color:rgb(147, 181, 182);">
-name = f'{RESOURCE_PREFIX}-bucket-{NONCE}'
-request = storage_api.objects().list(bucket=name).execute()["items"][0]
-bucket = name + ' :  ' + request["name"]
-resources.append(bucket)
+    name = f'{RESOURCE_PREFIX}-bucket-{NONCE}'
+    request = storage_api.objects().list(bucket=name).execute()["items"][0]
+    bucket = name + ' :  ' + request["name"]
+    resources.append(bucket)
+
 </pre>
 
 </div>

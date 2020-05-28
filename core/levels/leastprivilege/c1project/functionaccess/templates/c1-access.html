@@ -40,12 +40,11 @@
 <div style=" width:80%;margin:auto;padding:auto;" >
   <h4>Source code from current function {{prefix}}-access :</h4>
 <pre style=" width:100%;margin:auto;padding:auto; background-color:rgb(147, 181, 182);">
-	
-instance= instance_api.instances().list(zone="us-west1-b", project=PROJECT_ID).execute()["items"][0]		
-resources.append(f'Instance: {instance["name"]}({instance["machineType"]})')
-	
-bucket = storage_api.buckets().list(project=PROJECT_ID).execute()["items"][0]["name"]
-resources.append(f'Bucket: {bucket}')
+    instance= instance_api.instances().list(zone="us-west1-b", project=PROJECT_ID).execute()["items"][0]
+    resources.append(f'Instance: {instance["name"]}({instance["machineType"]})')
+
+    bucket = storage_api.buckets().list(project=PROJECT_ID).execute()["items"][0]["name"]
+    resources.append(f'Bucket: {bucket}')
 </pre>
 
 </div>
