@@ -129,10 +129,10 @@ def patch(level_path, template_files=[],
     labels = current_depoy['labels']
     fingerprint = current_depoy['fingerprint']
     level_name = os.path.basename(level_path)
-    content = _read_render_config(
-                    f'core/levels/{level_path}/{level_name}.yaml',
-                    template_args=config_template_args)
-    print(content)
+    # content = _read_render_config(
+    #                 f'core/levels/{level_path}/{level_name}.yaml',
+    #                 template_args=config_template_args)
+    # print(content)
     content_patch = _read_render_config(
                     f'{level_name}_patch.yaml',
                     template_args=config_template_args,
