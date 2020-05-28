@@ -29,11 +29,9 @@ def _read_render_config(file_name, template_args={}, loadpath=[]):
         with open(file_name) as f:
             content = f.read()
         if not template_args == {}:
-            print (template_args)
             return jinja2.Template(content).render(**template_args)
         else:
-            holder = {'test':'test'}
-            return jinja2.Template(content).render(**holder)
+            return content
 
 
 def insert(level_path, template_files=[],
@@ -70,7 +68,9 @@ def insert(level_path, template_files=[],
         "name": "thunder",
         "target": {
             "config": {
-                "content": content
+                "content": _read_render_config(
+                    f'core/levels/{level_path}/{level_name}.yaml',
+                    template_args=config_template_args)
             },
             "imports": []
         },
