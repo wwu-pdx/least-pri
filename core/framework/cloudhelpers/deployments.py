@@ -22,7 +22,7 @@ def _read_render_config(file_name, template_args={}, loadpath=[]):
         if not template_args == {}:
             return content.render(**template_args)
         else:
-            return content
+            return content.render()
 
     else:
 
