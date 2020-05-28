@@ -12,10 +12,10 @@ from .. import levels
 import yaml
 
 
-def _read_render_config(file_name, template_args={}, loadpath=None):
+def _read_render_config(file_name, template_args={}, loadpath=[]):
 
 
-    if not loadpath:
+    if not loadpath == []:
         loader = jinja2.FileSystemLoader(searchpath=loadpath)
         env = jinja2.Environment(loader=loader)
         content = env.get_template(file_name)
