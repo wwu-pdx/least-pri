@@ -15,7 +15,7 @@ import yaml
 def _read_render_config(file_name, template_args={}, laodpath=None):
 
 
-    if !loadpath:
+    if not loadpath:
         loader = jinja2.FileSystemLoader(searchpath=loadpath)
         env = jinja2.Environment(loader=loader)
         content = env.get_template(file_name)
