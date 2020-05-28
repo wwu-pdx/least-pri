@@ -36,7 +36,6 @@ def create():
         'core/framework/templates/service_account.jinja',
         'core/framework/templates/iam_policy.jinja']
         
-    
     deployments.insert(LEVEL_PATH, template_files=template_files,
                         config_template_args=config_template_args)
 

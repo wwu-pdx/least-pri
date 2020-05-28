@@ -1,8 +1,7 @@
 imports:
 - path: service_account.jinja
-- path: cloud_function.jinja
 - path: iam_policy.jinja
-- path: bucket_acl.jinja
+{% block imports %}{% endblock %}
 
 resources:
 - name: c5-access
@@ -11,30 +10,6 @@ resources:
 - name: c5-check
   type: service_account.jinja
     
-
-- name: c5-func-access
-  type: cloud_function.jinja
-  properties:
-    region: us-central1
-    nonce: {{ nonce }}
-    entry_point: main
-    upload_url: {{ func_upload_url1 }}
-    policyBindings:
-    - role: roles/cloudfunctions.invoker
-      service_account_id: allusers
-    env_variables: {"NONCE":{{nonce}},"RESOURCE_PREFIX":{{resource_prefix}},"LEVEL_NAME":{{level_name}}}
-
-- name: c5-func-check
-  type: cloud_function.jinja
-  properties:
-    region: us-central1
-    nonce: {{ nonce }}
-    entry_point: main
-    upload_url: {{ func_upload_url2 }}
-    policyBindings:
-    - role: roles/cloudfunctions.invoker
-      service_account_id: allusers
-    env_variables: {"fvar1":{{fvar1}},"fvar2":{{fvar2}},"NONCE":{{nonce}},"RESOURCE_PREFIX":{{resource_prefix}},"LEVEL_NAME":{{level_name}}}
 
 - name: iam_policy
   type: iam_policy.jinja
@@ -48,4 +23,4 @@ resources:
       role:
         name: roles/iam.roleViewer
         
-
+{% block resources %}{% endblock %}
