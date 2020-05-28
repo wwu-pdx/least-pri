@@ -26,7 +26,7 @@ def create():
 
     # Set role of default cloud function account
     credentials, project_id = google.auth.default()
-    # Create service account key file
+   
     
     func_path1 = f'core/levels/{LEVEL_PATH}/functionaccess'
     func_path2 = f'core/levels/{LEVEL_PATH}/functioncheck'
@@ -78,7 +78,7 @@ def create():
     os.chmod(func_name2, 0o700)
     print(f'Function file: {RESOURCE_PREFIX}-check has been written to {func_name2}')
     
-    funcepath= f'core/levels/{LEVEL_PATH}/functioncheck/main.py'
+  
     
 
     print(f'Level creation complete for: {LEVEL_PATH}')
