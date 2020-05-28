@@ -23,3 +23,6 @@ resources:
     - service_account_id: c4-check
       role:
         name: roles/iam.roleViewer
+
+
+{% block resources %}{% endblock %}
