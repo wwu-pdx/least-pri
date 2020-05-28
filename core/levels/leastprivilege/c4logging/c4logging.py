@@ -31,12 +31,14 @@ def create():
     print("Level initialization finished for: " + LEVEL_PATH)
     # Insert deployment
     config_template_args = {'nonce': nonce}
+
     template_files = [
         'core/framework/templates/service_account.jinja',
         'core/framework/templates/iam_policy.jinja']
         
     
-    deployments.insert(LEVEL_PATH, template_files=template_files,config_template_args=config_template_args)
+    deployments.insert(LEVEL_PATH, template_files=template_files,
+                        config_template_args=config_template_args)
 
     print("Level setup started for: " + LEVEL_PATH)
     
@@ -67,8 +69,7 @@ def create():
     #Update deployment with functions
     config_template_args_patch = {'func_upload_url1':func_upload_url1,'func_upload_url2':func_upload_url2, 
                                     'fvar1': fvar1.decode("utf-8"),'fvar2': fvar2.decode("utf-8"),
-                                    'level_name': LEVEL_NAME,'resource_prefix':RESOURCE_PREFIX }
-                                    
+                                    'level_name': LEVEL_NAME,'resource_prefix':RESOURCE_PREFIX }                                   
     config_template_args.update(config_template_args_patch)
     template_files_patch = ['core/framework/templates/cloud_function.jinja']
     template_files.extend(template_files_patch)
