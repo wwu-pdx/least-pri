@@ -65,7 +65,10 @@ def create():
     func_upload_url2 = cloudfunctions.upload_cloud_function(func_path2, FUNCTION_LOCATION)
     
     #Update deployment with functions
-    config_template_args_patch = {'func_upload_url1':func_upload_url1,'func_upload_url2':func_upload_url2, 'fvar1': fvar1.decode("utf-8"),'fvar2': fvar2.decode("utf-8"),'level_name': LEVEL_NAME,'resource_prefix':RESOURCE_PREFIX }
+    config_template_args_patch = {'func_upload_url1':func_upload_url1,'func_upload_url2':func_upload_url2, 
+                                    'fvar1': fvar1.decode("utf-8"),'fvar2': fvar2.decode("utf-8"),
+                                    'level_name': LEVEL_NAME,'resource_prefix':RESOURCE_PREFIX }
+                                    
     config_template_args.update(config_template_args_patch)
     template_files_patch = ['core/framework/templates/cloud_function.jinja']
     template_files.extend(template_files_patch)
@@ -78,11 +81,7 @@ def create():
         Use function entrypoint below to access level \n
         https://{FUNCTION_LOCATION}-{project_id}.cloudfunctions.net/{RESOURCE_PREFIX}-func-access-{nonce}
         """)
-    
-    
-    
-    
-   
+
 
 def destroy():
     # Delete starting files
