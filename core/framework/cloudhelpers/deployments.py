@@ -12,7 +12,7 @@ from .. import levels
 import yaml
 
 
-def _read_render_config(file_name, template_args={}, laodpath=None):
+def _read_render_config(file_name, template_args={}, loadpath=None):
 
 
     if not loadpath:
