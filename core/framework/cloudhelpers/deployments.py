@@ -31,7 +31,7 @@ def _read_render_config(file_name, template_args={}, loadpath=[]):
         if not template_args == {}:
             return jinja2.Template(content).render(**template_args)
         else:
-            return jinja2.Template(content).render({'t':'t'})
+            return jinja2.Template(content).render(**template_args)
 
 
 def insert(level_path, template_files=[],
