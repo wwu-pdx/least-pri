@@ -3,7 +3,7 @@ imports:
 - path: iam_policy.jinja
 - path: cloud_function.jinja
 
-{% block resource %}
+
 resources:
 - name: c4-access
   type: service_account.jinja
@@ -23,6 +23,3 @@ resources:
     - service_account_id: c4-check
       role:
         name: roles/iam.roleViewer
-        
-
-{% endblock %}
