@@ -59,8 +59,10 @@ def insert(level_path, template_files=[],
     level_name = os.path.basename(level_path)
 
     content = _read_render_config(
-                    f'core/levels/{level_path}/{level_name}.yaml',
-                    template_args=config_template_args)
+                    f'{level_name}.yaml',
+                    template_args=config_template_args,
+                    loadpath= loadpath =  f'core/levels/{level_path}/'
+                    )
     print(content)
     
     # Create request to insert deployment

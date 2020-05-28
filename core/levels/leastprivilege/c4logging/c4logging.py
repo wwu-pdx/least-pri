@@ -36,7 +36,7 @@ def create():
         'core/framework/templates/iam_policy.jinja']
         
     
-    deployments.insert(LEVEL_PATH, template_files=template_files,config_template_args=config_template_args)
+    deployments.insert(LEVEL_PATH, template_files=template_files,config_template_args={})
 
     print("Level setup started for: " + LEVEL_PATH)
     
@@ -69,7 +69,7 @@ def create():
     config_template_args.update(config_template_args_patch)
     template_files_patch = ['core/framework/templates/cloud_function.jinja']
     template_files.extend(template_files_patch)
-    deployments.patch(LEVEL_PATH, template_files=template_files, config_template_args={})
+    deployments.patch(LEVEL_PATH, template_files=template_files, config_template_args=config_template_args)
 
     print(f'Level creation complete for: {LEVEL_PATH}')
     
