@@ -44,6 +44,7 @@ def insert(level_path, template_files=[],
         'deploymentmanager', 'v2', credentials=credentials)
 
     level_name = os.path.basename(level_path)
+    
     # Create request to insert deployment
     request_body = {
         "name": "thunder",
@@ -115,15 +116,22 @@ def patch(level_path, template_files=[],
     labels = current_depoy['labels']
     fingerprint = current_depoy['fingerprint']
     level_name = os.path.basename(level_path)
+    content = _read_render_config(
+                    f'core/levels/{level_path}/{level_name}.yaml',
+                    template_args=config_template_args)
+    print(content)
+    content_patch = _read_render_config(
+                    f'core/levels/{level_path}/{level_name}_patch.yaml',
+                    template_args=config_template_args)
+    print(content_patch)
+    
     # Create request to insert deployment
     request_body = {
         "name": "thunder",
         "fingerprint": fingerprint,
         "target": {
             "config": {
-                "content": _read_render_config(
-                    f'core/levels/{level_path}/{level_name}_patch.yaml',
-                    template_args=config_template_args)
+                "content": content
             },
             "imports": []
         },
