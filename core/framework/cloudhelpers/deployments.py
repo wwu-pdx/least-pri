@@ -131,7 +131,7 @@ def patch(level_path, template_files=[],
         "fingerprint": fingerprint,
         "target": {
             "config": {
-                "content": content
+                "content": content_patch
             },
             "imports": []
         },
