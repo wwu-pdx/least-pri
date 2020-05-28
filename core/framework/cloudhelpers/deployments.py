@@ -61,7 +61,7 @@ def insert(level_path, template_files=[],
     content = _read_render_config(
                     f'{level_name}.yaml',
                     template_args=config_template_args,
-                    loadpath= loadpath =  f'core/levels/{level_path}/'
+                    loadpath =  f'core/levels/{level_path}/'
                     )
     print(content)
     
