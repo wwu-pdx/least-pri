@@ -42,7 +42,7 @@
 <pre style=" width:100%;margin:auto;padding:auto; background-color:rgb(147, 181, 182);">
 	client = logging.Client(credentials=credentials )
 	logname = "cloudaudit.googleapis.com%2Factivity"
-	filter ="logging.admin"
+	filter ="projects.setIamPolicy"
 	logger = client.logger(logname)	
 	entry = list(logger.list_entries(order_by=DESCENDING, filter_=filter))[0]
 </pre>

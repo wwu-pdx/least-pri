@@ -36,7 +36,7 @@ def create():
         'core/framework/templates/iam_policy.jinja']
         
     
-    deployments.insert(LEVEL_PATH, template_files=template_files,config_template_args={})
+    deployments.insert(LEVEL_PATH, template_files=template_files,config_template_args=config_template_args)
 
     print("Level setup started for: " + LEVEL_PATH)
     

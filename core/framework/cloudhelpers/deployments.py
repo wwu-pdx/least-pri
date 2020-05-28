@@ -12,11 +12,20 @@ from .. import levels
 import yaml
 
 
-def _read_render_config(file_name, template_args={}, loadpath=[]):
+def _read_render_config(file_name, template_args={}, load_path=[]):
+    '''Use load_path to set jinja env loader, if there are blocks in level yaml.
+    
+    Parameters:
+        file_name (str): Relative file path with name. example core/levels/leastprivilege/c1project/c1project.yaml.
+            if load_path provided, should be file name only. example c1project.yaml
+        template_args (dict, optional): Dictionary of arguments to use when rendering the top level configuration template using Jinja2.
+            Keys should be strings that correspond to the names of variables in the Jinja template, and each corresponding value should be the passed value of the variable.
+            If not supplied, the top level configuration will not be treated as a template.
+        load_path (str): Relative path example core/levels/leastprivilege/c1project/
+    '''
 
-
-    if not loadpath == []:
-        loader = jinja2.FileSystemLoader(searchpath=loadpath)
+    if not load_path == []:
+        loader = jinja2.FileSystemLoader(searchpath=load_path)
         env = jinja2.Environment(loader=loader)
         content = env.get_template(file_name)
         if not template_args == {}:
@@ -25,12 +34,13 @@ def _read_render_config(file_name, template_args={}, loadpath=[]):
             return content.render()
 
     else:
-
+        
         with open(file_name) as f:
             content = f.read()
         if not template_args == {}:
             return jinja2.Template(content).render(**template_args)
         else:
+            #deployment will faild if there are jinja blocks in yaml
             return content
 
 
@@ -57,20 +67,15 @@ def insert(level_path, template_files=[],
         'deploymentmanager', 'v2', credentials=credentials)
 
     level_name = os.path.basename(level_path)
-
-    content = _read_render_config(
-                    f'{level_name}.yaml',
-                    template_args=config_template_args,
-                    loadpath =  f'core/levels/{level_path}/'
-                    )
-    print(content)
     
     # Create request to insert deployment
     request_body = {
         "name": "thunder",
         "target": {
             "config": {
-                "content": content
+                "content": _read_render_config(
+                    f'core/levels/{level_path}/{level_name}.yaml',
+                    template_args=config_template_args)
             },
             "imports": []
         },
@@ -135,12 +140,12 @@ def patch(level_path, template_files=[],
     fingerprint = current_depoy['fingerprint']
     level_name = os.path.basename(level_path)
     
+    #render patched contnent
     content_patch = _read_render_config(
                     f'{level_name}_patch.yaml',
                     template_args=config_template_args,
-                    loadpath =  f'core/levels/{level_path}/'
+                    load_path =  f'core/levels/{level_path}/'
                 )
-    print(content_patch)
     
     # Create request to insert deployment
     request_body = {
