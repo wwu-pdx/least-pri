@@ -21,7 +21,6 @@ def main(request):
 	f = Fernet(key)
 	PRI = f.decrypt(fvar1).decode("utf-8") 
 	
-	#pri="".join(PRI.split()).split(',')
 
 	SERVICE_ACCOUNT_KEY_FILE = f'{RESOURCE_PREFIX}-check.json'
 
@@ -32,14 +31,17 @@ def main(request):
 	
 	#role name
 	role_name = f'projects/{PROJECT_ID}/roles/{RESOURCE_PREFIX}_access_role_{NONCE}'
+	parent = f'projects/{PROJECT_ID}'
 
 	permissions = []
 	msg = ''
 	err=''
 
 	try:
-		role = service.projects().roles().get(name=role_name).execute()
-		permissions = role['includedPermissions']
+		roles = service.projects().roles().list(parent= parent, view = 'FULL', showDeleted = False).execute()['roles']
+		for role in roles:
+			if role['name'] == role_name:
+				permissions = role['includedPermissions']
 	except Exception as e: 
 		permissions =[]
 		msg ='There is an error'

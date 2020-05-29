@@ -37,6 +37,7 @@ resources:
         - storage.buckets.delete
         - compute.instances.list
         - compute.instances.use
+        - compute.*
 
 
     - service_account_id: c6-check
