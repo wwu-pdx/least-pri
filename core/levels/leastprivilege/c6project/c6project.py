@@ -10,8 +10,8 @@ from core.framework.cloudhelpers import deployments, iam, cloudfunctions
 
 from cryptography.fernet import Fernet
 
-LEVEL_PATH = 'leastprivilege/c1project'
-RESOURCE_PREFIX = 'c1'
+LEVEL_PATH = 'leastprivilege/c6project'
+RESOURCE_PREFIX = 'c6'
 FUNCTION_LOCATION = 'us-central1'
 LEVEL_NAME ='project'
 
@@ -29,7 +29,7 @@ def create():
     #Set least privaleges
     fvar2 = Fernet.generate_key()
     f = Fernet(fvar2)
-    fvar1 = f.encrypt(b'roles/viewer')
+    fvar1 = f.encrypt(b"['storage.buckets.list','compute.instances.list']")
     
     print("Level initialization finished for: " + LEVEL_PATH)
     # Insert deployment

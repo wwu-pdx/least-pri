@@ -30,28 +30,21 @@ def main(request):
 	# Build cloudresourcemanager REST API python object
 	service_r = discovery.build('cloudresourcemanager','v1', credentials=credentials)
 	
-	# Service account 
-	sa = f'serviceAccount:{RESOURCE_PREFIX}-access@{PROJECT_ID}.iam.gserviceaccount.com'
+	#role name
+	role_name = f'projects/{PROJECT_ID}/roles/{RESOURCE_PREFIX}_access_role_{NONCE}'
 
-	get_iam_policy_request_body = {}
-	
-	roles =[]
-	permissions =[]
+	permissions = []
 	msg = ''
 	err=''
+
 	try:
-		bindings = service_r.projects().getIamPolicy(resource=PROJECT_ID, body=get_iam_policy_request_body).execute()["bindings"]
-		for r in bindings:
-			if sa in r["members"]:
-				roles.append(r["role"])
+		role = service.projects().roles().list(name=name).execute()
+		permissions = role['includedPermissions']
 	except Exception as e: 
 		permissions =[]
 		msg ='There is an error'
 		err = str(e)
-	if len(roles)>1 or PRI != roles[0]:
-		msg='Not least privilege role, please try again!'
-	else:
-		msg='Congratulations! You got the least privilege role.'
+
 		
 		
 	# Build iam  REST API python object
@@ -59,11 +52,11 @@ def main(request):
 
 	
 	try:
-		permissions = service_i.roles().list(name=roles[0]).execute()["includedPermissions"]
+		permissions = service_i.roles().get(name=roles[0]).execute()["includedPermissions"]
 		
 		
 	except Exception as e: 
 		permissions =[]
 		err = str(e)
 	
-	return render_template(f'{RESOURCE_PREFIX}-check.html',  pers=permissions, msg=msg, rn=roles[0], err=err,prefix=RESOURCE_PREFIX, level_name=LEVEL_NAME)
+	return render_template(f'{RESOURCE_PREFIX}-check.html',  pers=permissions, msg=msg, rn=role_name, err=err,prefix=RESOURCE_PREFIX, level_name=LEVEL_NAME)
