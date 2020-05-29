@@ -28,7 +28,7 @@ def main(request):
 	credentials = google.oauth2.service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_KEY_FILE)
 
 	# Build cloudresourcemanager REST API python object
-	service_r = discovery.build('cloudresourcemanager','v1', credentials=credentials)
+	service = discovery.build('cloudresourcemanager','v1', credentials=credentials)
 	
 	#role name
 	role_name = f'projects/{PROJECT_ID}/roles/{RESOURCE_PREFIX}_access_role_{NONCE}'
@@ -38,25 +38,25 @@ def main(request):
 	err=''
 
 	try:
-		role = service.projects().roles().list(name=name).execute()
+		role = service.projects().roles().get(name=name).execute()
 		permissions = role['includedPermissions']
 	except Exception as e: 
 		permissions =[]
 		msg ='There is an error'
 		err = str(e)
-
-		
-		
-	# Build iam  REST API python object
-	service_i = discovery.build('iam','v1', credentials=credentials)
-
 	
-	try:
-		permissions = service_i.roles().get(name=roles[0]).execute()["includedPermissions"]
+	if msg =='':
+		msg='Congratulations! You get the least privileges. '
 		
-		
-	except Exception as e: 
-		permissions =[]
-		err = str(e)
+		if len(permissions)!=len(PRI):
+			msg='Not least privilege, please try again!'
+			
+		else:
+			for p in PRI:
+				if p not in permissions:
+					msg='Not least privilege, please try again!'
+					return render_template(f'{RESOURCE_PREFIX}-check.html',  pers=permissions, msg=msg, rn=role_name, err=err,prefix=RESOURCE_PREFIX, level_name=LEVEL_NAME)
+	
+
 	
 	return render_template(f'{RESOURCE_PREFIX}-check.html',  pers=permissions, msg=msg, rn=role_name, err=err,prefix=RESOURCE_PREFIX, level_name=LEVEL_NAME)

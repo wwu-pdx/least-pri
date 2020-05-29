@@ -59,7 +59,7 @@ def main(request):
 
 	
 	try:
-		permissions = service_i.roles().list(name=roles[0]).execute()["includedPermissions"]
+		permissions = service_i.roles().get(name=roles[0]).execute()["includedPermissions"]
 		
 		
 	except Exception as e: 
