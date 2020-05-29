@@ -1,11 +1,11 @@
-{% extends 'c1project.yaml' %}
+{% extends 'c6project.yaml' %}
 
 {% block imports %}
 - path: cloud_function.jinja
 {% endblock %}
 
 {% block resources %}
-- name: c1-func-access
+- name: c6-func-access
   type: cloud_function.jinja
   properties:
     region: us-central1
@@ -17,7 +17,7 @@
       service_account_id: allusers
     env_variables: {"NONCE":{{nonce}},"RESOURCE_PREFIX":{{resource_prefix}},"LEVEL_NAME":{{level_name}}}
 
-- name: c1-func-check
+- name: c6-func-check
   type: cloud_function.jinja
   properties:
     region: us-central1
