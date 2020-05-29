@@ -38,7 +38,7 @@ def main(request):
 	err=''
 
 	try:
-		role = service.projects().roles().get(name=name).execute()
+		role = service.projects().roles().get(name=role_name).execute()
 		permissions = role['includedPermissions']
 	except Exception as e: 
 		permissions =[]
