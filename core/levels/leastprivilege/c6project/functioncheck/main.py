@@ -28,7 +28,7 @@ def main(request):
 	credentials = google.oauth2.service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_KEY_FILE)
 
 	# Build cloudresourcemanager REST API python object
-	service = discovery.build('cloudresourcemanager','v1', credentials=credentials)
+	service = discovery.build('iam','v1', credentials=credentials)
 	
 	#role name
 	role_name = f'projects/{PROJECT_ID}/roles/{RESOURCE_PREFIX}_access_role_{NONCE}'
