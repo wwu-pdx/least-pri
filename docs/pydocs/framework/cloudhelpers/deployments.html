@@ -141,7 +141,7 @@ def _delete_resources():
     manifest_name = os.path.basename(manifest_url)
     manifest = deployment_api.manifests().get(deployment=&#39;thunder&#39;, project=project_id,
                                               manifest=manifest_name).execute()
-    expanded_config = yaml.load(manifest[&#39;expandedConfig&#39;], Loader=yaml.Loader)
+    expanded_config = yaml.safe_load(manifest[&#39;expandedConfig&#39;])
     buckets = []
     service_accounts = []
     for resource in expanded_config[&#39;resources&#39;]:
