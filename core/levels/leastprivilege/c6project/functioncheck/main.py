@@ -20,7 +20,7 @@ def main(request):
 	#fvar1 = os.environ.get('fvar1', 'Specified environment variable is not set.').encode("utf-8") 
 	#f = Fernet(key)
 	#PRI = f.decrypt(fvar1).decode("utf-8") 
-	PRI ='{{fvar}}'
+	PRI ={{fvar|safe}}
 	
 
 	SERVICE_ACCOUNT_KEY_FILE = f'{RESOURCE_PREFIX}-check.json'
@@ -28,38 +28,63 @@ def main(request):
 	credentials = google.oauth2.service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_KEY_FILE)
 
 	# Build cloudresourcemanager REST API python object
-	service = discovery.build('iam','v1', credentials=credentials)
+	service_r = discovery.build('cloudresourcemanager','v1', credentials=credentials)
 	
-	#role name
-	role_name = f'projects/{PROJECT_ID}/roles/{RESOURCE_PREFIX}_access_role_{NONCE}'
-	parent = f'projects/{PROJECT_ID}'
+	# Service account 
+	sa = f'serviceAccount:{RESOURCE_PREFIX}-access@{PROJECT_ID}.iam.gserviceaccount.com'
 
-	permissions = []
+	get_iam_policy_request_body = {}
+	
+	roles =[]
+	permissions =[]
 	msg = ''
 	err=''
-
 	try:
-		roles = service.projects().roles().list(parent= parent, view = 'FULL', showDeleted = False).execute()['roles']
-		for role in roles:
-			if role['name'] == role_name:
-				permissions = role['includedPermissions']
+		bindings = service_r.projects().getIamPolicy(resource=PROJECT_ID, body=get_iam_policy_request_body).execute()['bindings']
+		for r in bindings:
+			if sa in r['members'] and r['roles'].startswith('roles/') :
+				roles.append(r['role'])
 	except Exception as e: 
 		permissions =[]
 		msg ='There is an error'
 		err = str(e)
-	
-	if msg =='':
-		msg='Congratulations! You get the least privileges. '
-		
-		if len(permissions)!=len(PRI):
-			msg='Not least privilege, please try again!'
-			
-		else:
-			for p in PRI:
-				if p not in permissions:
-					msg='Not least privilege, please try again!'
-					return render_template(f'{RESOURCE_PREFIX}-check.html',  pers=permissions, msg=msg, rn=role_name, err=err,prefix=RESOURCE_PREFIX, level_name=LEVEL_NAME)
-	
 
-	
-	return render_template(f'{RESOURCE_PREFIX}-check.html',  pers=permissions, msg=msg, rn=role_name, err=err,prefix=RESOURCE_PREFIX, level_name=LEVEL_NAME)
+	if len(roles)>0:
+		msg = f'A primitive or predefined role currently attached to {RESOURCE_PREFIX}-access account. Please attach one custom role with least privilege permissions. '
+		return render_template(f'{RESOURCE_PREFIX}-check.html',  pers=permissions, msg=msg, rn=role_name, err=err,prefix=RESOURCE_PREFIX, level_name=LEVEL_NAME)
+	else:
+
+		# Build cloudresourcemanager REST API python object
+		service = discovery.build('iam','v1', credentials=credentials)
+		
+		#role name
+		role_name = f'projects/{PROJECT_ID}/roles/{RESOURCE_PREFIX}_access_role_{NONCE}'
+		parent = f'projects/{PROJECT_ID}'
+
+		
+
+		try:
+			roles = service.projects().roles().list(parent= parent, view = 'FULL', showDeleted = False).execute()['roles']
+			for role in roles:
+				if role['name'] == role_name:
+					permissions = role['includedPermissions']
+		except Exception as e: 
+			permissions =[]
+			msg ='There is an error'
+			err = str(e)
+		
+		if msg =='':
+			msg='Congratulations! You get the least privileges. '
+			
+			if len(permissions)!=len(PRI):
+				msg='Not least privilege, please try again!'
+				
+			else:
+				for p in PRI:
+					if p not in permissions:
+						msg='Not least privilege, please try again!'
+						return render_template(f'{RESOURCE_PREFIX}-check.html',  pers=permissions, msg=msg, rn=role_name, err=err,prefix=RESOURCE_PREFIX, level_name=LEVEL_NAME)
+		
+
+		
+		return render_template(f'{RESOURCE_PREFIX}-check.html',  pers=permissions, msg=msg, rn=role_name, err=err,prefix=RESOURCE_PREFIX, level_name=LEVEL_NAME)
