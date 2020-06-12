@@ -27,9 +27,10 @@ def create():
     credentials, project_id = google.auth.default()
 
     #Set least privaleges
-    fvar2 = Fernet.generate_key()
-    f = Fernet(fvar2)
-    fvar1 = f.encrypt(b"['storage.buckets.list','compute.instances.list']")
+    #fvar2 = Fernet.generate_key()
+    #f = Fernet(fvar2)
+    #fvar1 = f.encrypt(b"['storage.buckets.list','compute.instances.list']")
+    fvar = ['storage.buckets.list','compute.instances.list']
     
     print("Level initialization finished for: " + LEVEL_PATH)
     # Insert deployment
@@ -73,12 +74,13 @@ def create():
     print(f'Function file: {RESOURCE_PREFIX}-check has been written to {func_name2}')
     
     #Generate function urls
+    func_template_args2 = {'fvar': fvar}
     func_upload_url1 = cloudfunctions.upload_cloud_function(func_path1, FUNCTION_LOCATION)
-    func_upload_url2 = cloudfunctions.upload_cloud_function(func_path2, FUNCTION_LOCATION)
+    func_upload_url2 = cloudfunctions.upload_cloud_function(func_path2, FUNCTION_LOCATION,template_args=func_template_args2)
     
     #Update deployment with functions
     config_template_args_patch = {'func_upload_url1':func_upload_url1,'func_upload_url2':func_upload_url2, 
-                                    'fvar1': fvar1.decode("utf-8"),'fvar2': fvar2.decode("utf-8"),
+                                    #'fvar1': fvar1.decode("utf-8"),'fvar2': fvar2.decode("utf-8"),
                                     'level_name': LEVEL_NAME,'resource_prefix':RESOURCE_PREFIX }
     config_template_args.update(config_template_args_patch)
     template_files_patch = ['core/framework/templates/cloud_function.jinja']

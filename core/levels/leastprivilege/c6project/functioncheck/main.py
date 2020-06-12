@@ -16,10 +16,11 @@ def main(request):
 	LEVEL_NAME = os.environ.get('LEVEL_NAME', 'Specified environment variable is not set.')
 	
 
-	key = os.environ.get('fvar2', 'Specified environment variable is not set.').encode("utf-8") 
-	fvar1 = os.environ.get('fvar1', 'Specified environment variable is not set.').encode("utf-8") 
-	f = Fernet(key)
-	PRI = f.decrypt(fvar1).decode("utf-8") 
+	#key = os.environ.get('fvar2', 'Specified environment variable is not set.').encode("utf-8") 
+	#fvar1 = os.environ.get('fvar1', 'Specified environment variable is not set.').encode("utf-8") 
+	#f = Fernet(key)
+	#PRI = f.decrypt(fvar1).decode("utf-8") 
+	PRI ='{{fvar}}'
 	
 
 	SERVICE_ACCOUNT_KEY_FILE = f'{RESOURCE_PREFIX}-check.json'
