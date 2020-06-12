@@ -7,12 +7,12 @@
 <div>
 <h1 style="text-align:center">Least Privileges {{prefix}}{{level_name}}</h1>
 <ul>
-  <li>An instance and a bucket were created with the level</li>
-  <li>Service account {{prefix}}-access has the role with permission to list resources in the project. However it's a role with permissions more than necessary</li>
-  <li>Custom role attached with {{prefix}}-access has the permissions to list buckets and instances in the project. However it was granted with permissions more than necessary</li>
+  <li>An instance and a bucket were generated with the level</li>
+  <li>Service account {{prefix}}-access has the role with permissions to list resources in the project. However it's a role with permissions more than necessary</li>
+  <li>You need to detatch the original role of {{prefix}}-access and create custom role with least privilege permission attach to it.</li>
   <li>You can use this <a href="{{url}}" target="_blank">funtion</a> to check current permissions of {{prefix}}-access</li>
-  <li>Go to google cloud console IAM&Admin -> Roles, find {{prefix}}-access role(enabled) in the table  and edit its permissions </li>
-  <li>Go to google cloud console IAM&Admin -> Roles, create a new role with name <b></b>{{prefix}}-access role in the table  and edit its permissions </li>
+  <li>Go to google cloud console IAM&Admin -> Roles, create a new role with name <b>{{prefix}}-access role</b> and ID <b>{{prefix}}_access_role_{{nonce}}</b>. Don't forget to add permissions </li>
+  <li>Go to google cloud console IAM&Admin -> IAM -> MEMBERS, find service acount {{prefix}}-access in the list and edit role. Add the custom ole you just created and remove its original role</li>
   <li>Refresh the check <a href="{{url}}" target="_blank">funtion</a> to see if you get the least-privilege permissions to list both resources</li>
   <li>To validate if there are sufficient permissions, wait 2 mins and refresh the current function.</li>
 </ul>  

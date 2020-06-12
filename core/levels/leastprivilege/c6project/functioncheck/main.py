@@ -42,7 +42,7 @@ def main(request):
 	try:
 		bindings = service_r.projects().getIamPolicy(resource=PROJECT_ID, body=get_iam_policy_request_body).execute()['bindings']
 		for r in bindings:
-			if sa in r['members'] and r['roles'].startswith('roles/') :
+			if sa in r['members'] and r['role'].startswith('roles/') :
 				roles.append(r['role'])
 	except Exception as e: 
 		permissions =[]
