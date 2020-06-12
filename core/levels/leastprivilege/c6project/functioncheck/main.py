@@ -59,15 +59,13 @@ def main(request):
 		
 		#role name
 		role_name = f'projects/{PROJECT_ID}/roles/{RESOURCE_PREFIX}_access_role_{NONCE}'
-		parent = f'projects/{PROJECT_ID}'
+		#parent = f'projects/{PROJECT_ID}'
 
 		
 
 		try:
-			roles = service.projects().roles().list(parent= parent, view = 'FULL', showDeleted = False).execute()['roles']
-			for role in roles:
-				if role['name'] == role_name:
-					permissions = role['includedPermissions']
+			roles = service.projects().roles().get(name= role_name).execute()
+				permissions = role['includedPermissions']
 		except Exception as e: 
 			permissions =[]
 			msg ='There is an error'

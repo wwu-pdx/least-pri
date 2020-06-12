@@ -34,7 +34,7 @@ def main(request):
 		resources.append("Instance: Insufficient privilege!")
 		err.append(str(e))
 	if len(err)!=0:
-		return render_template(f'{RESOURCE_PREFIX}-access.html', resources=resources, url=url, err=err,prefix=RESOURCE_PREFIX)
+		return render_template(f'{RESOURCE_PREFIX}-access.html', resources=resources, url=url, err=err,prefix=RESOURCE_PREFIX,level_name=LEVEL_NAME)
 
 	#Build storage REST API python object
 	storage_api = discovery.build('storage', 'v1', credentials=credentials)

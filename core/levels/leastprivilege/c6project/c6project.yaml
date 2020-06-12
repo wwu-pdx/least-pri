@@ -38,7 +38,7 @@ resources:
         name: custom
         custom_nonce: {{ nonce }}
         permissions:
-        - iam.roles.list
+        - iam.roles.get
         
 {% block resources %}{% endblock %}
 
