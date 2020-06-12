@@ -31,12 +31,9 @@ resources:
       role:
         name: custom
         custom_nonce: {{ nonce }}
-        permissions:
-        - storage.buckets.list
-        - storage.objects.list
-        - storage.buckets.delete
-        - compute.instances.list
-        - compute.instances.use
+    - service_account_id: c6-access
+      role:
+        name: roles/owner
 
 
 

@@ -208,7 +208,7 @@ def _delete_resources():
         manifest_name = os.path.basename(manifest_url)
         manifest = deployment_api.manifests().get(deployment='thunder', project=project_id,
                                                 manifest=manifest_name).execute()
-        expanded_config = yaml.load(manifest['expandedConfig'], Loader=yaml.Loader)
+        expanded_config = yaml.safe_load(manifest['expandedConfig'], Loader=yaml.Loader)
     except Exception as e:
         print(f"ERROR:Error retrieving deployment manifest for resource deletion: {e}")
         return
