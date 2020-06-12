@@ -38,7 +38,8 @@ resources:
         name: custom
         custom_nonce: {{ nonce }}
         permissions:
-        - iam.roles.get
+        - iam.roles.list
+        - resourcemanager.projects.getIamPolicy
         
 {% block resources %}{% endblock %}
 
