@@ -32,6 +32,8 @@ def main(request):
 	
 	# Service account 
 	sa = f'serviceAccount:{RESOURCE_PREFIX}-access@{PROJECT_ID}.iam.gserviceaccount.com'
+	#role name
+	role_name = f'projects/{PROJECT_ID}/roles/{RESOURCE_PREFIX}_access_role_{NONCE}'
 
 	get_iam_policy_request_body = {}
 	
@@ -57,8 +59,7 @@ def main(request):
 		# Build cloudresourcemanager REST API python object
 		service = discovery.build('iam','v1', credentials=credentials)
 		
-		#role name
-		role_name = f'projects/{PROJECT_ID}/roles/{RESOURCE_PREFIX}_access_role_{NONCE}'
+		#parent resource
 		parent = f'projects/{PROJECT_ID}'
 
 		
