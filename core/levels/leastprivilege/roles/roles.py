@@ -100,8 +100,8 @@ def create():
             https://{FUNCTION_LOCATION}-{project_id}.cloudfunctions.net/{RESOURCE_PREFIX}-func-access-{nonce}
             """)
         
-   deployments.patch(LEVEL_PATH, template_files=template_files, config_template_args=config_template_args)
-   print('Patching completed')
+    deployments.patch(LEVEL_PATH, template_files=template_files, config_template_args=config_template_args)
+    print('Patching completed')
 
 def destroy():
     # Delete starting files
