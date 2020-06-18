@@ -26,7 +26,7 @@ def main(request):
 	instance_api = discovery.build('compute', 'v1', credentials=credentials)
 	err=[]
 	resources=[]
-	url=f'https://{FUNCTION_REGION}-{PROJECT_ID}.cloudfunctions.net/{RESOURCE_PREFIX}-func-check-{NONCE}'
+	url=f'https://{FUNCTION_REGION}-{PROJECT_ID}.cloudfunctions.net/{RESOURCE_PREFIX}-f-check-{NONCE}'
 	try:
 		instance= instance_api.instances().list(zone="us-west1-b", project=PROJECT_ID).execute()["items"][0]		
 		resources.append(f'Instance: {instance["name"]}({instance["machineType"]})')

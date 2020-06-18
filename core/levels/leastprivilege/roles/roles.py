@@ -57,13 +57,14 @@ def create():
     
     template_files_patch = ['core/framework/templates/cloud_function.jinja']
     template_files.extend(template_files_patch)
+    print( 'Use function entrypoints below to access levels')
 
     for RESOURCE_PREFIX in LEVEL_NAMES:
 
         LEVEL_NAME = LEVEL_NAMES[RESOURCE_PREFIX]
         fvar = fvars[RESOURCE_PREFIX]
 
-        print(f'Level creation for: {LEVEL_PATH}/{RESOURCE_PREFIX}/{LEVEL_NAME}')
+        #print(f'Level creation for: {LEVEL_PATH}/{RESOURCE_PREFIX}/{LEVEL_NAME}')
         #Generate account key files
         sa_keya = iam.generate_service_account_key(f'{RESOURCE_PREFIX}-access')
         sa_keyc = iam.generate_service_account_key(f'{RESOURCE_PREFIX}-check')
@@ -77,11 +78,11 @@ def create():
         with open(func_namea, 'w') as f:
             f.write(sa_keya)
         os.chmod(func_namea, 0o700)
-        print(f'Function file: {RESOURCE_PREFIX}-access has been written to {func_namea}')
+        #print(f'Function file: {RESOURCE_PREFIX}-access has been written to {func_namea}')
         with open(func_namec, 'w') as f:
             f.write(sa_keyc)
         os.chmod(func_namec, 0o700)
-        print(f'Function file: {RESOURCE_PREFIX}-check has been written to {func_namec}')
+        #print(f'Function file: {RESOURCE_PREFIX}-check has been written to {func_namec}')
         
         #Generate function urls
         func_template_argsc = {'fvar': fvar}
@@ -96,8 +97,7 @@ def create():
         
         print(
             f"""
-            Use function entrypoint below to access level \n
-            https://{FUNCTION_LOCATION}-{project_id}.cloudfunctions.net/{RESOURCE_PREFIX}-func-access-{nonce}
+            https://{FUNCTION_LOCATION}-{project_id}.cloudfunctions.net/{RESOURCE_PREFIX}-f-access-{nonce}
             """)
         
     deployments.patch(LEVEL_PATH, template_files=template_files, config_template_args=config_template_args)
