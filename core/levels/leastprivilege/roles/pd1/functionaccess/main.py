@@ -3,10 +3,8 @@ def main(request):
 	from googleapiclient import discovery
 	import google.oauth2.service_account
 	from google.oauth2.credentials import Credentials
-	from google.cloud import logging
-	from google.cloud.logging import DESCENDING
 	import os
-	
+
 	
 	# Set the project ID
 	PROJECT_ID = os.environ['GCP_PROJECT']
@@ -18,20 +16,18 @@ def main(request):
 	SERVICE_ACCOUNT_KEY_FILE = f'{RESOURCE_PREFIX}-access.json'
 	
 
-	
-	
-	
+
+	credentials = google.oauth2.service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_KEY_FILE)
+
+	#Build storage REST API python object
+	storage_api = discovery.build('storage', 'v1', credentials=credentials)
+	name = f'{RESOURCE_PREFIX}-bucket-{NONCE}'
 	err=[]
 	resources = []
 	try:
-		#Build logging REST API python object
-		credentials = google.oauth2.service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_KEY_FILE)
-		client = logging.Client(credentials=credentials )
-		logname = "cloudaudit.googleapis.com%2Factivity"
-		filter ="projects.setIamPolicy"
-		logger = client.logger(logname)	
-		entry = list(logger.list_entries(order_by=DESCENDING, filter_=filter))[0]
-		resources.append(entry)
+		request = storage_api.objects().list(bucket=name).execute()["items"][0]
+		bucket = name + ' :  ' + request["name"]
+		resources.append(bucket)
 
 	except Exception as e:
 		resources.append('Insufficient privilege!') 
@@ -40,7 +36,7 @@ def main(request):
 	url=f'https://{FUNCTION_REGION}-{PROJECT_ID}.cloudfunctions.net/{RESOURCE_PREFIX}-func-check-{NONCE}'
 	
 	
-	return render_template(f'{RESOURCE_PREFIX}-access.html', resources=resources, url=url, err=err,prefix=RESOURCE_PREFIX, level_name=LEVEL_NAME,nonce=NONCE)
+	return render_template(f'{RESOURCE_PREFIX}-access.html', resources=resources, url=url, err=err,prefix=RESOURCE_PREFIX,level_name=LEVEL_NAME)
 
 	
 
