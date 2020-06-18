@@ -15,14 +15,13 @@ LEVEL_PATH = 'leastprivilege/roles'
 #RESOURCE_PREFIX = 'c6'
 FUNCTION_LOCATION = 'us-central1'
 #LEVEL_NAME ='project'
-LEVEL_NAMES = {'pr':'Projects','pd1':'Storage','pd2':'Compute','pd3':'Logging','pd4':'Datastore'}
+LEVEL_NAMES = {'pr':'Projects','pd1':'Storage','pd2':'Compute','pd3':'Logging','pd4':'Datastore','ct1':'Projects'}
 fvars = {'pr':'roles/viewer',
          'pd1':'roles/storage.objectViewer',
          'pd2':'roles/compute.viewer',
          'pd3':'roles/logging.viewer',
-         'pd4':'roles/datastore.viewer'
-
-         #{'ct1':['storage.buckets.list','compute.instances.list']}
+         'pd4':'roles/datastore.viewer',
+         'ct1':['storage.buckets.list','compute.instances.list']
         }
 KINDS = {}
 
@@ -126,10 +125,11 @@ def create():
 
 def destroy():
     #Delete datastore
-    
-    client = datastore.Client()
+   
+    print(f'Deleting entities {KINDS}')
     for prefix in KINDS:
-        print(f'Deleting entities {KINDS[prefix]}')
+        print(f'Deleting entities in {KINDS[prefix]}')
+        client = datastore.Client()
         query = client.query(kind=KINDS[prefix])
         entities = query.fetch()
         for entity in entities:

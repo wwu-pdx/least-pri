@@ -64,6 +64,19 @@ resources:
   type: service_account.jinja
 
 
+- name: ct1-access
+  type: service_account.jinja
+
+- name: ct1-check
+  type: service_account.jinja
+
+- name: ct1-bucket
+  type: bucket_acl.jinja
+  properties:
+    nonce: {{ nonce }}
+    predefined_acl: private
+
+
 - name: iam_policy
   type: iam_policy.jinja
   properties:
@@ -112,6 +125,20 @@ resources:
     - service_account_id: pd4-check
       role:
         name: roles/iam.roleViewer
+
+
+
+    - service_account_id: ct1-access
+      role:
+        name: roles/owner
+
+    - service_account_id: ct1-check
+      role:
+        name: custom
+        custom_nonce: {{ nonce }}
+        permissions:
+        - iam.roles.list
+        - resourcemanager.projects.getIamPolicy
         
         
 {% block resources %}{% endblock %}
