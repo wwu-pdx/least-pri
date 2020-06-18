@@ -126,9 +126,10 @@ def create():
 
 def destroy():
     #Delete datastore
-    print(f'Deleting entities ')
+    
     client = datastore.Client()
     for prefix in KINDS:
+        print(f'Deleting entities {KINDS[prefix]}')
         query = client.query(kind=KINDS[prefix])
         entities = query.fetch()
         for entity in entities:
