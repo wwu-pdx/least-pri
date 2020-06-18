@@ -63,7 +63,7 @@ def create():
         LEVEL_NAME = LEVEL_NAMES[RESOURCE_PREFIX]
         fvar = fvars[RESOURCE_PREFIX]
 
-
+        print(f'Level creation for: {LEVEL_PATH}/{RESOURCE_PREFIX}/{LEVEL_NAME}')
         #Generate account key files
         sa_keya = iam.generate_service_account_key(f'{RESOURCE_PREFIX}-access')
         sa_keyc = iam.generate_service_account_key(f'{RESOURCE_PREFIX}-check')
@@ -94,17 +94,14 @@ def create():
                                         f'level_name_{RESOURCE_PREFIX}': LEVEL_NAME, f'resource_prefix_{RESOURCE_PREFIX}':RESOURCE_PREFIX }
         config_template_args.update(config_template_args_patch)
         
-        deployments.patch(LEVEL_PATH, template_files=template_files, config_template_args=config_template_args)
-
-        print(f'Level creation complete for: {LEVEL_PATH}/{RESOURCE_PREFIX}/{LEVEL_NAME}')
-        
         print(
             f"""
             Use function entrypoint below to access level \n
             https://{FUNCTION_LOCATION}-{project_id}.cloudfunctions.net/{RESOURCE_PREFIX}-func-access-{nonce}
             """)
         
-   
+   deployments.patch(LEVEL_PATH, template_files=template_files, config_template_args=config_template_args)
+   print('Patching completed')
 
 def destroy():
     # Delete starting files
