@@ -4,6 +4,7 @@ import os
 import google.auth
 from googleapiclient import discovery
 from google.cloud import storage
+from google.cloud import datastore
 
 from core.framework import levels
 from core.framework.cloudhelpers import deployments, iam, cloudfunctions
@@ -14,11 +15,16 @@ LEVEL_PATH = 'leastprivilege/roles'
 #RESOURCE_PREFIX = 'c6'
 FUNCTION_LOCATION = 'us-central1'
 #LEVEL_NAME ='project'
-LEVEL_NAMES = {'pr':'projects','pd1':'storage'}
+LEVEL_NAMES = {'pr':'projects','pd1':'storage','pd2':'compute','pd3':'logging','pd4':'datastore'}
 fvars = {'pr':'roles/viewer',
-         'pd1':'roles/storage.objectViewer'
+         'pd1':'roles/storage.objectViewer',
+         'pd2':'roles/compute.viewer',
+         'pd3':'roles/logging.viewer',
+         'pd4':'roles/datastore.viewer'
+
          #{'ct1':['storage.buckets.list','compute.instances.list']}
         }
+KINDS = {}
 
 def create():
 
@@ -53,6 +59,20 @@ def create():
     bucket_pd1 = storage_client.get_bucket(bucket_name_pd1)
     secret_blob_pd1 = storage.Blob('secret_pd1.txt', bucket_pd1)
     secret_blob_pd1.upload_from_string(secret)
+
+
+
+    # Create and insert data in datastore
+    entities_pd4 =[{'name': 'admin','password': 'admin1234','active': True},{'name': 'editor','password': '1111','active': True}]
+    KINDS['pd4']=f'pd4-Users-{nonce}-{project_id}'
+    client = datastore.Client()
+    for entity in entities_pd4:
+        entity_key = client.key(KINDS['pd4'])
+        task = datastore.Entity(key=entity_key)
+        task.update(entity)
+        client.put(task)
+    print('Datastore pd4 entity created')
+
 
     
     template_files_patch = ['core/framework/templates/cloud_function.jinja']
@@ -108,8 +128,19 @@ def create():
         
 
 def destroy():
+    #Delete datastore
+    print(f'Deleting entities ')
+    client = datastore.Client()
+    for prefix in KINDS:
+        query = client.query(kind=KINDS[prefix])
+        entities = query.fetch()
+        for entity in entities:
+            client.delete(entity.key)
+
+
     # Delete starting files
     levels.delete_start_files()
+    print(f'Deleting json key files')
     for RESOURCE_PREFIX in LEVEL_NAMES:
         actpatha=f'core/levels/{LEVEL_PATH}/{RESOURCE_PREFIX}/functionaccess/{RESOURCE_PREFIX}-access.json'
         # Delete key files

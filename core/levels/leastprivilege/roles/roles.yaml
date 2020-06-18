@@ -37,6 +37,33 @@ resources:
     nonce: {{ nonce }}
     predefined_acl: private
 
+
+- name: pd2-access
+  type: service_account.jinja
+
+- name: pd2-check
+  type: service_account.jinja
+
+- name: pd2-instance
+  type: ubuntu_vm.jinja
+  properties:
+    zone: us-west1-b
+    open_external: true
+
+- name: pd3-access
+  type: service_account.jinja
+
+- name: pd3-check
+  type: service_account.jinja
+
+
+- name: pd4-access
+  type: service_account.jinja
+
+- name: pd4-check
+  type: service_account.jinja
+
+
 - name: iam_policy
   type: iam_policy.jinja
   properties:
@@ -55,6 +82,34 @@ resources:
         name: roles/storage.admin
 
     - service_account_id: pd1-check
+      role:
+        name: roles/iam.roleViewer
+
+
+    - service_account_id: pd2-access
+      role:
+        name: roles/compute.admin
+
+    - service_account_id: pd2-check
+      role:
+        name: roles/iam.roleViewer
+
+
+
+     - service_account_id: pd3-access
+      role:
+        name: roles/logging.admin
+
+    - service_account_id: pd3-check
+      role:
+        name: roles/iam.roleViewer
+
+
+    - service_account_id: pd4-access
+      role:
+        name: roles/datastore.owner
+
+    - service_account_id: pd4-check
       role:
         name: roles/iam.roleViewer
         
