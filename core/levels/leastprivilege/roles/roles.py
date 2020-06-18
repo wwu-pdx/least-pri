@@ -64,6 +64,7 @@ def create():
     # Create and insert data in datastore
     entities_pd4 =[{'name': 'admin','password': 'admin1234','active': True},{'name': 'editor','password': '1111','active': True}]
     KINDS['pd4']=f'pd4-Users-{nonce}-{project_id}'
+    print(f'kinds {KINDS}')
     client = datastore.Client()
     for entity in entities_pd4:
         entity_key = client.key(KINDS['pd4'])

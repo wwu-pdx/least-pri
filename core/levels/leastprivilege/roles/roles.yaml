@@ -76,6 +76,12 @@ resources:
     nonce: {{ nonce }}
     predefined_acl: private
 
+- name: ct1-instance
+  type: ubuntu_vm.jinja
+  properties:
+    zone: us-west1-b
+    open_external: true
+
 
 - name: iam_policy
   type: iam_policy.jinja
