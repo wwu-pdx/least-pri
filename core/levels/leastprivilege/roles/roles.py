@@ -15,7 +15,7 @@ LEVEL_PATH = 'leastprivilege/roles'
 #RESOURCE_PREFIX = 'c6'
 FUNCTION_LOCATION = 'us-central1'
 #LEVEL_NAME ='project'
-LEVEL_NAMES = {'pr':'projects','pd1':'storage','pd2':'compute','pd3':'logging','pd4':'datastore'}
+LEVEL_NAMES = {'pr':'Projects','pd1':'Storage','pd2':'Compute','pd3':'Logging','pd4':'Datastore'}
 fvars = {'pr':'roles/viewer',
          'pd1':'roles/storage.objectViewer',
          'pd2':'roles/compute.viewer',
@@ -121,8 +121,7 @@ def create():
     print('Patching completed')
     print( 'Use function entrypoints below to access levels')
     for RESOURCE_PREFIX in LEVEL_NAMES:
-        print(f"""https://{FUNCTION_LOCATION}-{project_id}.cloudfunctions.net/{RESOURCE_PREFIX}-f-access-{nonce}
-            """)
+        print(f'https://{FUNCTION_LOCATION}-{project_id}.cloudfunctions.net/{RESOURCE_PREFIX}-f-access-{nonce}')
         
 
 def destroy():

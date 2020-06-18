@@ -25,16 +25,18 @@ def main(request):
 	resources=[]
 	url=f'https://{FUNCTION_REGION}-{PROJECT_ID}.cloudfunctions.net/{RESOURCE_PREFIX}-f-check-{NONCE}'
 	try:
-		instance= instance_api.instances().list(zone="us-west1-b", project=PROJECT_ID).execute()["items"][0]		
-		resources.append(f'Name: {instance["name"]}')
-		resources.append(f'Machine Type: {instance["machineType"]}')
-		resources.append(f'NatIP: {instance["networkInterfaces"][0]["accessConfigs"][0]["natIP"]}')
+		instances= instance_api.instances().list(zone="us-west1-b", project=PROJECT_ID).execute()["items"]
+		for instance in instances:
+			if instance["name"].startswith(RESOURCE_PREFIX):		
+				resources.append(f'Name: {instance["name"]}')
+				resources.append(f'Machine Type: {instance["machineType"]}')
+				resources.append(f'NatIP: {instance["networkInterfaces"][0]["accessConfigs"][0]["natIP"]}')
 	except Exception as e:
 		resources.append("Instance: Insufficient privilege!")
 		err.append(str(e))
 	
 	
-	url=f'https://{FUNCTION_REGION}-{PROJECT_ID}.cloudfunctions.net/{RESOURCE_PREFIX}-func-check-{NONCE}'
+	
 	
 	
 	return render_template(f'{RESOURCE_PREFIX}-access.html', resources=resources, url=url, err=err,prefix=RESOURCE_PREFIX, level_name=LEVEL_NAME)

@@ -28,8 +28,10 @@ def main(request):
 	resources=[]
 	url=f'https://{FUNCTION_REGION}-{PROJECT_ID}.cloudfunctions.net/{RESOURCE_PREFIX}-f-check-{NONCE}'
 	try:
-		instance= instance_api.instances().list(zone="us-west1-b", project=PROJECT_ID).execute()["items"][0]		
-		resources.append(f'Instance: {instance["name"]}({instance["machineType"]})')
+		instances= instance_api.instances().list(zone="us-west1-b", project=PROJECT_ID).execute()["items"]
+		for instance in instances:
+			if instance["name"].startswith(RESOURCE_PREFIX):
+				resources.append(f'Instance: {instance["name"]}({instance["machineType"]})')
 	except Exception as e:
 		resources.append("Instance: Insufficient privilege!")
 		err.append(str(e))
@@ -38,10 +40,12 @@ def main(request):
 
 	#Build storage REST API python object
 	storage_api = discovery.build('storage', 'v1', credentials=credentials)
-	bucket=''
+	
 	try:
-		bucket = storage_api.buckets().list(project=PROJECT_ID).execute()["items"][0]["name"]
-		resources.append(f'Bucket: {bucket}')
+		buckets = storage_api.buckets().list(project=PROJECT_ID).execute()["items"]
+		for bucket in buckets:
+			if bucket["name"].startswith(RESOURCE_PREFIX):
+				resources.append(f'Bucket: {bucket["name"]}')
 	except Exception as e:
 		resources.append('Bucket: Insufficient privilege!')
 		err.append(str(e))
