@@ -96,7 +96,7 @@ resources:
 
 
 
-     - service_account_id: pd3-access
+    - service_account_id: pd3-access
       role:
         name: roles/logging.admin
 

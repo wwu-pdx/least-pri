@@ -121,9 +121,7 @@ def create():
     print('Patching completed')
     print( 'Use function entrypoints below to access levels')
     for RESOURCE_PREFIX in LEVEL_NAMES:
-        print(
-            f"""
-            https://{FUNCTION_LOCATION}-{project_id}.cloudfunctions.net/{RESOURCE_PREFIX}-f-access-{nonce}
+        print(f"""https://{FUNCTION_LOCATION}-{project_id}.cloudfunctions.net/{RESOURCE_PREFIX}-f-access-{nonce}
             """)
         
 
