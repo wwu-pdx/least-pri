@@ -1,5 +1,6 @@
 import random
 import os
+import re
 
 import google.auth
 from googleapiclient import discovery
@@ -134,7 +135,23 @@ def create():
         # temp datastore permissions not supported for custom roles, will explore other Native  mode
         if RESOURCE_PREFIX != 'ct5':
             print(f'https://{FUNCTION_LOCATION}-{project_id}.cloudfunctions.net/{RESOURCE_PREFIX}-f-access-{nonce}')
-        
+
+def delete_custom_roles():
+    print(f'Deleting custom roles')
+    credentials, project_id = google.auth.default()
+    service = discovery.build('iam','v1', credentials=credentials)
+    parent = f'projects/{project_id}'
+    try:
+		roles = service.projects().roles().list(parent= parent, showDeleted = False).execute()['roles']
+        pattern = f'projects/{project_id}/roles/ct'
+		for role in roles:
+			if re.search(rf"{pattern}[0-9]_access_role_", role['name'], re.IGNORECASE):
+				service.projects().roles().delete(name= role['name']).execute()
+	except Exception as e: 
+		err = str(e)
+        print(err)
+
+
 
 def destroy():
     #Delete datastore
@@ -162,3 +179,6 @@ def destroy():
             os.remove(actpathc)
     # Delete deployment
     deployments.delete()
+    delete_custom_roles()
+    
+
