@@ -143,10 +143,11 @@ def delete_custom_roles():
     parent = f'projects/{project_id}'
     try:
         roles = service.projects().roles().list(parent= parent, showDeleted = False).execute()['roles']
-        pattern = f'projects/{project_id}/roles/ct'
-        for role in roles:
-            if re.search(rf"{pattern}[0-9]_access_role_", role['name'], re.IGNORECASE):
-                service.projects().roles().delete(name= role['name']).execute()
+        if len(roles)!=0:
+            pattern = f'projects/{project_id}/roles/ct'
+            for role in roles:
+                if re.search(rf"{pattern}[0-9]_access_role_", role['name'], re.IGNORECASE):
+                    service.projects().roles().delete(name= role['name']).execute()
     except Exception as e: 
         err = str(e)
         print(err)
@@ -155,11 +156,9 @@ def delete_custom_roles():
 
 def destroy():
     #Delete datastore
-    
+    print('Deleting entities')
     client = datastore.Client()
     for k in KINDS:
-        print(f'Deleting entities in {KINDS[k]}')
-        
         query = client.query(kind=KINDS[k])
         entities = query.fetch()
         for entity in entities:
