@@ -72,7 +72,7 @@ def create():
 
     # Create and insert data in datastore
     for k in KINDS:
-        entities =[{'name': f'admin{k}','password': 'admin1234','active': True},{'name': f'editor{k}','password': '1111','active': True}]
+        entities =[{'name': f'admin-{k}','password': 'admin1234','active': True},{'name': f'editor-{k}','password': '1111','active': True}]
         KIND=f'{k}-Users-{nonce}-{project_id}'
         KINDS[k]=KIND
         client = datastore.Client()
@@ -131,7 +131,9 @@ def create():
     print('Patching completed')
     print( 'Use function entrypoints below to access levels')
     for RESOURCE_PREFIX in LEVEL_NAMES:
-        print(f'https://{FUNCTION_LOCATION}-{project_id}.cloudfunctions.net/{RESOURCE_PREFIX}-f-access-{nonce}')
+        # temp datastore permissions not supported for custom roles, will explore other Native  mode
+        if RESOURCE_PREFIX != 'ct5':
+            print(f'https://{FUNCTION_LOCATION}-{project_id}.cloudfunctions.net/{RESOURCE_PREFIX}-f-access-{nonce}')
         
 
 def destroy():
