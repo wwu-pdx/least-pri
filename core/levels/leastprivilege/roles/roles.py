@@ -155,7 +155,7 @@ def delete_custom_roles():
 
 def destroy():
     #Delete datastore
-   
+    
     client = datastore.Client()
     for k in KINDS:
         print(f'Deleting entities in {KINDS[k]}')
