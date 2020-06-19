@@ -113,7 +113,7 @@ def insert(level_path, template_files=[],
 
 def patch(level_path, template_files=[],
            config_template_args={}, labels={}):
-    '''Patch a deployment using deployment manager, importing any specified template files. 
+    '''Patches a deployment using deployment manager, importing any specified template files. 
         If template arguments are included, the top level configuration file will be rendered using Jinja2.
 
     Parameters:
@@ -147,7 +147,7 @@ def patch(level_path, template_files=[],
                     load_path =  f'core/levels/{level_path}/'
                 )
     
-    # Create request to insert deployment
+    # Create request to patch deployment
     request_body = {
         "name": "thunder",
         "fingerprint": fingerprint,

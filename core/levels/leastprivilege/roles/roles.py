@@ -130,7 +130,7 @@ def create():
     deployments.patch(LEVEL_PATH, template_files=template_files, config_template_args=config_template_args)
 
     print('Patching completed')
-    print( 'Use function entrypoints below to access levels')
+    print( 'Use function entrypoints below to access levels:')
     for RESOURCE_PREFIX in LEVEL_NAMES:
         # temp datastore permissions not supported for custom roles, will explore other Native  mode
         if RESOURCE_PREFIX != 'ct5':
