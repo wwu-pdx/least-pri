@@ -15,21 +15,28 @@ LEVEL_PATH = 'leastprivilege/roles'
 #RESOURCE_PREFIX = 'c6'
 FUNCTION_LOCATION = 'us-central1'
 #LEVEL_NAME ='project'
-LEVEL_NAMES = {'pr':'Projects','pd1':'Storage','pd2':'Compute','pd3':'Logging','pd4':'Datastore','ct1':'Projects'}
+LEVEL_NAMES = {'pr':'Projects','pd1':'Storage','pd2':'Compute','pd3':'Logging','pd4':'Datastore','ct1':'Projects','ct2':'Storage','ct3':'Compute','ct4':'Logging','ct5':'Datastore'}
 fvars = {'pr':'roles/viewer',
          'pd1':'roles/storage.objectViewer',
          'pd2':'roles/compute.viewer',
          'pd3':'roles/logging.viewer',
          'pd4':'roles/datastore.viewer',
-         'ct1':['storage.buckets.list','compute.instances.list']
+         'ct1':['storage.buckets.list','compute.instances.list'],
+         'ct2':['storage.buckets.list'],
+         'ct3':['compute.instances.list'],
+         'ct4':['logging.logEntries.list'],
+         'ct5':['datastore.entities.list']
+         
+
         }
-KINDS = {}
+KINDS = {'pd4':'','ct5':''}
+BUCKETS = ['pd1','ct2']
 
 def create():
 
     # Create randomized bucket name to avoid namespace conflict
     nonce = str(random.randint(100000000000, 999999999999))
-    bucket_name_pd1 = f'pd1-bucket-{nonce}'
+    
     
 
     # Set role of default cloud function account
@@ -54,24 +61,27 @@ def create():
     
     # Insert secret into bucket
     storage_client = storage.Client()
-    secret = levels.make_secret(LEVEL_PATH)
-    bucket_pd1 = storage_client.get_bucket(bucket_name_pd1)
-    secret_blob_pd1 = storage.Blob('secret_pd1.txt', bucket_pd1)
-    secret_blob_pd1.upload_from_string(secret)
+    for b in BUCKETS:
+        bucket_name = f'{b}-bucket-{nonce}'
+        secret = levels.make_secret(LEVEL_PATH)
+        bucket = storage_client.get_bucket(bucket_name)
+        secret_blob = storage.Blob(f'secret_{b}.txt', bucket)
+        secret_blob.upload_from_string(secret)
 
 
 
     # Create and insert data in datastore
-    entities_pd4 =[{'name': 'admin','password': 'admin1234','active': True},{'name': 'editor','password': '1111','active': True}]
-    KINDS['pd4']=f'pd4-Users-{nonce}-{project_id}'
-    print(f'kinds {KINDS}')
-    client = datastore.Client()
-    for entity in entities_pd4:
-        entity_key = client.key(KINDS['pd4'])
-        task = datastore.Entity(key=entity_key)
-        task.update(entity)
-        client.put(task)
-    print('Datastore pd4 entity created')
+    for k in KINDS:
+        entities =[{'name': f'admin{k}','password': 'admin1234','active': True},{'name': f'editor{k}','password': '1111','active': True}]
+        KIND=f'{k}-Users-{nonce}-{project_id}'
+        KINDS[k]=KIND
+        client = datastore.Client()
+        for entity in entities:
+            entity_key = client.key(KINDS[k])
+            task = datastore.Entity(key=entity_key)
+            task.update(entity)
+            client.put(task)
+        print(f'Datastore {KIND}  created')
 
 
     
@@ -98,11 +108,11 @@ def create():
         with open(func_namea, 'w') as f:
             f.write(sa_keya)
         os.chmod(func_namea, 0o700)
-        print(f'Function file: {RESOURCE_PREFIX}-access has been written to {func_namea}')
+        print(f'Key file: {RESOURCE_PREFIX}-access has been written to {func_namea}')
         with open(func_namec, 'w') as f:
             f.write(sa_keyc)
         os.chmod(func_namec, 0o700)
-        print(f'Function file: {RESOURCE_PREFIX}-check has been written to {func_namec}')
+        print(f'Key file: {RESOURCE_PREFIX}-check has been written to {func_namec}')
         
         #Generate function urls
         func_template_argsc = {'fvar': fvar}
@@ -127,11 +137,11 @@ def create():
 def destroy():
     #Delete datastore
    
-    print(f'Deleting entities {KINDS}')
-    for prefix in KINDS:
-        print(f'Deleting entities in {KINDS[prefix]}')
-        client = datastore.Client()
-        query = client.query(kind=KINDS[prefix])
+    client = datastore.Client()
+    for k in KINDS:
+        print(f'Deleting entities in {KINDS[k]}')
+        
+        query = client.query(kind=KINDS[k])
         entities = query.fetch()
         for entity in entities:
             client.delete(entity.key)
