@@ -76,7 +76,7 @@ def create():
         entities =[{'name': f'admin-{k}','password': 'admin1234','active': True},{'name': f'editor-{k}','password': '1111','active': True}]
         KIND=f'{k}-Users-{nonce}-{project_id}'
         KINDS[k]=KIND
-        client = datastore.Client()
+        client = datastore.Client(project_id)
         for entity in entities:
             entity_key = client.key(KINDS[k])
             task = datastore.Entity(key=entity_key)
