@@ -127,7 +127,7 @@ def create_app_engine():
     request_body = {"id": f"{project_id}", "locationId": "us-west2"}
     new_app = app_api.apps().create(body=request_body).execute()
     op_name = new_app['name']
-    _wait_for_api_op(op_name, app_api)
+    
 
 def check_app_engine():
     found = False
