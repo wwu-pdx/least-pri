@@ -113,7 +113,7 @@ resources:
   type: service_account.jinja
 
 
-{% block resources %}{% endblock %}    
+{% block resources %}{% endblock %}
 
 
 - name: iam_policy
@@ -153,15 +153,6 @@ resources:
         name: roles/logging.admin
 
     - service_account_id: pd3-check
-      role:
-        name: roles/iam.roleViewer
-
-
-    - service_account_id: pd4-access
-      role:
-        name: roles/datastore.owner
-
-    - service_account_id: pd4-check
       role:
         name: roles/iam.roleViewer
 

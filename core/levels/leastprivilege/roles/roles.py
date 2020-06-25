@@ -16,12 +16,12 @@ LEVEL_PATH = 'leastprivilege/roles'
 #RESOURCE_PREFIX = 'c6'
 FUNCTION_LOCATION = 'us-central1'
 #LEVEL_NAME ='project'
-LEVEL_NAMES = {'pr':'Projects','pd1':'Storage','pd2':'Compute','pd3':'Logging','pd4':'Datastore','ct1':'Projects','ct2':'Storage','ct3':'Compute','ct4':'Logging'}
+LEVEL_NAMES = {'pr':'Projects','pd1':'Storage','pd2':'Compute','pd3':'Logging','ct1':'Projects','ct2':'Storage','ct3':'Compute','ct4':'Logging'}
 fvars = {'pr':'roles/viewer',
          'pd1':'roles/storage.objectViewer',
          'pd2':'roles/compute.viewer',
          'pd3':'roles/logging.viewer',
-         'pd4':'roles/datastore.viewer',
+         #'pd4':'roles/datastore.viewer',
          'ct1':['storage.buckets.list','compute.instances.list'],
          'ct2':['storage.buckets.list'],
          'ct3':['compute.instances.list'],
@@ -29,7 +29,7 @@ fvars = {'pr':'roles/viewer',
          
 
         }
-KINDS = {'pd4':''}
+#KINDS = {'pd4':''}
 BUCKETS = ['pd1','ct2']
 
 def create():
@@ -71,17 +71,17 @@ def create():
     
 
     # Create and insert data in datastore
-    for k in KINDS:
-        entities =[{'name': f'admin-{k}','password': 'admin1234','active': True},{'name': f'editor-{k}','password': '1111','active': True}]
-        KIND=f'{k}-Users-{nonce}-{project_id}'
-        KINDS[k]=KIND
-        client = datastore.Client(project_id)
-        for entity in entities:
-            entity_key = client.key(KINDS[k])
-            task = datastore.Entity(key=entity_key)
-            task.update(entity)
-            client.put(task)
-        print(f'Datastore {KIND}  created')
+    # for k in KINDS:
+    #     entities =[{'name': f'admin-{k}','password': 'admin1234','active': True},{'name': f'editor-{k}','password': '1111','active': True}]
+    #     KIND=f'{k}-Users-{nonce}-{project_id}'
+    #     KINDS[k]=KIND
+    #     client = datastore.Client(project_id)
+    #     for entity in entities:
+    #         entity_key = client.key(KINDS[k])
+    #         task = datastore.Entity(key=entity_key)
+    #         task.update(entity)
+    #         client.put(task)
+    #     print(f'Datastore {KIND}  created')
 
 
     
@@ -118,7 +118,7 @@ def create():
         func_template_argsc = {'fvar': fvar}
         func_upload_urla = cloudfunctions.upload_cloud_function(func_patha, FUNCTION_LOCATION)
         func_upload_urlc = cloudfunctions.upload_cloud_function(func_pathc, FUNCTION_LOCATION,template_args=func_template_argsc)
-        #print(func_upload_urla)
+        print(func_upload_urla)
         #Update deployment with functions
         config_template_args_patch = {f'funca_upload_url_{RESOURCE_PREFIX}':func_upload_urla, f'funcc_upload_url_{RESOURCE_PREFIX}':func_upload_urlc, 
                                        
@@ -172,16 +172,16 @@ def delete_custom_roles():
 
 def destroy():
     #Delete datastore
-    print('Deleting entities')
-    try:
-        client = datastore.Client()
-        for k in KINDS:
-            query = client.query(kind=KINDS[k])
-            entities = query.fetch()
-            for entity in entities:
-                client.delete(entity.key)
-    except Exception as e: 
-        print(str(e))
+    # print('Deleting entities')
+    # try:
+    #     client = datastore.Client()
+    #     for k in KINDS:
+    #         query = client.query(kind=KINDS[k])
+    #         entities = query.fetch()
+    #         for entity in entities:
+    #             client.delete(entity.key)
+    # except Exception as e: 
+    #     print(str(e))
 
 
     # Delete starting files

@@ -118,6 +118,24 @@ def setup_project():
         compute_api.firewalls().insert(project=project_id, body=firewall_body).execute()
 
 
+def create_app_engine():
+    found = False
+    credentials, project_id = google.auth.default()
+    app_api = discovery.build('appengine','v1', credentials=credentials)
+    try:
+        app = app_api.apps().get(appsId=project_id).execute()['name']
+        found = True
+    except Exception as e:
+        #print(str(e))
+        print('Project App Engine does not found')
+
+    if not found:
+        print(f'Creating App Engine appId:{project_id}')
+        request_body = {"id": f"{project_id}", "locationId": "us-west2"}
+        new_app = app_api.apps().create(body=request_body).execute()
+
+
+
 def _wait_for_api_op(op_name, services_api):
     # Wait till operation finishes, giving updates every 5 seconds
     op_done = False
