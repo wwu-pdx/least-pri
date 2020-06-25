@@ -29,7 +29,7 @@ def create(*args):
     level_path = args[0]
     level_module = levels.import_level(level_path)
     if level_path == 'leastprivilege/roles':
-        level_module.create_appeng()
+         level_module.create_appeng()
     level_module.create()
 
 
@@ -91,6 +91,7 @@ def activate_project(*args):
         print('Project has been set.')
     else:
         print('Project not set.')
+
 
 
 def generate_level_docs():
