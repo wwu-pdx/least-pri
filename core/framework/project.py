@@ -120,8 +120,9 @@ def setup_project():
 
 def create_app_engine():
 
-    print(f'Creating App Engine appId:{project_id}')
+    
     credentials, project_id = google.auth.default()
+    print(f'Creating App Engine appId:{project_id}')
     app_api = discovery.build('appengine','v1', credentials=credentials)
     request_body = {"id": f"{project_id}", "locationId": "us-west2"}
     new_app = app_api.apps().create(body=request_body).execute()
