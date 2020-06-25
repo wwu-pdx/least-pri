@@ -118,7 +118,7 @@ def create():
         func_template_argsc = {'fvar': fvar}
         func_upload_urla = cloudfunctions.upload_cloud_function(func_patha, FUNCTION_LOCATION)
         func_upload_urlc = cloudfunctions.upload_cloud_function(func_pathc, FUNCTION_LOCATION,template_args=func_template_argsc)
-        
+        print(func_upload_urla)
         #Update deployment with functions
         config_template_args_patch = {f'funca_upload_url_{RESOURCE_PREFIX}':func_upload_urla, f'funcc_upload_url_{RESOURCE_PREFIX}':func_upload_urlc, 
                                        
