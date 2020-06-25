@@ -141,14 +141,12 @@ def create():
             print(f'https://{FUNCTION_LOCATION}-{project_id}.cloudfunctions.net/{RESOURCE_PREFIX}-f-access-{nonce}')
 
 def check_appeng(credentials, project_id, service):
-    found = false
+    found = False
     try:
         app = service.apps().get(appsId=project_id).execute()['name']
-        found = true
+        found = True
     except Exception as e:
         print(str(e))
-        
-        
     return found
 
 def delete_custom_roles():
