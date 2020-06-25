@@ -16,7 +16,7 @@ LEVEL_PATH = 'leastprivilege/roles'
 #RESOURCE_PREFIX = 'c6'
 FUNCTION_LOCATION = 'us-central1'
 #LEVEL_NAME ='project'
-LEVEL_NAMES = {'pr':'Projects','pd1':'Storage','pd2':'Compute','pd3':'Logging','pd4':'Datastore','ct1':'Projects','ct2':'Storage','ct3':'Compute','ct4':'Logging','ct5':'Datastore'}
+LEVEL_NAMES = {'pr':'Projects','pd1':'Storage','pd2':'Compute','pd3':'Logging','pd4':'Datastore','ct1':'Projects','ct2':'Storage','ct3':'Compute','ct4':'Logging'}
 fvars = {'pr':'roles/viewer',
          'pd1':'roles/storage.objectViewer',
          'pd2':'roles/compute.viewer',
@@ -25,12 +25,11 @@ fvars = {'pr':'roles/viewer',
          'ct1':['storage.buckets.list','compute.instances.list'],
          'ct2':['storage.buckets.list'],
          'ct3':['compute.instances.list'],
-         'ct4':['logging.logEntries.list'],
-         'ct5':['datastore.entities.list']
+         'ct4':['logging.logEntries.list']
          
 
         }
-KINDS = {'pd4':'','ct5':''}
+KINDS = {'pd4':''}
 BUCKETS = ['pd1','ct2']
 
 def create():
@@ -133,8 +132,7 @@ def create():
     print( 'Use function entrypoints below to access levels:')
     for RESOURCE_PREFIX in LEVEL_NAMES:
         # temp datastore permissions not supported for custom roles, will explore other Native  mode
-        if RESOURCE_PREFIX != 'ct5':
-            print(f'https://{FUNCTION_LOCATION}-{project_id}.cloudfunctions.net/{RESOURCE_PREFIX}-f-access-{nonce}')
+        print(f'https://{FUNCTION_LOCATION}-{project_id}.cloudfunctions.net/{RESOURCE_PREFIX}-f-access-{nonce}')
 
 def create_appeng():
     found = False
