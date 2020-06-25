@@ -70,7 +70,7 @@ def create():
         secret_blob.upload_from_string(secret)
 
 
-
+    create_app(credentials, project_id)
     # Create and insert data in datastore
     for k in KINDS:
         entities =[{'name': f'admin-{k}','password': 'admin1234','active': True},{'name': f'editor-{k}','password': '1111','active': True}]
@@ -136,6 +136,15 @@ def create():
         if RESOURCE_PREFIX != 'ct5':
             print(f'https://{FUNCTION_LOCATION}-{project_id}.cloudfunctions.net/{RESOURCE_PREFIX}-f-access-{nonce}')
 
+def create_app(credentials, project_id):
+    service = discovery.build('appengine','v1', credentials=credentials)
+    try:
+        app = service.apps().get(appsId=project_id)
+    except Exception as e:
+        print(f'Creating App Engine appId:{project_id}')
+        new_app = service.apps().create(id=project_id, locationId='us-west2')
+
+
 def delete_custom_roles():
     print(f'Deleting custom roles')
     credentials, project_id = google.auth.default()
@@ -151,6 +160,9 @@ def delete_custom_roles():
     except Exception as e: 
         err = str(e)
         print(err)
+
+
+       
 
 
 

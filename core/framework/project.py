@@ -89,7 +89,8 @@ def setup_project():
         'logging.googleapis.com',
         'deploymentmanager.googleapis.com',
         'storage-api.googleapis.com',
-        'storage-component.googleapis.com'
+        'storage-component.googleapis.com',
+        'appengine.googleapis.com'
     ]
     request_body = {'serviceIds': apis}
     op_name = services_api.services().batchEnable(
