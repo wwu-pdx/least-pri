@@ -139,12 +139,12 @@ def create():
 def create_app(credentials, project_id):
     service = discovery.build('appengine','v1', credentials=credentials)
     try:
-        app = service.apps().get(appsId=project_id)['name']
+        app = service.apps().get(appsId=project_id).execute()['name']
     except Exception as e:
         print(f'Creating App Engine appId:{project_id}')
         print(e)
         request_body = {"id": f"{project_id}", "locationId": "us-east1"}
-        new_app = service.apps().create(body=request_body)
+        new_app = service.apps().create(body=request_body).execute()
 
 
 def delete_custom_roles():
