@@ -1,7 +1,7 @@
 import random
 import os
 import re
-import time
+#import time
 
 import google.auth
 from googleapiclient import discovery
@@ -17,8 +17,8 @@ LEVEL_PATH = 'leastprivilege/roles'
 #RESOURCE_PREFIX = 'c6'
 FUNCTION_LOCATION = 'us-central1'
 #LEVEL_NAME ='project'
-LEVEL_NAMES = {'pr':'Projects','pd1':'Storage','pd2':'Compute','pd3':'Logging','pd4':'Datastore','ct1':'Projects','ct2':'Storage','ct3':'Compute','ct4':'Logging'}
-fvars = {'pr':'roles/viewer',
+LEVEL_NAMES = {'pd1':'Storage','pd2':'Compute','pd3':'Logging','pd4':'Datastore','ct1':'Projects','ct2':'Storage','ct3':'Compute','ct4':'Logging','pr':'Projects'}
+fvars = {
          'pd1':'roles/storage.objectViewer',
          'pd2':'roles/compute.viewer',
          'pd3':'roles/logging.viewer',
@@ -27,7 +27,7 @@ fvars = {'pr':'roles/viewer',
          'ct2':['storage.buckets.list'],
          'ct3':['compute.instances.list'],
          'ct4':['logging.logEntries.list']
-         
+         'pr':'roles/viewer'
 
         }
 KINDS = {'pd4':''}
@@ -126,7 +126,7 @@ def create():
                                         f'level_name_{RESOURCE_PREFIX}': LEVEL_NAME, f'resource_prefix_{RESOURCE_PREFIX}':RESOURCE_PREFIX }
         config_template_args.update(config_template_args_patch)
         
-    time.sleep(30)    
+    #time.sleep(30)    
     deployments.patch(LEVEL_PATH, template_files=template_files, config_template_args=config_template_args)
 
     print('Patching completed')
