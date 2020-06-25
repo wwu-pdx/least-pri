@@ -119,6 +119,16 @@ def setup_project():
 
 
 def create_app_engine():
+
+    print(f'Creating App Engine appId:{project_id}')
+    credentials, project_id = google.auth.default()
+    app_api = discovery.build('appengine','v1', credentials=credentials)
+    request_body = {"id": f"{project_id}", "locationId": "us-west2"}
+    new_app = app_api.apps().create(body=request_body).execute()
+    op_name = new_app['name']
+    _wait_for_api_op(op_name, app_api):
+
+def check_app_engine():
     found = False
     credentials, project_id = google.auth.default()
     app_api = discovery.build('appengine','v1', credentials=credentials)
@@ -129,10 +139,7 @@ def create_app_engine():
         #print(str(e))
         print('Project App Engine does not found')
 
-    if not found:
-        print(f'Creating App Engine appId:{project_id}')
-        request_body = {"id": f"{project_id}", "locationId": "us-west2"}
-        new_app = app_api.apps().create(body=request_body).execute()
+    return found
 
 
 
