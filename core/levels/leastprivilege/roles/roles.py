@@ -144,7 +144,8 @@ def create_appeng():
         app = app_api.apps().get(appsId=project_id).execute()['name']
         found = True
     except Exception as e:
-        print(str(e))
+        #print(str(e))
+        print('Project App Engine does not found')
 
     if not found:
         print(f'Creating App Engine appId:{project_id}')
