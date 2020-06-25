@@ -141,9 +141,9 @@ def create_app(credentials, project_id):
     try:
         app = service.apps().get(appsId=project_id).execute()['name']
     except Exception as e:
+        print(str(e))
         print(f'Creating App Engine appId:{project_id}')
-        print(e)
-        request_body = {"id": f"{project_id}", "locationId": "us-east1"}
+        request_body = {"id": f"{project_id}", "locationId": "us-west2"}
         new_app = service.apps().create(body=request_body).execute()
 
 
@@ -160,8 +160,7 @@ def delete_custom_roles():
                 if re.search(rf"{pattern}[0-9]_access_role_", role['name'], re.IGNORECASE):
                     service.projects().roles().delete(name= role['name']).execute()
     except Exception as e: 
-        err = str(e)
-        print(err)
+        print(str(e))
 
 
        
@@ -171,12 +170,15 @@ def delete_custom_roles():
 def destroy():
     #Delete datastore
     print('Deleting entities')
-    client = datastore.Client()
-    for k in KINDS:
-        query = client.query(kind=KINDS[k])
-        entities = query.fetch()
-        for entity in entities:
-            client.delete(entity.key)
+    try:
+        client = datastore.Client()
+        for k in KINDS:
+            query = client.query(kind=KINDS[k])
+            entities = query.fetch()
+            for entity in entities:
+                client.delete(entity.key)
+    except Exception as e: 
+        print(str(e))
 
 
     # Delete starting files
