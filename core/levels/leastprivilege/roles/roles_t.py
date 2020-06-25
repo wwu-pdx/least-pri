@@ -16,8 +16,8 @@ LEVEL_PATH = 'leastprivilege/roles'
 #RESOURCE_PREFIX = 'c6'
 FUNCTION_LOCATION = 'us-central1'
 #LEVEL_NAME ='project'
-LEVEL_NAMES = {'pr':'Projects','pd1':'Storage','pd2':'Compute','pd3':'Logging','pd4':'Datastore','ct1':'Projects','ct2':'Storage','ct3':'Compute','ct4':'Logging'}
-fvars = {'pr':'roles/viewer',
+LEVEL_NAMES = {'pd1':'Storage','pd2':'Compute','pd3':'Logging','pd4':'Datastore','ct1':'Projects','ct2':'Storage','ct3':'Compute','ct4':'Logging'}
+fvars = {
          'pd1':'roles/storage.objectViewer',
          'pd2':'roles/compute.viewer',
          'pd3':'roles/logging.viewer',

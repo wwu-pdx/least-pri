@@ -120,15 +120,6 @@ resources:
   type: iam_policy.jinja
   properties:
     bindings:
-    - service_account_id: pr-access
-      role:
-        name: roles/owner
-
-    - service_account_id: pr-check
-      role:
-        name: roles/iam.roleViewer
-
-
     - service_account_id: pd1-access
       role:
         name: roles/storage.admin
