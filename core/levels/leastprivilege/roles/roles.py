@@ -69,8 +69,12 @@ def create():
         secret_blob = storage.Blob(f'secret_{b}.txt', bucket)
         secret_blob.upload_from_string(secret)
 
+    app_api = discovery.build('appengine','v1', credentials=credentials)
+    if not check_appeng(credentials, project_id, app_api):
+        print(f'Creating App Engine appId:{project_id}')
+        request_body = {"id": f"{project_id}", "locationId": "us-west2"}
+        new_app = app_api.apps().create(body=request_body).execute()
 
-    create_app(credentials, project_id)
     # Create and insert data in datastore
     for k in KINDS:
         entities =[{'name': f'admin-{k}','password': 'admin1234','active': True},{'name': f'editor-{k}','password': '1111','active': True}]
@@ -136,16 +140,16 @@ def create():
         if RESOURCE_PREFIX != 'ct5':
             print(f'https://{FUNCTION_LOCATION}-{project_id}.cloudfunctions.net/{RESOURCE_PREFIX}-f-access-{nonce}')
 
-def create_app(credentials, project_id):
-    service = discovery.build('appengine','v1', credentials=credentials)
+def check_appeng(credentials, project_id, service):
+    found = false
     try:
         app = service.apps().get(appsId=project_id).execute()['name']
+        found = true
     except Exception as e:
         print(str(e))
-        print(f'Creating App Engine appId:{project_id}')
-        request_body = {"id": f"{project_id}", "locationId": "us-west2"}
-        new_app = service.apps().create(body=request_body).execute()
-
+        
+        
+    return found
 
 def delete_custom_roles():
     print(f'Deleting custom roles')
@@ -192,6 +196,7 @@ def destroy():
         actpathc=f'core/levels/{LEVEL_PATH}/{RESOURCE_PREFIX}/functioncheck/{RESOURCE_PREFIX}-check.json'
         if os.path.exists(actpathc):
             os.remove(actpathc)
+
     # Delete deployment
     deployments.delete()
     delete_custom_roles()
