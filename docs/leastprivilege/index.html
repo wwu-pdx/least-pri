@@ -45,7 +45,10 @@
     <h2 class="toggle toggle_lst"> Thunder CTF - Least Privilege</h2>
     <div id="about_lst"  >
         <p>Thunder CTF - Least Privilege is an extension of Thunder CTF. Both were built based on Google Cloud Platform.</p>
-        <p>Least Privilege levels do not have "secret". They were desgined to help understand google cloud iam roles and permissions.</p>
+        <p>Least Privilege levels do not have "secret". They were desgined to help understand google cloud iam roles and permissions. 
+          Related google documentaion can be found <a href="https://cloud.google.com/iam/docs/understanding-roles">here</a>
+        </p>
+        
     </div>
     
 
@@ -96,13 +99,13 @@
 
       </p>
       <pre>
-gcloud config set project [PROJECT-ID]
+gcloud config set project [PROJECT-ID] #Can skip this line if cloud shell is launched within the project you want to use 
 virtualenv -v env-tctf
 source env-tctf/bin/activate
 git clone https://github.com/NicholasSpringer/thunder-ctf.git
 cd thunder-ctf
 pip3 install -r requirements.txt
-python3 thunder.py activate_project [PROJECT-ID]</pre>
+python3 thunder.py activate_project  $GOOGLE_CLOUD_PROJECT</pre>
 <p>A full list of commands can be found by running: </p>
         <pre>python3 thunder.py help</pre>
       <h3>Deploy:</h3>

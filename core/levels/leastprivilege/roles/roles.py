@@ -1,7 +1,7 @@
 import random
 import os
 import re
-#import time
+
 
 import google.auth
 from googleapiclient import discovery
@@ -17,8 +17,9 @@ LEVEL_PATH = 'leastprivilege/roles'
 #RESOURCE_PREFIX = 'c6'
 FUNCTION_LOCATION = 'us-central1'
 #LEVEL_NAME ='project'
-LEVEL_NAMES = {'pd1':'Storage','pd2':'Compute','pd3':'Logging','pd4':'Datastore','ct1':'Projects','ct2':'Storage','ct3':'Compute','ct4':'Logging','pr':'Projects'}
+LEVEL_NAMES = {'pr':'PrimitiveRole-Project','pd1':'PredefinedRole-Storage','pd2':'PredefinedRole-Compute','pd3':'PredefinedRole-Logging','pd4':'PredefinedRole-Datastore','ct1':'CustomRole-Project','ct2':'CustomRole-Storage','ct3':'CustomRole-Compute','ct4':'CustomRole-Logging'}
 fvars = {
+         'pr':'roles/viewer',
          'pd1':'roles/storage.objectViewer',
          'pd2':'roles/compute.viewer',
          'pd3':'roles/logging.viewer',
@@ -26,9 +27,7 @@ fvars = {
          'ct1':['storage.buckets.list','compute.instances.list'],
          'ct2':['storage.buckets.list'],
          'ct3':['compute.instances.list'],
-         'ct4':['logging.logEntries.list'],
-         'pr':'roles/viewer'
-
+         'ct4':['logging.logEntries.list']
         }
 KINDS = {'pd4':''}
 BUCKETS = ['pd1','ct2']
@@ -126,30 +125,20 @@ def create():
                                         f'level_name_{RESOURCE_PREFIX}': LEVEL_NAME, f'resource_prefix_{RESOURCE_PREFIX}':RESOURCE_PREFIX }
         config_template_args.update(config_template_args_patch)
         
-    #time.sleep(30)    
+    try
     deployments.patch(LEVEL_PATH, template_files=template_files, config_template_args=config_template_args)
 
     print('Patching completed')
     print( 'Use function entrypoints below to access levels:')
+    start_message = ''
+    levels.write_start_info(LEVEL_PATH, start_message)
     for RESOURCE_PREFIX in LEVEL_NAMES:
-        # temp datastore permissions not supported for custom roles, will explore other Native  mode
-        print(f'https://{FUNCTION_LOCATION}-{project_id}.cloudfunctions.net/{RESOURCE_PREFIX}-f-access-{nonce}')
+        msg= f'https://{FUNCTION_LOCATION}-{project_id}.cloudfunctions.net/{RESOURCE_PREFIX}-f-access-{nonce}    {LEVEL_NAMES[RESOURCE_PREFIX]}'
+        start_message += msg+'\n'
+        print(msg)
+    levels.write_start_info(LEVEL_PATH, start_message)
+    print( 'Entrypoints are written to start/roles.txt')
 
-def create_appeng():
-    found = False
-    credentials, project_id = google.auth.default()
-    app_api = discovery.build('appengine','v1', credentials=credentials)
-    try:
-        app = app_api.apps().get(appsId=project_id).execute()['name']
-        found = True
-    except Exception as e:
-        #print(str(e))
-        print('Project App Engine does not found')
-
-    if not found:
-        print(f'Creating App Engine appId:{project_id}')
-        request_body = {"id": f"{project_id}", "locationId": "us-west2"}
-        new_app = app_api.apps().create(body=request_body).execute()
 
 def delete_custom_roles():
     print(f'Deleting custom roles')
