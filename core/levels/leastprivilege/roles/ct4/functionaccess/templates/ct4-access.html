@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 {% raw -%}
 <head>
-  <title>Least Privileges - {{prefix}}{{level_name}}</title>
+  <title>Least Privileges - {{prefix}} {{level_name}}</title>
 </head>
 <body >
 <div>
-<h1 style="text-align:center">Least Privileges {{prefix}}{{level_name}}</h1>
+<h1 style="text-align:center">Least Privileges {{prefix}} {{level_name}}</h1>
 <ul>
   <li>Service account {{prefix}}-access has the role with permission to list log entries associated with this project. However it's a role with permissions more than necessary</li>
   <li>You need to detatch the original role of {{prefix}}-access and create custom role with least privilege permission attach to it.</li>

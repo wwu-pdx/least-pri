@@ -81,7 +81,7 @@ def create():
             task = datastore.Entity(key=entity_key)
             task.update(entity)
             client.put(task)
-        print(f'Datastore {KIND}  created')
+        #print(f'Datastore {KIND}  created')
 
 
     
@@ -136,6 +136,7 @@ def create():
         msg= f'https://{FUNCTION_LOCATION}-{project_id}.cloudfunctions.net/{RESOURCE_PREFIX}-f-access-{nonce}    {LEVEL_NAMES[RESOURCE_PREFIX]}'
         start_message += msg+'\n'
         print(msg)
+    print(start_message)
     levels.write_start_info(LEVEL_PATH, start_message)
     print( 'Entrypoints are written to start/roles.txt')
 
@@ -153,7 +154,7 @@ def delete_custom_roles():
                 if re.search(rf"{pattern}[0-9]_access_role_", role['name'], re.IGNORECASE):
                     service.projects().roles().delete(name= role['name']).execute()
     except Exception as e: 
-        print(str(e))
+        #print(str(e))
 
 
        

@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 {% raw -%}
 <head>
-  <title>Least Privileges - {{prefix}}{{level_name}}</title>
+  <title>Least Privileges - {{prefix}} {{level_name}}</title>
 </head>
 <body >
 <div>
-<h1 style="text-align:center">Least Privileges {{prefix}}{{level_name}}</h1>
+<h1 style="text-align:center">Least Privileges {{prefix}} {{level_name}}</h1>
 <ul>
   <li>A Bucket was created with the level and a txt file has been placed into the bucket</li>
   <li>Service account {{prefix}}-access has the role with permission to list content in bucket. However it's a role with permissions more than necessary</li>
@@ -44,8 +44,7 @@
     name = f'{RESOURCE_PREFIX}-bucket-{NONCE}'
     request = storage_api.objects().list(bucket=name).execute()["items"][0]
     bucket = name + ' :  ' + request["name"]
-    resources.append(bucket)
-
+    
 </pre>
 
 </div>
