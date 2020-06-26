@@ -125,7 +125,7 @@ def create():
                                         f'level_name_{RESOURCE_PREFIX}': LEVEL_NAME, f'resource_prefix_{RESOURCE_PREFIX}':RESOURCE_PREFIX }
         config_template_args.update(config_template_args_patch)
         
-    try
+    
     deployments.patch(LEVEL_PATH, template_files=template_files, config_template_args=config_template_args)
 
     print('Patching completed')
