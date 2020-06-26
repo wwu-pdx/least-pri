@@ -154,12 +154,7 @@ def delete_custom_roles():
                 if re.search(rf"{pattern}[0-9]_access_role_", role['name'], re.IGNORECASE):
                     service.projects().roles().delete(name= role['name']).execute()
     except Exception as e: 
-        #print(str(e))
-
-
-       
-
-
+    #print(str(e))
 
 def destroy():
     #Delete datastore
