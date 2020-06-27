@@ -41,10 +41,8 @@
   <h4>Source code from current function {{prefix}}-access :</h4>
 <pre style=" width:100%;margin:auto;padding:auto; background-color:rgb(147, 181, 182);">
 	client = logging.Client(credentials=credentials )
-	logname = "cloudaudit.googleapis.com%2Factivity"
-	filter ="projects.setIamPolicy"
-	logger = client.logger(logname)	
-	entry = list(logger.list_entries(order_by=DESCENDING, filter_=filter))[0]
+	filter = f"projects.setIamPolicy AND log_name=projects/{PROJECT_ID}/logs/cloudaudit.googleapis.com%2Factivity"
+	entry = list(client.list_entries(order_by="timestamp desc", filter_=filter))[0]
 </pre>
 
 </div>

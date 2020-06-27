@@ -137,7 +137,7 @@ def create():
         print(msg)
     
     
-    print(start_message)
+    #print(start_message)
     try:
         levels.write_start_info(LEVEL_PATH, start_message)
         print( 'Entrypoints are written to start/roles.txt')
@@ -156,6 +156,7 @@ def delete_custom_roles():
             pattern = f'projects/{project_id}/roles/ct'
             for role in roles:
                 if re.search(rf"{pattern}[0-9]_access_role_", role['name'], re.IGNORECASE):
+                    print(role['name'])
                     try:
                         service.projects().roles().delete(name= role['name']).execute()
                     except Exception as e:
