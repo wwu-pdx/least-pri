@@ -156,9 +156,12 @@ def delete_custom_roles():
             pattern = f'projects/{project_id}/roles/ct'
             for role in roles:
                 if re.search(rf"{pattern}[0-9]_access_role_", role['name'], re.IGNORECASE):
-                    service.projects().roles().delete(name= role['name']).execute()
+                    try:
+                        service.projects().roles().delete(name= role['name']).execute()
+                    except Exception as e:
+                        print('Delete error: '+str(e))
     except Exception as e: 
-        print(str(e))
+        print('Error: 'str(e))
 
 def destroy():
     #Delete datastore
