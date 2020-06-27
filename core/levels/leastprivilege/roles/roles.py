@@ -162,7 +162,7 @@ def delete_custom_roles():
                     except Exception as e:
                         print('Delete error: '+str(e))
     except Exception as e: 
-        print('Error: 'str(e))
+        print('Error: '+str(e))
 
 def destroy():
     #Delete datastore
