@@ -62,18 +62,21 @@ def main(request):
 		#parent resource
 		parent = f'projects/{PROJECT_ID}'
 
-		
-
+		#Track if custom role with specific id was created
+		found = False
 		try:
 			roles = service.projects().roles().list(parent= parent, view = 'FULL', showDeleted = False).execute()['roles']
 			for role in roles:
 				if role['name'] == role_name:
 					permissions = role['includedPermissions']
+					found = True
 		except Exception as e: 
 			permissions =[]
 			msg ='There is an error'
 			err = str(e)
-		
+		if not found:
+			msg = f'Did not find custom role with id {role_name} attached to {RESOURCE_PREFIX}-access Role '
+
 		if msg =='':
 			msg='Congratulations! You get the least privileges. '
 			
