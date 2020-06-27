@@ -18,7 +18,7 @@ LEVEL_PATH = 'leastprivilege/roles'
 FUNCTION_LOCATION = 'us-central1'
 #LEVEL_NAME ='project'
 LEVEL_NAMES = {'pr':'PrimitiveRole-Project','pd1':'PredefinedRole-Storage','pd2':'PredefinedRole-Compute','pd3':'PredefinedRole-Logging','pd4':'PredefinedRole-Datastore','ct1':'CustomRole-Project','ct2':'CustomRole-Storage','ct3':'CustomRole-Compute','ct4':'CustomRole-Logging'}
-fvars = {
+FARS = {
          'pr':'roles/viewer',
          'pd1':'roles/storage.objectViewer',
          'pd2':'roles/compute.viewer',
@@ -31,11 +31,13 @@ fvars = {
         }
 KINDS = {'pd4':''}
 BUCKETS = ['pd1','ct2']
+NONCE = ''
 
 def create():
 
     # Create randomized bucket name to avoid namespace conflict
     nonce = str(random.randint(100000000000, 999999999999))
+    NONCE = nonce
     
     
 
@@ -92,7 +94,7 @@ def create():
     for RESOURCE_PREFIX in LEVEL_NAMES:
 
         LEVEL_NAME = LEVEL_NAMES[RESOURCE_PREFIX]
-        fvar = fvars[RESOURCE_PREFIX]
+        fvar = FARS[RESOURCE_PREFIX]
 
         #print(f'Level creation for: {LEVEL_PATH}/{RESOURCE_PREFIX}/{LEVEL_NAME}')
         #Generate account key files
@@ -130,14 +132,11 @@ def create():
 
     print('Patching completed')
     
-    start_message = '\n Use function entrypoints below to access levels \n'
+    start_message = ' Use function entrypoints below to access levels \n'
     for RESOURCE_PREFIX in LEVEL_NAMES:
         msg= f'https://{FUNCTION_LOCATION}-{project_id}.cloudfunctions.net/{RESOURCE_PREFIX}-f-access-{nonce}    {LEVEL_NAMES[RESOURCE_PREFIX]}'
         start_message += msg+'\n'
-        
-    
-    
-    
+
     try:
         levels.write_start_info(LEVEL_PATH, start_message)
         
@@ -155,7 +154,7 @@ def delete_custom_roles():
         if len(roles)!=0:
             pattern = f'projects/{project_id}/roles/ct'
             for role in roles:
-                if re.search(rf"{pattern}[0-9]_access_role_", role['name'], re.IGNORECASE):
+                if re.search(rf"{pattern}[0-9]_access_role_{NONCE}", role['name'], re.IGNORECASE):
                     print(role['name'])
                     try:
                         service.projects().roles().delete(name= role['name']).execute()
