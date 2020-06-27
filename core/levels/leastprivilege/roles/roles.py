@@ -129,18 +129,18 @@ def create():
     deployments.patch(LEVEL_PATH, template_files=template_files, config_template_args=config_template_args)
 
     print('Patching completed')
-    print( 'Use function entrypoints below to access levels:')
-    start_message = ''
+    
+    start_message = '\n Use function entrypoints below to access levels \n'
     for RESOURCE_PREFIX in LEVEL_NAMES:
         msg= f'https://{FUNCTION_LOCATION}-{project_id}.cloudfunctions.net/{RESOURCE_PREFIX}-f-access-{nonce}    {LEVEL_NAMES[RESOURCE_PREFIX]}'
         start_message += msg+'\n'
-        print(msg)
+        
     
     
-    #print(start_message)
+    
     try:
         levels.write_start_info(LEVEL_PATH, start_message)
-        print( 'Entrypoints are written to start/roles.txt')
+        
     except Exception as e: 
         print(str(e))
 
