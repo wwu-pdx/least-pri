@@ -11,7 +11,7 @@ from . import iam, gcstorage
 from .. import levels
 import yaml
 
-SECONd_DEPLOY = False
+SECOND_DEPLOY = False
 
 def _read_render_config(file_name, template_args={}, load_path=[]):
     '''Use load_path to set jinja env loader, if there are blocks in level yaml.
@@ -179,8 +179,8 @@ def patch(level_path, template_files=[],
         op_name = operation['name']
     except Exception as e: 
         print(str(e))
-        
-    if not SECONd_DEPLOY
+
+    if not SECOND_DEPLOY:
         _wait_for_patch(op_name, deployment_api,
                             project_id, level_path=level_path)
     else:
@@ -300,7 +300,7 @@ def _wait_for_patch(op_name, deployment_api, project_id, level_path=None):
         level_module = levels.import_level(level_path)
         level_module.destroy()
         level_module.create()
-        SECONd_DEPLOY = True
+        SECOND_DEPLOY = True
     
     
 
