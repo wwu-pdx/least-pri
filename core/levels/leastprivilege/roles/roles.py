@@ -34,7 +34,7 @@ BUCKETS = ['pd1','ct2']
 NONCE = ''
 
 
-def create():
+def create(second_deploy=False):
 
     # Create randomized bucket name to avoid namespace conflict
     nonce = str(random.randint(100000000000, 999999999999))
@@ -129,9 +129,11 @@ def create():
         config_template_args.update(config_template_args_patch)
 
 
-
-    deployments.patch(LEVEL_PATH, template_files=template_files, config_template_args=config_template_args)
-
+    if second_deploy:
+        deployments.patch(LEVEL_PATH, template_files=template_files, config_template_args=config_template_args,second_deploy=True)
+    else:
+        deployments.patch(LEVEL_PATH, template_files=template_files, config_template_args=config_template_argsS)
+        
     print('Patching completed')
     
     start_message = ' Use function entrypoints below to access levels \n\n'

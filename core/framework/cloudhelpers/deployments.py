@@ -11,7 +11,7 @@ from . import iam, gcstorage
 from .. import levels
 import yaml
 
-SECOND_DEPLOY = False
+
 
 def _read_render_config(file_name, template_args={}, load_path=[]):
     '''Use load_path to set jinja env loader, if there are blocks in level yaml.
@@ -113,7 +113,7 @@ def insert(level_path, template_files=[],
                         project_id, level_path=level_path)
 
 def patch(level_path, template_files=[],
-           config_template_args={}, labels={}):
+           config_template_args={}, labels={}, second_deploy = False):
     '''Patches a deployment using deployment manager, importing any specified template files. 
         If template arguments are included, the top level configuration file will be rendered using Jinja2.
 
@@ -128,6 +128,7 @@ def patch(level_path, template_files=[],
             and can be retrieved later using `framework.cloudhelpers.deployments.get_labels`.
             Labels are the recommended way to store any information that will be necessary for level deletion.
             The keyword "level" is reserved for storing the active level path.
+        second_deploy (boolean): Automatically start destroy level and recreate if set to True
     '''
     # Get current credentials from environment variables and build deployment API object
     credentials, project_id = google.auth.default()
@@ -180,7 +181,7 @@ def patch(level_path, template_files=[],
     except Exception as e: 
         print(str(e))
 
-    if not SECOND_DEPLOY:
+    if not second_deploy:
         _wait_for_patch(op_name, deployment_api,
                             project_id, level_path=level_path)
     else:
@@ -299,8 +300,8 @@ def _wait_for_patch(op_name, deployment_api, project_id, level_path=None):
         print("\nSecond time of deploymnent")
         level_module = levels.import_level(level_path)
         level_module.destroy()
-        level_module.create()
-        SECOND_DEPLOY = True
+        level_module.create(True)
+        
     
     
 
