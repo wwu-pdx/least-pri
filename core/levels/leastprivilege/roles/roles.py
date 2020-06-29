@@ -129,7 +129,7 @@ def create():
                                         f'level_name_{RESOURCE_PREFIX}': LEVEL_NAME, f'resource_prefix_{RESOURCE_PREFIX}':RESOURCE_PREFIX }
         config_template_args.update(config_template_args_patch)
 
-        patch()
+    patch()
 
 
 def patch():
