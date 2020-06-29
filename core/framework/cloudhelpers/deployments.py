@@ -11,6 +11,7 @@ from . import iam, gcstorage
 from .. import levels
 import yaml
 
+SECONd_DEPLOY = False
 
 def _read_render_config(file_name, template_args={}, load_path=[]):
     '''Use load_path to set jinja env loader, if there are blocks in level yaml.
@@ -179,8 +180,13 @@ def patch(level_path, template_files=[],
     except Exception as e: 
         print(str(e))
         
-    _wait_for_operation(op_name, deployment_api,
-                        project_id, level_path=level_path)
+    if not SECONd_DEPLOY
+        _wait_for_patch(op_name, deployment_api,
+                            project_id, level_path=level_path)
+    else:
+
+        _wait_for_operation(op_name, deployment_api,
+                            project_id, level_path=level_path)
 
 def delete():
     '''Deletes the active deployment. 
@@ -265,6 +271,38 @@ def _wait_for_operation(op_name, deployment_api, project_id, level_path=None):
             level_module.destroy()
             exit()
 
+def _wait_for_patch(op_name, deployment_api, project_id, level_path=None):
+    # Wait till  operation finishes, giving updates every 5 seconds
+    op_done = False
+    t = 0
+    start_time = time.time()
+    time_string = ''
+    while not op_done:
+        time_string = f'[{int(t/60)}m {(t%60)//10}{t%10}s]'
+        sys.stdout.write(
+            f'\r{time_string}Deployment patching in progress...')
+        t += 5
+        while t < time.time()-start_time:
+            t += 5
+        time.sleep(t-(time.time()-start_time))
+        op_status = deployment_api.operations().get(
+            project=project_id,
+            operation=op_name).execute()['status']
+        op_done = (op_status == 'DONE')
+    sys.stdout.write(
+        f'\r{time_string}Deployment patching in progress... Done\n')
+    operation = op_status = deployment_api.operations().get(
+        project=project_id,
+        operation=op_name).execute()
+    if 'error' in operation and level_path:
+        print("\nDeployment patching Error:\n" + yaml.dump(operation['error']))
+        print("\nSecond time of deploymnent")
+        level_module = levels.import_level(level_path)
+        level_module.destroy()
+        level_module.create()
+        SECONd_DEPLOY = True
+    
+    
 
 def get_labels():
     '''Queries the Deployment Manager API to retrieve the labels on the active level's deployment.
