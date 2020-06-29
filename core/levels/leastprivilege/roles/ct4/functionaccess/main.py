@@ -31,7 +31,7 @@ def main(request):
 		# entry = list(client.list_entries(order_by="timestamp desc", filter_=filter))[0]
 		logname = "cloudaudit.googleapis.com%2Factivity"
 		filter =f"projects.setIamPolicy AND {NONCE}"
-		logger = client.logger(logname)	
+		logger = client.logger(logname)
 		#entry = list(logger.list_entries(order_by=DESCENDING, filter_=filter))[0]
 		entry = logger.list_entries(order_by=DESCENDING, filter_=filter)
 		resources.append(str(entry))

@@ -297,7 +297,7 @@ def _wait_for_patch(op_name, deployment_api, project_id, level_path=None):
         operation=op_name).execute()
     if 'error' in operation and level_path:
         print("\nDeployment patching Error:\n" + yaml.dump(operation['error']))
-        print("\nSecond time of deploymnent")
+        print("\nSecond try of deploymnent")
         level_module = levels.import_level(level_path)
         level_module.destroy()
         level_module.create(True)
