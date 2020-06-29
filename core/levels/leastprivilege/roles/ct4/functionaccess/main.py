@@ -33,13 +33,11 @@ def main(request):
 		filter =f"projects.setIamPolicy AND {NONCE}"
 		logger = client.logger(logname)
 		#entry = list(logger.list_entries(order_by=DESCENDING, filter_=filter))[0]
-		#entry = logger.list_entries(order_by=DESCENDING, filter_=filter)
 		entries = logger.list_entries(order_by=DESCENDING, filter_=filter)
 		for entry in entries:
 			resources.append(entry)
 			if entries.num_results >0:
 				break
-		
 
 	except Exception as e:
 		resources.append('Insufficient privilege!') 

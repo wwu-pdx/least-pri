@@ -30,7 +30,6 @@ def main(request):
 		filter = f"projects.setIamPolicy AND {NONCE} AND logName=projects/{PROJECT_ID}/logs/cloudaudit.googleapis.com%2Factivity"
 		#entry = list(client.list_entries(order_by="timestamp desc", filter_=filter))[0]
 		entries = client.list_entries(order_by="timestamp desc", filter_=filter)
-		#entry = list(client.list_entries())[0]
 		#logname = "cloudaudit.googleapis.com%2Factivity"
 		#filter ="projects.setIamPolicy"
 		#logger = client.logger(logname)	
