@@ -32,7 +32,7 @@ FARS = {
 KINDS = {'pd4':''}
 BUCKETS = ['pd1','ct2']
 NONCE = ''
-
+start_message = ' Use function entrypoints below to access levels \n\n'
 
 def create(second_deploy=False):
 
@@ -128,18 +128,15 @@ def create(second_deploy=False):
                                         f'level_name_{RESOURCE_PREFIX}': LEVEL_NAME, f'resource_prefix_{RESOURCE_PREFIX}':RESOURCE_PREFIX }
         config_template_args.update(config_template_args_patch)
 
+        msg= f'https://{FUNCTION_LOCATION}-{project_id}.cloudfunctions.net/{RESOURCE_PREFIX}-f-access-{nonce}    {LEVEL_NAMES[RESOURCE_PREFIX]}'
+        start_message += msg+'\n'
+
 
     if second_deploy:
         deployments.patch(LEVEL_PATH, template_files=template_files, config_template_args=config_template_args,second_deploy=True)
     else:
         deployments.patch(LEVEL_PATH, template_files=template_files, config_template_args=config_template_args)
         
-    print('Patching completed')
-    
-    start_message = ' Use function entrypoints below to access levels \n\n'
-    for RESOURCE_PREFIX in LEVEL_NAMES:
-        msg= f'https://{FUNCTION_LOCATION}-{project_id}.cloudfunctions.net/{RESOURCE_PREFIX}-f-access-{nonce}    {LEVEL_NAMES[RESOURCE_PREFIX]}'
-        start_message += msg+'\n'
 
     try:
         levels.write_start_info(LEVEL_PATH, start_message)
