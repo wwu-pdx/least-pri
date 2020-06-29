@@ -132,7 +132,7 @@ def create(second_deploy=False):
     if second_deploy:
         deployments.patch(LEVEL_PATH, template_files=template_files, config_template_args=config_template_args,second_deploy=True)
     else:
-        deployments.patch(LEVEL_PATH, template_files=template_files, config_template_args=config_template_argsS)
+        deployments.patch(LEVEL_PATH, template_files=template_files, config_template_args=config_template_args)
         
     print('Patching completed')
     
