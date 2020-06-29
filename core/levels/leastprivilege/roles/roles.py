@@ -32,8 +32,7 @@ FARS = {
 KINDS = {'pd4':''}
 BUCKETS = ['pd1','ct2']
 NONCE = ''
-config_template_args = {}
-template_files = []
+
 
 def create():
 
@@ -129,12 +128,7 @@ def create():
                                         f'level_name_{RESOURCE_PREFIX}': LEVEL_NAME, f'resource_prefix_{RESOURCE_PREFIX}':RESOURCE_PREFIX }
         config_template_args.update(config_template_args_patch)
 
-    patch()
 
-
-def patch():
-    # Set role of default cloud function account
-    credentials, project_id = google.auth.default()
 
     deployments.patch(LEVEL_PATH, template_files=template_files, config_template_args=config_template_args)
 
