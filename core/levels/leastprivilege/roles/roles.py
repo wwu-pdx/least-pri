@@ -11,7 +11,7 @@ from google.cloud import datastore
 from core.framework import levels
 from core.framework.cloudhelpers import deployments, iam, cloudfunctions
 
-from cryptography.fernet import Fernet
+
 
 LEVEL_PATH = 'leastprivilege/roles'
 #RESOURCE_PREFIX = 'c6'
