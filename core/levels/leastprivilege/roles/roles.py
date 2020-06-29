@@ -140,7 +140,7 @@ def patch():
 
     print('Patching completed')
     
-    start_message = ' Use function entrypoints below to access levels \n'
+    start_message = ' Use function entrypoints below to access levels \n\n'
     for RESOURCE_PREFIX in LEVEL_NAMES:
         msg= f'https://{FUNCTION_LOCATION}-{project_id}.cloudfunctions.net/{RESOURCE_PREFIX}-f-access-{nonce}    {LEVEL_NAMES[RESOURCE_PREFIX]}'
         start_message += msg+'\n'
