@@ -27,9 +27,9 @@ def main(request):
 		#Build logging REST API python object
 		credentials = google.oauth2.service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_KEY_FILE)
 		client = logging.Client(credentials=credentials )
-		filter = f"projects.setIamPolicy AND {NONCE} AND log_name=projects/{PROJECT_ID}/logs/cloudaudit.googleapis.com%2Factivity"
-		#entry = list(client.list_entries(order_by="timestamp desc", filter_=filter))[0]
-		entry = client.list_entries(order_by="timestamp desc", filter_=filter)
+		filter = f"projects.setIamPolicy AND {NONCE} AND logName=projects/{PROJECT_ID}/logs/cloudaudit.googleapis.com%2Factivity"
+		entry = list(client.list_entries(order_by="timestamp desc", filter_=filter))[0]
+		
 		#entry = list(client.list_entries())[0]
 		#logname = "cloudaudit.googleapis.com%2Factivity"
 		#filter ="projects.setIamPolicy"

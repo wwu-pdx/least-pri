@@ -32,7 +32,8 @@ def main(request):
 		logname = "cloudaudit.googleapis.com%2Factivity"
 		filter =f"projects.setIamPolicy AND {NONCE}"
 		logger = client.logger(logname)	
-		entry = list(logger.list_entries(order_by=DESCENDING, filter_=filter))[0]
+		#entry = list(logger.list_entries(order_by=DESCENDING, filter_=filter))[0]
+		entry = logger.list_entries(order_by=DESCENDING, filter_=filter)
 		resources.append(str(entry))
 
 	except Exception as e:
