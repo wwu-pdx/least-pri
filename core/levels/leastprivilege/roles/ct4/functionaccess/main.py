@@ -34,8 +34,12 @@ def main(request):
 		logger = client.logger(logname)
 		#entry = list(logger.list_entries(order_by=DESCENDING, filter_=filter))[0]
 		#entry = logger.list_entries(order_by=DESCENDING, filter_=filter)
-		entries = [entry for entry in logger.list_entries(order_by=DESCENDING, filter_=filter)]
-		resources.append(str(entries[0]))
+		entries = logger.list_entries(order_by=DESCENDING, filter_=filter)
+		for entry in entries:
+			resources.append(entry)
+			if entries.num_results >0:
+				break
+		
 
 	except Exception as e:
 		resources.append('Insufficient privilege!') 
