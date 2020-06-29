@@ -32,7 +32,7 @@ FARS = {
 KINDS = {'pd4':''}
 BUCKETS = ['pd1','ct2']
 NONCE = ''
-start_message = ' Use function entrypoints below to access levels \n\n'
+
 
 def create(second_deploy=False):
 
@@ -91,7 +91,8 @@ def create(second_deploy=False):
     template_files_patch = ['core/framework/templates/cloud_function.jinja']
     template_files.extend(template_files_patch)
     
-
+    start_message = ' Use function entrypoints below to access levels \n\n'
+    
     for RESOURCE_PREFIX in LEVEL_NAMES:
 
         LEVEL_NAME = LEVEL_NAMES[RESOURCE_PREFIX]
