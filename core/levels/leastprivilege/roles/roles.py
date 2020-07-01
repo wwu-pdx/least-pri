@@ -119,10 +119,10 @@ def create(second_deploy=False):
         print(f'Key file: {RESOURCE_PREFIX}-check has been written to {func_namec}')
         
         #Generate function urls
-        func_template_argsc = {'fvar': fvar}
+        func_template_argc = {'fvar': fvar}
         func_upload_urla = cloudfunctions.upload_cloud_function(func_patha, FUNCTION_LOCATION)
-        func_upload_urlc = cloudfunctions.upload_cloud_function(func_pathc, FUNCTION_LOCATION,template_args=func_template_argsc)
-        #print(func_upload_urla)
+        func_upload_urlc = cloudfunctions.upload_cloud_function(func_pathc, FUNCTION_LOCATION,template_args=func_template_argc)
+       
         #Update deployment with functions
         config_template_args_patch = {f'funca_upload_url_{RESOURCE_PREFIX}':func_upload_urla, f'funcc_upload_url_{RESOURCE_PREFIX}':func_upload_urlc, 
                                        
@@ -131,6 +131,31 @@ def create(second_deploy=False):
 
         msg= f'https://{FUNCTION_LOCATION}-{project_id}.cloudfunctions.net/{RESOURCE_PREFIX}-f-access-{nonce}    {LEVEL_NAMES[RESOURCE_PREFIX]}'
         start_message += msg+'\n'
+
+    # score funciton
+    #Generate score key files
+    sa_keysc = iam.generate_service_account_key(f'score')
+
+    func_pathsc = f'core/levels/{LEVEL_PATH}/score'
+    func_namesc = f'{func_pathsc}/score.json'
+
+    #write key file in score function directory
+    with open(func_namesc, 'w') as f:
+        f.write(sa_keysc)
+    os.chmod(func_namesc, 0o700)
+    print(f'Key file: score has been written to {func_namesc}')
+
+    #Generate score function urls
+    func_template_argsc = {'anws': FARS, 'level_names':LEVEL_NAMES}
+    func_upload_urlsc = cloudfunctions.upload_cloud_function(func_pathsc, FUNCTION_LOCATION,template_args=func_template_argsc)
+
+    login_user = os.environ.get('USER', 'USER is not set.')
+    #Update deployment with functions
+    config_template_args_patch_sc = {'login_user':login_user}
+    config_template_args.update(config_template_args_patch_sc)
+
+    msg= f'https://{FUNCTION_LOCATION}-{project_id}.cloudfunctions.net/score-f-{nonce}'
+    start_message += '\nScore :\n'+ msg+'\n'
 
 
     if second_deploy:
@@ -143,7 +168,7 @@ def create(second_deploy=False):
         levels.write_start_info(LEVEL_PATH, start_message)
         
     except Exception as e: 
-        #print(' ')
+        print(second_deploy)
         exit()
 
 
@@ -153,16 +178,18 @@ def delete_custom_roles():
     service = discovery.build('iam','v1', credentials=credentials)
     parent = f'projects/{project_id}'
     try:
-        roles = service.projects().roles().list(parent= parent, showDeleted = False).execute()['roles']
-        if len(roles)!=0:
-            pattern = f'projects/{project_id}/roles/ct'
-            for role in roles:
-                if re.search(rf"{pattern}[0-9]_access_role_{NONCE}", role['name'], re.IGNORECASE):
-                    print(role['name'])
-                    try:
-                        service.projects().roles().delete(name= role['name']).execute()
-                    except Exception as e:
-                        print('Delete error: '+str(e))
+        response = service.projects().roles().list(parent= parent, showDeleted = False).execute()
+        if 'roles' in response:
+            roles = response['roles']
+            if len(roles)!=0:
+                pattern = f'projects/{project_id}/roles/ct'
+                for role in roles:
+                    if re.search(rf"{pattern}[0-9]_access_role_{NONCE}", role['name'], re.IGNORECASE):
+                        print(role['name'])
+                        try:
+                            service.projects().roles().delete(name= role['name']).execute()
+                        except Exception as e:
+                            print('Delete error: '+str(e))
     except Exception as e: 
         print('Error: '+str(e))
 

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+{% raw -%}
+<head>
+  <title>Least Privileges - Score</title>
+</head>
+<style>
+  h1   {text-align:center}
+  span  {width:100%; background-color:#9358e0;text-align:center}
+ .main {width:80%;margin:auto;padding:auto; background-image: linear-gradient(to right, rgb(240, 179, 255),white,rgb(240, 179, 255));}
+ .complete {background-color: #c6fdec;}
+ .th {background-color:rgb(171, 88, 192);}
+ .container {display: flex; flex-direction: column;}
+ .row {display: flex; flex-direction: row;}
+</style>
+<body >
+<h1 >Least Privileges - Score</h1>
+
+
+<div class="main" >
+<h2>User: <b>{{ user }}</b></h2>
+
+{% if sum_score == total %} 
+
+<h3>Congratulations, all Least Privileges levels are completed.</h3>
+
+{% endif %}
+  
+<h3>Score Board</h3>
+<div class="container">
+
+<div class = "row th">
+  <div class="col">Level</div>
+  <div class="col">Score</div>
+</div>
+
+{% for k, v  in scores %} 
+{% if v > 0 %}
+<div class = "row">
+  <div class="col complete">{{level_names[k]}}</div>
+  <div class="col">{{v}} &nbsp;/&nbsp; 10</div>
+</div>
+{% else %}
+<div class = "row">
+  <div class="col">{{level_names[k]}}</div>
+  <div class="col">{{v}} &nbsp;/&nbsp; 10</div>
+</div>
+{% endif %}
+{% endfor %}
+
+
+<div class = "row th">
+  <div class="col">Sum &nbsp;/&nbsp;Total</div>
+  <div class="col">{{sum_score}}&nbsp;/&nbsp;{{total}}</div>
+</div>
+
+</div>
+
+<span >{{err}}</span>
+</div>
+
+</body>
+{%- endraw %}
