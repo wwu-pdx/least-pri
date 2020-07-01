@@ -15,19 +15,25 @@ def main(request):
 	LOGIN_USER = os.environ.get('LOGIN_USER', 'LOGIN_USER is not set.')
 	ANWS ={{anws|safe}}
 	LEVEL_NAMES = {{level_names|safe}}
-	
-	for k in LEVEL_NAMES:
-		scores[k] = 0
-		# Level Service Accounts 
-		levels_sa [k] = f'serviceAccount:{k}-access@{PROJECT_ID}.iam.gserviceaccount.com'
-		level_bindings[k] = []
 
 	err=''
 	total = 10 * len(LEVEL_NAMES)
 	sum_score = 0
 
+	scores = {}
+	levels_sa = {}
+	level_bindings ={}
 
-	SERVICE_ACCOUNT_KEY_FILE = f'scores.json'
+	for k in LEVEL_NAMES:
+		scores[k] = 0
+		# Level Service Accounts 
+		levels_sa[k] = f'serviceAccount:{k}-access@{PROJECT_ID}.iam.gserviceaccount.com'
+		level_bindings[k] = []
+
+	
+
+
+	SERVICE_ACCOUNT_KEY_FILE = 'scores.json'
 	credentials = google.oauth2.service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_KEY_FILE)
 
 
@@ -38,9 +44,9 @@ def main(request):
 		service_c = discovery.build('cloudresourcemanager','v1', credentials=credentials)
 		get_iam_policy_request_body = {}
 		bindings = service_c.projects().getIamPolicy(resource=PROJECT_ID, body=get_iam_policy_request_body).execute()['bindings']
-		for l, sa in levels_sa:
+		for l in levels_sa:
 			for b in bindings:
-				if sa in b['members']:
+				if levels_sa[l] in b['members']:
 					level_bindings[l].append(b['role'])
 	except Exception as e: 
 		err = str(e)
@@ -58,9 +64,9 @@ def main(request):
 	except Exception as e: 
 		err = str(e)
 
-	for l, a in ANWS:	
+	for l in ANWS:	
 		if l.startswith('p'):
-			if len(level_bindings[l])==1 and level_bindings[l][0] == a:
+			if len(level_bindings[l])==1 and level_bindings[l][0] == ANWS[l]:
 				scores[l] += 10 
 				sum_score += scores[l]
 
@@ -71,9 +77,9 @@ def main(request):
 				for role in roles:
 					if role['name'] == role_name:
 						permissions = role['includedPermissions']
-						if len(permissions)==len(a):
+						if len(permissions)==len(ANWS[l]):
 							least = True
-							for p in a:
+							for p in ANWS[l]:
 								if p not in permissions:
 									least = False	
 							if least == True:

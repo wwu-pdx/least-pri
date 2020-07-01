@@ -33,16 +33,16 @@
   <div class="col">Score</div>
 </div>
 
-{% for k, v  in scores %} 
-{% if v > 0 %}
+{% for k  in scores %} 
+{% if scores[k] > 0 %}
 <div class = "row">
   <div class="col complete">{{level_names[k]}}</div>
-  <div class="col">{{v}} &nbsp;/&nbsp; 10</div>
+  <div class="col">{{ scores[k]}} &nbsp;/&nbsp; 10</div>
 </div>
 {% else %}
 <div class = "row">
   <div class="col">{{level_names[k]}}</div>
-  <div class="col">{{v}} &nbsp;/&nbsp; 10</div>
+  <div class="col">{{ scores[k]}} &nbsp;/&nbsp; 10</div>
 </div>
 {% endif %}
 {% endfor %}
