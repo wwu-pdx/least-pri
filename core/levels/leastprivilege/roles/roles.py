@@ -132,20 +132,20 @@ def create(second_deploy=False):
         msg= f'https://{FUNCTION_LOCATION}-{project_id}.cloudfunctions.net/{RESOURCE_PREFIX}-f-access-{nonce}    {LEVEL_NAMES[RESOURCE_PREFIX]}'
         start_message += msg+'\n'
 
-    # score funciton
-    #Generate score key files
-    sa_keysc = iam.generate_service_account_key(f'score')
+    # scores funciton
+    #Generate scores key files
+    sa_keysc = iam.generate_service_account_key(f'scores')
 
-    func_pathsc = f'core/levels/{LEVEL_PATH}/score'
-    func_namesc = f'{func_pathsc}/score.json'
+    func_pathsc = f'core/levels/{LEVEL_PATH}/scores'
+    func_namesc = f'{func_pathsc}/scores.json'
 
-    #write key file in score function directory
+    #write key file in scores function directory
     with open(func_namesc, 'w') as f:
         f.write(sa_keysc)
     os.chmod(func_namesc, 0o700)
-    print(f'Key file: score has been written to {func_namesc}')
+    print(f'Key file: scores has been written to {func_namesc}')
 
-    #Generate score function urls
+    #Generate scores function urls
     func_template_argsc = {'anws': FARS, 'level_names':LEVEL_NAMES}
     func_upload_urlsc = cloudfunctions.upload_cloud_function(func_pathsc, FUNCTION_LOCATION,template_args=func_template_argsc)
 
@@ -154,8 +154,8 @@ def create(second_deploy=False):
     config_template_args_patch_sc = {'login_user':login_user}
     config_template_args.update(config_template_args_patch_sc)
 
-    msg= f'https://{FUNCTION_LOCATION}-{project_id}.cloudfunctions.net/score-f-{nonce}'
-    start_message += '\nScore :\n'+ msg+'\n'
+    msg= f'https://{FUNCTION_LOCATION}-{project_id}.cloudfunctions.net/scores-f-{nonce}'
+    start_message += '\nScores :\n'+ msg+'\n'
 
 
     if second_deploy:

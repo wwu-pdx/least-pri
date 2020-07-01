@@ -27,7 +27,7 @@ def main(request):
 	sum_score = 0
 
 
-	SERVICE_ACCOUNT_KEY_FILE = f'score.json'
+	SERVICE_ACCOUNT_KEY_FILE = f'scores.json'
 	credentials = google.oauth2.service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_KEY_FILE)
 
 
@@ -84,4 +84,4 @@ def main(request):
 		
 
 		
-		return render_template(f'score.html',  scores=scores, user=LOGIN_USER,  err=err, level_names=LEVEL_NAMES, total=total, sum_score=sum_score )
+		return render_template(f'scores.html',  scores=scores, user=LOGIN_USER,  err=err, level_names=LEVEL_NAMES, total=total, sum_score=sum_score )
