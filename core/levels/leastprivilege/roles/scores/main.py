@@ -11,8 +11,10 @@ def main(request):
 	PROJECT_ID = os.environ['GCP_PROJECT']
 	
 	# Get function env variable
-	NONCE = os.environ.get('NONCE', 'Specified environment variable is not set.')
+	NONCE = os.environ.get('NONCE', 'NONCE is not set.')
 	LOGIN_USER = os.environ.get('LOGIN_USER', 'LOGIN_USER is not set.')
+	FUNCTION_REGION = os.environ.get('FUNCTION_REGION', 'FUNCTION_REGION is not set.')
+
 	ANWS ={{anws|safe}}
 	LEVEL_NAMES = {{level_names|safe}}
 
@@ -23,12 +25,16 @@ def main(request):
 	scores = {}
 	levels_sa = {}
 	level_bindings ={}
+	a_urls = {}
+	c_urls = {}
 
 	for k in LEVEL_NAMES:
 		scores[k] = 0
 		# Level Service Accounts 
 		levels_sa[k] = f'serviceAccount:{k}-access@{PROJECT_ID}.iam.gserviceaccount.com'
 		level_bindings[k] = []
+		a_urls[k] = f'https://{FUNCTION_REGION}-{PROJECT_ID}.cloudfunctions.net/{k}-f-access-{NONCE}'
+		c_urls[k] = f'https://{FUNCTION_REGION}-{PROJECT_ID}.cloudfunctions.net/{k}-f-check-{NONCE}'
 
 	
 
@@ -81,7 +87,8 @@ def main(request):
 							least = True
 							for p in ANWS[l]:
 								if p not in permissions:
-									least = False	
+									least = False
+									break	
 							if least == True:
 								scores[l] += 10	
 								sum_score += scores[l]
@@ -90,4 +97,4 @@ def main(request):
 		
 
 		
-		return render_template(f'scores.html',  scores=scores, user=LOGIN_USER,  err=err, level_names=LEVEL_NAMES, total=total, sum_score=sum_score )
+	return render_template(f'scores.html', scores=scores, user=LOGIN_USER, err=err, level_names=LEVEL_NAMES, total=total, sum_score=sum_score,nonce=NONCE,c_urls=c_urls,a_urls=a_urls )

@@ -155,7 +155,7 @@ def create(second_deploy=False):
     config_template_args.update(config_template_args_patch)
 
     msg= f'https://{FUNCTION_LOCATION}-{project_id}.cloudfunctions.net/scores-f-{nonce}'
-    start_message += '\nScores :\n'+ msg+'\n'
+    start_message += '\nScores :\nLinks of level entrypoints included \n'+ msg+'\n'
 
 
     if second_deploy:
