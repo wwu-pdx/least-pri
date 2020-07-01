@@ -112,7 +112,7 @@ resources:
 - name: ct4-check
   type: service_account.jinja
 
-- name: score
+- name: scores
   type: service_account.jinja
 
 {% block resources %}{% endblock %}

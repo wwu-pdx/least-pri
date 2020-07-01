@@ -146,13 +146,13 @@ def create(second_deploy=False):
     print(f'Key file: scores has been written to {func_namesc}')
 
     #Generate scores function urls
-    func_template_argsc = {'anws': FARS, 'level_names':LEVEL_NAMES}
-    func_upload_urlsc = cloudfunctions.upload_cloud_function(func_pathsc, FUNCTION_LOCATION,template_args=func_template_argsc)
+    func_template_arg = {'anws': FARS, 'level_names':LEVEL_NAMES}
+    func_upload_urlsc = cloudfunctions.upload_cloud_function(func_pathsc, FUNCTION_LOCATION,template_args=func_template_arg)
 
     login_user = os.environ.get('USER', 'USER is not set.')
     #Update deployment with functions
-    config_template_args_patch_sc = {'login_user':login_user}
-    config_template_args.update(config_template_args_patch_sc)
+    config_template_args_patch = {'funcc_upload_url_scores':func_upload_urlsc, 'login_user':login_user}
+    config_template_args.update(config_template_args_patch)
 
     msg= f'https://{FUNCTION_LOCATION}-{project_id}.cloudfunctions.net/scores-f-{nonce}'
     start_message += '\nScores :\n'+ msg+'\n'
