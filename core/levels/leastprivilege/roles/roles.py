@@ -199,6 +199,7 @@ def destroy():
     try:
         client = datastore.Client()
         for k in KINDS:
+            print(k+' '+ KINDS[k])
             query = client.query(kind=KINDS[k])
             entities = query.fetch()
             for entity in entities:
