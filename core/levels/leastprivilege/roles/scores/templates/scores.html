@@ -43,8 +43,8 @@
 {% else %}
 <div class = "row">
 {% endif %}
-  <div class="col "><a href ={{a_urls[k]}}>{{level_names[k]}}</a></div>
-  <div class="col"><a href ={{c_urls[k]}}>{{ scores[k]}}</a>  /  10</div>
+  <div class="col "><a href ={{a_urls[k]}} target="_blank">{{level_names[k]}}</a></div>
+  <div class="col"><a href ={{c_urls[k]}} target="_blank">{{ scores[k]}}</a>  /  10</div>
 </div>
 
 {% endfor %}
@@ -57,9 +57,9 @@
 
 
 </div>
-
+<br >
 <span >{{err}}</span>
 </div>
-
+<br>
 </body>
 {%- endraw %}

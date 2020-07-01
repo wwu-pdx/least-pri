@@ -38,6 +38,7 @@ def create(second_deploy=False):
 
     # Create randomized bucket name to avoid namespace conflict
     nonce = str(random.randint(100000000000, 999999999999))
+    global NONCE
     NONCE = nonce
     
     
@@ -74,17 +75,19 @@ def create(second_deploy=False):
     
 
     # Create and insert data in datastore
+    global KINDS
     for k in KINDS:
         entities =[{'name': f'admin-{k}','password': 'admin1234','active': True},{'name': f'editor-{k}','password': '1111','active': True}]
-        KIND=f'{k}-Users-{nonce}-{project_id}'
-        KINDS[k]=KIND
+        kind =f'{k}-Users-{nonce}-{project_id}'
+        global KINDS
+        KINDS[k] = kind
         client = datastore.Client(project_id)
         for entity in entities:
-            entity_key = client.key(KINDS[k])
+            entity_key = client.key(kind)
             task = datastore.Entity(key=entity_key)
             task.update(entity)
             client.put(task)
-        #print(f'Datastore {KIND}  created')
+        #print(f'Datastore {kind}  created')
 
 
     
@@ -173,7 +176,7 @@ def create(second_deploy=False):
 
 
 def delete_custom_roles():
-    print(f'Deleting custom roles')
+    print(f'Deleting custom roles {NONCE}')
     credentials, project_id = google.auth.default()
     service = discovery.build('iam','v1', credentials=credentials)
     parent = f'projects/{project_id}'
@@ -200,6 +203,7 @@ def destroy():
         client = datastore.Client()
         for k in KINDS:
             print(k+' '+ KINDS[k])
+            global KINDS
             query = client.query(kind=KINDS[k])
             entities = query.fetch()
             for entity in entities:
