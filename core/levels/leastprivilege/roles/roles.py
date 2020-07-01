@@ -75,11 +75,10 @@ def create(second_deploy=False):
     
 
     # Create and insert data in datastore
-    
+    global KINDS
     for k in KINDS:
         entities =[{'name': f'admin-{k}','password': 'admin1234','active': True},{'name': f'editor-{k}','password': '1111','active': True}]
         kind =f'{k}-Users-{nonce}-{project_id}'
-        global KINDS
         KINDS[k] = kind
         client = datastore.Client(project_id)
         for entity in entities:
