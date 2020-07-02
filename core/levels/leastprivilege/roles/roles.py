@@ -201,10 +201,10 @@ def delete_custom_roles():
 def destroy():
     #Delete datastore
     print('Deleting entities')
+    global KINDS
     print (str(KINDS))
     try:
         client = datastore.Client()
-        global KINDS
         for k in KINDS:
             print(str(KINDS))
             query = client.query(kind=KINDS[k])
