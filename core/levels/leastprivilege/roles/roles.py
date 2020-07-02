@@ -29,18 +29,21 @@ FARS = {
          'ct3':['compute.instances.list'],
          'ct4':['logging.logEntries.list']
         }
-KINDS = {'pd4':''}
+KINDS = ['pd4']
 BUCKETS = ['pd1','ct2']
-NONCE = ''
+
 
 ()
 def create(second_deploy=False):
 
     # Create randomized bucket name to avoid namespace conflict
     nonce = str(random.randint(100000000000, 999999999999))
-    global NONCE
-    NONCE = nonce
-    
+    nonce_file =  f'core/levels/{LEVEL_PATH}/nonce.txt'
+    #write key file in function directory
+    with open(nonce_file, 'w') as f:
+        f.write(nonce)
+    os.chmod(nonce_file, 0o700)
+    print(f'Nonce {nonce} has been written to {nonce_file}')
     
 
     # Set role of default cloud function account
@@ -75,11 +78,9 @@ def create(second_deploy=False):
     
 
     # Create and insert data in datastore
-    global KINDS
     for k in KINDS:
         entities =[{'name': f'admin-{k}','password': 'admin1234','active': True},{'name': f'editor-{k}','password': '1111','active': True}]
         kind =f'{k}-Users-{nonce}-{project_id}'
-        KINDS[k] = kind
         client = datastore.Client(project_id)
         for entity in entities:
             entity_key = client.key(kind)
@@ -170,13 +171,43 @@ def create(second_deploy=False):
         levels.write_start_info(LEVEL_PATH, start_message)
         
     except Exception as e: 
-        print(second_deploy)
         exit()
-    print (str(KINDS))
 
-def delete_custom_roles():
+def read_nonce():
+    nonce_file =  f'core/levels/{LEVEL_PATH}/nonce.txt'
+    level_nonce = ''
+    try:
+        f = open(nonce_file, "r")
+        level_nonce = f.read()
+    except Exception as e: 
+        print(str(e))
+    return level_nonce
+
+def delete_nonce_file():
+    try:
+        print(f'Deleting nonce file')
+        nonce_file =  f'core/levels/{LEVEL_PATH}/nonce.txt'
+        if os.path.exists(nonce_file):
+            os.remove(nonce_file)
+    except Exception as e: 
+        print(str(e))
+
+def delete_key_files():
+    try:
+        print(f'Deleting json key files')
+        for RESOURCE_PREFIX in LEVEL_NAMES:
+            actpatha=f'core/levels/{LEVEL_PATH}/{RESOURCE_PREFIX}/functionaccess/{RESOURCE_PREFIX}-access.json'
+            # Delete key files
+            if os.path.exists(actpatha):
+                os.remove(actpatha)
+            actpathc=f'core/levels/{LEVEL_PATH}/{RESOURCE_PREFIX}/functioncheck/{RESOURCE_PREFIX}-check.json'
+            if os.path.exists(actpathc):
+                os.remove(actpathc)
+    except Exception as e: 
+        print(str(e))
     
-    credentials, project_id = google.auth.default()
+
+def delete_custom_roles(credentials, project_id):
     service = discovery.build('iam','v1', credentials=credentials)
     parent = f'projects/{project_id}'
     try:
@@ -184,8 +215,8 @@ def delete_custom_roles():
         if 'roles' in response:
             roles = response['roles']
             if len(roles)!=0:
-                global NONCE
-                print(f'Deleting custom roles {NONCE}')
+                print(f'Deleting custom roles ')
+                NONCE = read_nonce()
                 pattern = f'projects/{project_id}/roles/ct'
                 for role in roles:
                     if re.search(rf"{pattern}[0-9]*_access_role_{NONCE}", role['name'], re.IGNORECASE):
@@ -198,37 +229,35 @@ def delete_custom_roles():
     except Exception as e: 
         print('Error: '+str(e))
 
-def destroy():
-    #Delete datastore
+def  delete_entities(project_id):
     print('Deleting entities')
-    global KINDS
-    print (str(KINDS))
+    nonce = read_nonce()
     try:
         client = datastore.Client()
         for k in KINDS:
-            print(str(KINDS))
-            query = client.query(kind=KINDS[k])
+            kind =f'{k}-Users-{nonce}-{project_id}'
+            query = client.query(kind=kind)
             entities = query.fetch()
             for entity in entities:
                 client.delete(entity.key)
     except Exception as e: 
         print(str(e))
 
+def destroy():
+
+    credentials, project_id = google.auth.default()
+    #Delete datastore entity
+    delete_entities(project_id)
 
     # Delete starting files
     levels.delete_start_files()
-    print(f'Deleting json key files')
-    for RESOURCE_PREFIX in LEVEL_NAMES:
-        actpatha=f'core/levels/{LEVEL_PATH}/{RESOURCE_PREFIX}/functionaccess/{RESOURCE_PREFIX}-access.json'
-        # Delete key files
-        if os.path.exists(actpatha):
-            os.remove(actpatha)
-        actpathc=f'core/levels/{LEVEL_PATH}/{RESOURCE_PREFIX}/functioncheck/{RESOURCE_PREFIX}-check.json'
-        if os.path.exists(actpathc):
-            os.remove(actpathc)
+
+    #delete sa keys
+    delete_key_files()
 
     # Delete deployment
     deployments.delete()
-    delete_custom_roles()
-    
 
+    delete_custom_roles(credentials, project_id)
+    
+    delete_nonce_file()
