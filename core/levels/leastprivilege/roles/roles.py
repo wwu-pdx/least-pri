@@ -33,7 +33,7 @@ KINDS = {'pd4':''}
 BUCKETS = ['pd1','ct2']
 NONCE = ''
 
-
+()
 def create(second_deploy=False):
 
     # Create randomized bucket name to avoid namespace conflict
@@ -172,7 +172,7 @@ def create(second_deploy=False):
     except Exception as e: 
         print(second_deploy)
         exit()
-
+    print (str(KINDS))
 
 def delete_custom_roles():
     
@@ -201,6 +201,7 @@ def delete_custom_roles():
 def destroy():
     #Delete datastore
     print('Deleting entities')
+    print (str(KINDS))
     try:
         client = datastore.Client()
         global KINDS
