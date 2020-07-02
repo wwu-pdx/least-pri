@@ -175,7 +175,7 @@ def create(second_deploy=False):
 
 
 def delete_custom_roles():
-    print(f'Deleting custom roles {NONCE}')
+    
     credentials, project_id = google.auth.default()
     service = discovery.build('iam','v1', credentials=credentials)
     parent = f'projects/{project_id}'
@@ -184,14 +184,17 @@ def delete_custom_roles():
         if 'roles' in response:
             roles = response['roles']
             if len(roles)!=0:
+                global NONCE
+                print(f'Deleting custom roles {NONCE}')
                 pattern = f'projects/{project_id}/roles/ct'
                 for role in roles:
-                    if re.search(rf"{pattern}[0-9]_access_role_{NONCE}", role['name'], re.IGNORECASE):
+                    if re.search(rf"{pattern}[0-9]*_access_role_{NONCE}", role['name'], re.IGNORECASE):
                         print(role['name'])
                         try:
                             service.projects().roles().delete(name= role['name']).execute()
                         except Exception as e:
                             print('Delete error: '+str(e))
+                
     except Exception as e: 
         print('Error: '+str(e))
 
@@ -200,6 +203,7 @@ def destroy():
     print('Deleting entities')
     try:
         client = datastore.Client()
+        global KINDS
         for k in KINDS:
             print(str(KINDS))
             query = client.query(kind=KINDS[k])
