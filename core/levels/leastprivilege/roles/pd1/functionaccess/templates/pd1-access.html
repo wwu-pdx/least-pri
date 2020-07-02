@@ -64,9 +64,9 @@
     <h4>Source code of function that checks what roles bind with {{prefix}}-access :</h4>
   </div>
   <div class="code">
-  <pre >name = f'{RESOURCE_PREFIX}-bucket-{NONCE}'
-  request = storage_api.objects().list(bucket=name).execute()["items"][0]
-  bucket = name + ' :  ' + request["name"]</pre>
+<pre >name = f'{RESOURCE_PREFIX}-bucket-{NONCE}'
+request = storage_api.objects().list(bucket=name).execute()["items"][0]
+bucket = name + ' :  ' + request["name"]</pre>
   </div>
   </div>
   
