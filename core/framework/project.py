@@ -203,6 +203,8 @@ def _enable_data_access_audit_logs(credentials, project_id, service):
             },
             "updateMask": "auditConfigs,etag"
         }
+
+        print(str(set_iam_policy_request_body))
         #set iam policy to enable data access audit logs
         set_iam = service.projects().setIamPolicy(resource=resource, body=set_iam_policy_request_body).execute()
         print(str(set_iam))
