@@ -117,7 +117,7 @@ def setup_project():
                          'targetTags': ['http-server']}
         compute_api.firewalls().insert(project=project_id, body=firewall_body).execute()
     
-    services_logtypes = {"storage.googleapis.com":[],"compute.googleapis.com":[],"logging.googleapis.com":["ADMIN_READ","DATA_READ"]}
+    services_logtypes = {"storage.googleapis.com":[],"compute.googleapis.com":[],"logging.googleapis.com":["DATA_READ"]}
     _enable_data_access_audit_logs(credentials, project_id, services_logtypes)
     
 
