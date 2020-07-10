@@ -26,7 +26,7 @@ FARS = {
          'pd2':['roles/compute.viewer'],
          'pd3':['roles/logging.viewer'],
          'pd4':['roles/datastore.viewer'],
-         'pd5':['roles/datastore.user','roles/storage.objectAdmin']
+         'pd5':['roles/datastore.user','roles/storage.objectAdmin'],
          'ct1':['storage.buckets.list','compute.instances.list'],
          'ct2':['storage.objects.list'],
          'ct3':['compute.instances.list'],
