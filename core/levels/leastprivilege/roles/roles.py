@@ -21,12 +21,12 @@ LEVEL_NAMES = {'pr':'PrimitiveRole-Project','pd1':'PredefinedRole-Storage','pd2'
                 'pd3':'PredefinedRole-Logging','pd4':'PredefinedRole-Datastore', 'pd5': 'PredefinedRole-Vision',
                'ct1':'CustomRole-Project','ct2':'CustomRole-Storage','ct3':'CustomRole-Compute','ct4':'CustomRole-Logging'}
 FARS = {
-         'pr':'roles/viewer',
-         'pd1':'roles/storage.objectViewer',
-         'pd2':'roles/compute.viewer',
-         'pd3':'roles/logging.viewer',
-         'pd4':'roles/datastore.viewer',
-         'pd5':'roles/datastore.viewer',
+         'pr':['roles/viewer'],
+         'pd1':['roles/storage.objectViewer'],
+         'pd2':['roles/compute.viewer'],
+         'pd3':['roles/logging.viewer'],
+         'pd4':['roles/datastore.viewer'],
+         'pd5':['roles/datastore.user','roles/storage.objectAdmin']
          'ct1':['storage.buckets.list','compute.instances.list'],
          'ct2':['storage.objects.list'],
          'ct3':['compute.instances.list'],
@@ -34,6 +34,7 @@ FARS = {
         }
 KINDS = ['pd4']
 BUCKETS = ['pd1','ct2']
+#entires created in cloud function
 F_KINDS =['pd5']
 
 

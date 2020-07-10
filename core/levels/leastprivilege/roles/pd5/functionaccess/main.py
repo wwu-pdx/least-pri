@@ -1,5 +1,5 @@
 #https://github.com/GoogleCloudPlatform/python-docs-samples/blob/master/codelabs/flex_and_vision/main.py
-from flask import render_template
+from flask import render_template,redirect
 def main(request):
 	from googleapiclient import discovery
 	import google.oauth2.service_account
@@ -28,11 +28,13 @@ def main(request):
 	url=f'https://{FUNCTION_REGION}-{PROJECT_ID}.cloudfunctions.net/{RESOURCE_PREFIX}-f-check-{NONCE}'
 	#upload url
 	up_url = f'/{RESOURCE_PREFIX}-f-access-{NONCE}'
-	err_build=[]
-	err_query=[]
+	err_build=request.args['err_build'] if request.args and 'err_build' in request.args else ''
+	err_query=''
 	
 	if request.files and 'file' in request.files:
+		err = ''
 		try:
+			
 			photo = request.files['file']
 
 			# Create a Cloud Storage client.
@@ -95,14 +97,13 @@ def main(request):
 			# Save the new entity to Datastore.
 			datastore_client.put(entity)
 		except Exception as e:
-			err_build.append(str(e))
+			err=str(e)
+			err_url = f'{up_url}/?err_build={err}'
+			return redirect(err_url)
 
-	
-	
-	
-	
-	
-	
+		
+		return redirect(up_url)
+
 	try:
 		#Build datastore REST API python object
 		client = datastore.Client(credentials=credentials )
@@ -111,7 +112,7 @@ def main(request):
 		image_entities = list(query.fetch())
 
 	except Exception as e:
-		err_query.append(str(e))
+		err_query=str(e)
 	
 	
 	
