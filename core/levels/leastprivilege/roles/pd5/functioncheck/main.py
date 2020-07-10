@@ -45,17 +45,20 @@ def main(request):
 		err = str(e)
 		return render_template(f'{RESOURCE_PREFIX}-check.html',  pers=permissions, msg=msg, err=err, prefix=RESOURCE_PREFIX,level_name=LEVEL_NAME,nonce=NONCE)
 	
-	
-	if  len(PRI)  > len(roles):
-		msg='Not sufficient roles, please try again!'
-	elif  len(PRI)  < len(roles):
-		msg='Too many roles, please try again!'
-	else :
-		msg='Congratulations! You got the least privilege role.'
-		for p in PRI:
-			if p not in roles:
-				msg='Not least privilege, please try again!'
-				break
+	if 'roles/owner' in roles:
+		msg='You have project owner role attached, please try again!'
+	else:
+
+		if  len(PRI)  > len(roles):
+			msg='Not sufficient roles, please try again!'
+		elif  len(PRI)  < len(roles):
+			msg='Too many roles, please try again!'
+		else :
+			msg='Congratulations! You got the least privilege role.'
+			for p in PRI:
+				if p not in roles:
+					msg='Not least privilege, please try again!'
+					break
 	
 	# Build iam  REST API python object
 	service_i = discovery.build('iam','v1', credentials=credentials)

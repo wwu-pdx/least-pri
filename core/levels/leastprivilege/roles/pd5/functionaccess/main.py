@@ -30,6 +30,7 @@ def main(request):
 	up_url = f'/{RESOURCE_PREFIX}-f-access-{NONCE}'
 	err_build=request.args['err_build'] if request.args and 'err_build' in request.args else ''
 	err_query=''
+	image_entities = []
 	
 	if request.files and 'file' in request.files:
 		err = ''
