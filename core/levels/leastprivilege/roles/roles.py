@@ -236,7 +236,8 @@ def delete_custom_roles(credentials, project_id):
 def  delete_entities(project_id):
     print('Deleting entities')
     nonce = read_nonce()
-    all_kinds = KINDS
+    all_kinds = []
+    all_kinds .extend(KINDS)
     all_kinds.extend(F_KINDS)
     try:
         client = datastore.Client()
