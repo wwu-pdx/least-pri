@@ -28,12 +28,13 @@ def main(request):
 	url=f'https://{FUNCTION_REGION}-{PROJECT_ID}.cloudfunctions.net/{RESOURCE_PREFIX}-f-check-{NONCE}'
 	#upload url
 	up_url = f'/{RESOURCE_PREFIX}-f-access-{NONCE}'
-	err_build=request.args['err_build'] if request.args and 'err_build' in request.args else ''
+	#err_build=request.args['err_build'] if request.args and 'err_build' in request.args else ''
+	err_build = ''
 	err_query=''
 	image_entities = []
 	
 	if request.files and 'file' in request.files:
-		err = ''
+		
 		try:
 			
 			photo = request.files['file']
@@ -98,12 +99,10 @@ def main(request):
 			# Save the new entity to Datastore.
 			datastore_client.put(entity)
 		except Exception as e:
-			err=str(e)
-			err_url = f'{up_url}/?err_build={err}'
-			return redirect(err_url)
+			err_build = str(e)
 
-		
-		return redirect(up_url)
+		if err_build == '':
+			return redirect(up_url)
 
 	try:
 		#Build datastore REST API python object
