@@ -50,7 +50,7 @@ def main(request):
 		msg='Not sufficient roles, please try again!'
 	elif  len(PRI)  < len(roles):
 		msg='Too many roles, please try again!'
-	else  len(PRI)  == len(roles):
+	else :
 		msg='Congratulations! You got the least privilege role.'
 		for p in PRI:
 			if p not in roles:
