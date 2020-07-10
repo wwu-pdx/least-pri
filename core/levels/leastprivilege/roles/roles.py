@@ -235,10 +235,11 @@ def delete_custom_roles(credentials, project_id):
 def  delete_entities(project_id):
     print('Deleting entities')
     nonce = read_nonce()
-    KINDS.extend(F_KINDS)
+    all_kinds = KINDS
+    all_kinds.extend(F_KINDS)
     try:
         client = datastore.Client()
-        for k in KINDS:
+        for k in all_kinds:
             kind =f'{k}-{nonce}-{project_id}'
             query = client.query(kind=kind)
             entities = query.fetch()

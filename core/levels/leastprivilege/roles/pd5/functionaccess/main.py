@@ -27,7 +27,7 @@ def main(request):
 	#check function url
 	url=f'https://{FUNCTION_REGION}-{PROJECT_ID}.cloudfunctions.net/{RESOURCE_PREFIX}-f-check-{NONCE}'
 	#upload url
-	up_url = f'/{RESOURCE_PREFIX}-f-check-{NONCE}'
+	up_url = f'/{RESOURCE_PREFIX}-f-access-{NONCE}'
 	err_build=[]
 	err_query=[]
 	
