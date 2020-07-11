@@ -256,7 +256,7 @@ resources:
 
     - service_account_id: ct5-access
       role:
-        name: roles/datastore.admin
+        name: roles/datastore.owner
 
     - service_account_id: ct5-check
       role:
