@@ -95,7 +95,25 @@ def main(request):
 									scores[l] += 10	
 									sum_score += scores[l]
 			else:
-				
+				if role_name in level_bindings[l]:
+					correct_bindings = [role_name]
+					correct_bindings.extend(ANWS[l]['predefined'])
+					if len(level_bindings[l])==len(correct_bindings) and collections.Counter(level_bindings[l]) == collections.Counter(correct_bindings):
+						scores[l] += 5 
+						sum_score += scores[l]
+
+					for role in roles:
+						if role['name'] == role_name:
+							permissions = role['includedPermissions']
+							if len(permissions)==len(ANWS[l]['custom']):
+								least = True
+								for p in ANWS[l]['custom']:
+									if p not in permissions:
+										least = False
+										break	
+								if least == True:
+									scores[l] += 5	
+									sum_score += scores[l]
 
 	
 		
