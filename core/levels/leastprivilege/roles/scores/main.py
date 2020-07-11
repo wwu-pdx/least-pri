@@ -115,8 +115,4 @@ def main(request):
 									scores[l] += 5	
 									sum_score += scores[l]
 
-	
-		
-
-		
 	return render_template(f'scores.html', scores=scores, user=LOGIN_USER, err=err, level_names=LEVEL_NAMES, total=total, sum_score=sum_score,nonce=NONCE,c_urls=c_urls,a_urls=a_urls )
