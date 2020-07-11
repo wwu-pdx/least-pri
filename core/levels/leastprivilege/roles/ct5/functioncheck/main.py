@@ -55,6 +55,16 @@ def main(request):
 		err = str(e)
 		return render_template(f'{RESOURCE_PREFIX}-check.html',  pers=permissions, msg=msg, err=err, prefix=RESOURCE_PREFIX,level_name=LEVEL_NAME,nonce=NONCE)
 	
+	# Build iam  REST API python object
+	service_i = discovery.build('iam','v1', credentials=credentials)
+	
+	try:
+		for rn in p_roles:
+			permissions[rn] = service_i.roles().get(name=rn).execute()["includedPermissions"]
+	except Exception as e: 
+		msg ='There is an error'
+		err = str(e)
+		return render_template(f'{RESOURCE_PREFIX}-check.html',  pers=permissions, msg=msg, err=err, prefix=RESOURCE_PREFIX,level_name=LEVEL_NAME,nonce=NONCE)
 
 	if len(c_roles)==0:
 		msg = f'Did not find custom role attached to {RESOURCE_PREFIX}-access Role '
@@ -67,19 +77,9 @@ def main(request):
 		return render_template(f'{RESOURCE_PREFIX}-check.html',  pers=permissions, msg=msg, rn=role_name, err=err,prefix=RESOURCE_PREFIX, level_name=LEVEL_NAME, nonce=NONCE)
 		
 	else:
-		# Build iam  REST API python object
-		service_i = discovery.build('iam','v1', credentials=credentials)
-
 		
 		try:
-			for rn in permissions:
-				permissions[rn] = service_i.roles().get(name=rn).execute()["includedPermissions"]
-		except Exception as e: 
-			msg ='There is an error'
-			err = str(e)
-
-		try:
-			roles = service.projects().roles().list(parent= parent, view = 'FULL', showDeleted = False).execute()['roles']
+			roles = service_i.projects().roles().list(parent= parent, view = 'FULL', showDeleted = False).execute()['roles']
 			for role in roles:
 				if role['name'] == role_name:
 					permissions[role_name] = role['includedPermissions']
@@ -87,7 +87,7 @@ def main(request):
 		except Exception as e: 
 			msg ='There is an error'
 			err = str(e)
-
+			
 
 		if msg =='':
 			if len(p_roles)!=len(P_PRI):
