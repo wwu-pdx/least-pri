@@ -80,19 +80,22 @@ def main(request):
 		else:
 			#role name
 			role_name = f'projects/{PROJECT_ID}/roles/{l}_access_role_{NONCE}'
-			if len(level_bindings[l])==1 and level_bindings[l][0] == role_name:
-				for role in roles:
-					if role['name'] == role_name:
-						permissions = role['includedPermissions']
-						if len(permissions)==len(ANWS[l]):
-							least = True
-							for p in ANWS[l]:
-								if p not in permissions:
-									least = False
-									break	
-							if least == True:
-								scores[l] += 10	
-								sum_score += scores[l]
+			if 'predefined' not in ANWS[l]:
+				if len(level_bindings[l])==1 and level_bindings[l][0] == role_name:
+					for role in roles:
+						if role['name'] == role_name:
+							permissions = role['includedPermissions']
+							if len(permissions)==len(ANWS[l]):
+								least = True
+								for p in ANWS[l]:
+									if p not in permissions:
+										least = False
+										break	
+								if least == True:
+									scores[l] += 10	
+									sum_score += scores[l]
+			else:
+				
 
 	
 		

@@ -46,9 +46,10 @@ def main(request):
 		for r in bindings:
 			if sa in r['members'] and r['role'].startswith('roles/') :
 				p_roles.append(r['role'])
+				permissions[r['role']]=[]
 			if sa in r['members'] and r['role'].startswith(f'projects/{PROJECT_ID}/roles/') :
 				c_roles.append(r['role'])
-			permissions[r['role']]=[]
+				permissions[r['role']]=[]
 	except Exception as e: 
 		msg ='There is an error'
 		err = str(e)
