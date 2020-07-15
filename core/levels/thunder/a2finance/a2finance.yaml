@@ -47,3 +47,7 @@ resources:
     - service_account_id: a2-logging-instance-sa
       role:
         name: roles/logging.viewer
+
+    - service_account_id: a2-logging-instance-sa
+      role:
+        name: roles/logging.logWriter
