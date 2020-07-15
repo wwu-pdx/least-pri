@@ -182,7 +182,7 @@ def _wait_for_api_op(op_name, services_api):
 def _enable_data_access_audit_logs(credentials, project_id, services_logtypes):
     new_auditConfigs=[]
     for service in services_logtypes:
-        if len(services_logtypes[service]) === "all":
+        if services_logtypes[service] == "all":
             auditConfig = {
                 "service": service,
                 "auditLogConfigs": [
