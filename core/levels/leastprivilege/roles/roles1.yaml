@@ -275,7 +275,6 @@ resources:
         - iam.roles.list
         - resourcemanager.projects.getIamPolicy
 
-        
-        
+
 
 
