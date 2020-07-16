@@ -311,6 +311,8 @@ def _wait_for_operation2(op_name, deployment_api, project_id, level_path=None):
         print("\nSecond try of deploymnent")
         level_module = levels.import_level(level_path)
         level_module.destroy()
+        sys.exit()
+        level_module = levels.import_level(level_path)
         level_module.create(False)
         
     
