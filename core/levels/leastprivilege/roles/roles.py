@@ -117,31 +117,30 @@ def create(second_deploy=True):
     else:
         deployments.insert(LEVEL_PATH, template_files=template_files, config_template_args=config_template_args)
 
-      # Insert secret into bucket
-    storage_client = storage.Client()
-    for b in BUCKETS:
-        bucket_name = f'{b}-bucket-{nonce}'
-        secret = levels.make_secret(LEVEL_PATH)
-        bucket = storage_client.get_bucket(bucket_name)
-        secret_blob = storage.Blob(f'secret_{b}.txt', bucket)
-        secret_blob.upload_from_string(secret)
-
-    
-
-    # Create and insert data in datastore
-    for k in KINDS:
-        entities =[{'name': f'admin-{k}','password': 'admin1234','active': True},{'name': f'editor-{k}','password': '1111','active': True}]
-        kind =f'{k}-{nonce}-{project_id}'
-        client = datastore.Client(project_id)
-        for entity in entities:
-            entity_key = client.key(kind)
-            task = datastore.Entity(key=entity_key)
-            task.update(entity)
-            client.put(task)
-        #print(f'Datastore {kind}  created')
-    
-
     try:
+        # Insert secret into bucket
+        storage_client = storage.Client()
+        for b in BUCKETS:
+            bucket_name = f'{b}-bucket-{nonce}'
+            secret = levels.make_secret(LEVEL_PATH)
+            bucket = storage_client.get_bucket(bucket_name)
+            secret_blob = storage.Blob(f'secret_{b}.txt', bucket)
+            secret_blob.upload_from_string(secret)
+
+        
+
+        # Create and insert data in datastore
+        for k in KINDS:
+            entities =[{'name': f'admin-{k}','password': 'admin1234','active': True},{'name': f'editor-{k}','password': '1111','active': True}]
+            kind =f'{k}-{nonce}-{project_id}'
+            client = datastore.Client(project_id)
+            for entity in entities:
+                entity_key = client.key(kind)
+                task = datastore.Entity(key=entity_key)
+                task.update(entity)
+                client.put(task)
+            #print(f'Datastore {kind}  created')
+    
         levels.write_start_info(LEVEL_PATH, start_message)
         
     except Exception as e: 
