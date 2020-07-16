@@ -40,7 +40,7 @@ BUCKETS = ['pd1','ct2']
 F_KINDS =['pd5','ct5']
 
 
-def create(second_deploy=False):
+def create(second_deploy=True):
 
     # Create randomized bucket name to avoid namespace conflict
     nonce = str(random.randint(100000000000, 999999999999))
@@ -112,7 +112,10 @@ def create(second_deploy=False):
     msg= f'https://{FUNCTION_LOCATION}-{project_id}.cloudfunctions.net/scores-f-{nonce}'
     start_message += '\n Or access levels through Score Board: \n'+ msg+'\n'
 
-    deployments.insert(LEVEL_PATH, template_files=template_files, config_template_args=config_template_args)
+    if second_deploy:
+        deployments.insert(LEVEL_PATH, template_files=template_files, config_template_args=config_template_args, second_deploy=True)
+    else:
+        deployments.insert(LEVEL_PATH, template_files=template_files, config_template_args=config_template_args)
 
       # Insert secret into bucket
     storage_client = storage.Client()
