@@ -121,7 +121,8 @@ def setup_project():
     services_logtypes = {"storage.googleapis.com":"all",
                          "compute.googleapis.com":"all",
                          "logging.googleapis.com":["DATA_READ"],
-                         "iam.googleapis.com":"all"}
+                         "iam.googleapis.com":"all",
+                         "cloudfunctions.googleapis.com":"all"}
     confirmed = 'y' == input(
             f'Turn on audit logging for selected services {services_logtypes}? [y/n]: ').lower().strip()[0]
     if(confirmed):
