@@ -231,6 +231,7 @@ def _wait_for_operation2(op_name, deployment_api, project_id, level_path=None):
         project=project_id,
         operation=op_name).execute()
     if 'error' in operation and level_path:
+        print( str(operation['error']))
         print("\nDeployment Error:\n" + yaml.dump(operation['error']))
         print("\nSecond try of deploymnent")
         level_module = levels.import_level(level_path)
