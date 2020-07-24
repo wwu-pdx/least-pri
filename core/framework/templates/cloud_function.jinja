@@ -29,9 +29,9 @@ resources:
       bindings:
       {% for binding in properties['policyBindings'] %}
       - role: {{ binding['role'] }}
-      {% if binding['service_account_id'] == 'allusers' %}
+      {% if binding['service_account_id'] == 'allauthenticatedusers' %}
         members:
-        - allUsers
+        - allAuthenticatedUsers 
       {% else %}
         members:
         - serviceAccount:$(ref.{{ binding['service_account_id'] }}.email)
