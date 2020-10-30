@@ -35,7 +35,7 @@
 <ul>
   <li>Level service account {{prefix}}-f-access-{{nonce}}-sa is bound with an over-privileged <b>Predefined Role</b> to list an object(txt file) in a Cloud Storage Bucket.</li>
   <li>Your goal is to find a <b>Predefined Role</b> with minimum permissions but still enough to list the object.</li>
-  <li>Load the <a href="{{url}}" target="_blank">check function</a> to view current role and permissions of {{prefix}}-f-access-{{nonce}}-sa.</li>
+  <li>Use the <a href="{{url}}" target="_blank">check function</a> to view role and permissions of {{prefix}}-f-access-{{nonce}}-sa.</li>
   <li>Go to google cloud console IAM&Admin -> IAM -> MEMBERS, click the pencil icon to edit service acount {{prefix}}-f-access-{{nonce}}-sa in the table.</li>
   <li>Replace the current role with the new one you found. To keep the process simple, do not leave the service account with empty role.
     <br>Because if all roles are removed, service account will disappear from the IAM memeber table 

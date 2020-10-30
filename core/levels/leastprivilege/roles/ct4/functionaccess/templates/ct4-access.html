@@ -34,10 +34,10 @@
 
 <div class="ins">
 <ul>
-  <li>Level service account {{prefix}}-f-access-{{nonce}}-sa is bound with a Predefined Role to list Cloud Logging Entries in the project.</li>
+  <li>Level service account {{prefix}}-f-access-{{nonce}}-sa is bound with an over-privileged Predefined Role to list Cloud Logging Entries in the project.</li>
   <li>Your goal is to replace the Predefined Role with a <b>Custom Role</b> which has minimum permission(s) that is(are) just enough to list log entries</li>
   <li>Use the <a href="{{url}}" target="_blank">check function</a> to view permissions of {{prefix}}-f-access-{{nonce}}-sa.</li>
-  <li>Go to IAM&Admin -> Roles in google cloud console, create a new role with ID <b>{{prefix}}_access_role_{{nonce}}</b> and attach the least privilege permission.
+  <li>Go to IAM&Admin -> Roles in google cloud console, create a custom role with ID <b>{{prefix}}_access_role_{{nonce}}</b> and attach the least privilege permission.
     <br><b>Hint:</b> Look for a permission under a <a href="https://cloud.google.com/logging/docs/access-control" target="_blank"><b>Predefined Cloud Logging Role</b></a> in google doc.
  </li> 
   <li>Go to IAM&Admin -> IAM -> MEMBERS, click the pencil icon to edit service acount {{prefix}}-f-access-{{nonce}}-sa in the table.</li>
