@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 
@@ -53,7 +54,9 @@ gcloud config set project [PROJECT-ID] </pre>
       <pre>
 virtualenv -v env-tctf
 source env-tctf/bin/activate
-cd [your directory]
+#We suggest to upload source code into your own repo or Google Cloud Console
+git clone https://an-anonymous-ropo/leastpri-ctf.git
+cd leastpri-ctf
 pip3 install -r requirements.txt
 python3 thunder.py activate_project  $GOOGLE_CLOUD_PROJECT</pre>
 <p>A full list of commands can be found by running: </p>
