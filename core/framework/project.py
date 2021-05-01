@@ -30,8 +30,8 @@ def test_application_default_credentials(tctf_project=None):
     # Try to extract application default credentials
     try:
         credentials, project_id = google.auth.default()
-    except google.auth.exceptions.DefaultCredentialsError:
-        exit('Application default credentials not set. To set credentials, run:\n'
+    except (google.auth.exceptions.DefaultCredentialsError, google.auth.exceptions.RefreshError):
+        exit('Application default credentials not valid. To set credentials, run:\n'
              '  gcloud auth application-default login')
 
     # Make sure application default project is the same as the project in thunder ctf config
@@ -151,7 +151,7 @@ def check_app_engine():
         found = True
     except Exception as e:
         #print(str(e))
-        print('Project App Engine does not found')
+        print('App Engine not configured')
 
     return found
 
