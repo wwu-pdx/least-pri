@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Least Privilege-Thunder CTF</title>
+  <link rel="stylesheet" type="text/css" href="static/style.css">
+  </link>
+  <link href='https://fonts.googleapis.com/css?family=Nova+Square' rel='stylesheet' type='text/css'>
+  </link>
+  <link href='https://fonts.googleapis.com/css?family=Roboto:400,500,300' rel='stylesheet' type='text/css'>
+  </link>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  </meta>
+</head>
+
+<body>
+  <header class="banner" style="top: 5px">
+    <div id="nav">
+      <h1 style="margin-top:0px;">Thunder CTF<br><small style="font-size:0.6em">Least Privilege</small></h1>
+    </div>
+  </header>
+    <h2 class="toggle toggle_lst"> Thunder CTF - Least Privilege</h2>
+
+    <br >
+
+    <div class=hints>
+        <div>
+          <span id="prev" class="hintbanner hintbutton buttondisabled">Prev</span>
+          <span id="hint_title" class="hintbanner hintbannertext"></span>
+          <span id="next" class="hintbanner hintbutton">Next</span>
+        </div>
+        <div id="hint_display" class="hintdisplay">
+        </div>
+        <div>
+          <span id="writeup_button" class="hintbanner writeupbutton">Show Level Writeup</span>
+        </div>
+      </div>
+  </div>
+
+  <p></p>
+  <footer class="bottombanner"></footer>
+  <ul id="hint_content" style="display: none">
+    <li>
+      <span>leastprivilege/roles</span>
+      <h3>Setup:</h3>
+      <p>First, <a class="inline" href="https://cloud.google.com/resource-manager/docs/creating-managing-projects">create a new google cloud project</a> and and enable <a class="inline" href="https://cloud.google.com/billing/docs/how-to/modify-project">billing</a> for it. The deployment should ideally be done on a new to ensure that playing the levels won't affect your existing or future work on GCP.  Players new to Google Cloud can get a free $300 credit <a class="inline" style="font-size: 1em;" href="https://cloud.google.com/free">here</a>.
+     </p>
+      <p>Second, the CTF is played through Cloud Shell which is accessible in the <a style="font-size: 1em;" class="inline" href="https://console.cloud.google.com">GCP console</a> by clicking on the <a style="font-size: 1em;" class="inline" >Cloud Shell icon<img src="img/index/cloudshell.png"></a>.  Open Cloud Shell and run the following commands to set up the CTF:
+      </p>
+      <pre>
+# Optional: Can skip if cloud shell is started from the project you want to use
+gcloud config set project [PROJECT-ID] </pre>
+      <pre>
+virtualenv -v env-tctf
+source env-tctf/bin/activate
+cd [your directory]
+pip3 install -r requirements.txt
+python3 thunder.py activate_project  $GOOGLE_CLOUD_PROJECT</pre>
+<p>A full list of commands can be found by running: </p>
+        <pre>python3 thunder.py help</pre>
+      <h3>Deploy:</h3>
+      <p>You are now ready to play. Create level with command below:</p>
+      <pre>python3 thunder.py create leastprivilege/roles</pre>
+        <h3>Level Access:</h3>
+        <p>If deployment is successful,  a list of function entrypoints will be printed in Cloud Shell. You can also find them in start/roles.txt .  Click each entrypoint link to see its associated level instruction. Note: If level requires creating custom role, you have to create the role with the exact ID specified in level instruction </p>
+        <h3>Destroy:</h3>
+        <p>Don't forget to destroy levels after you are done using the command below:</p>
+        <pre>python3 thunder.py destroy</pre>
+    </li>
+  </ul>
+  <div id="writeup_content" style="display: none">
+    <p><a href="https://cloud.google.com/iam/docs/understanding-roles">Understanding Google Cloud IAM Roles</a>  </p>
+  </div>
+  <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+  <script src="static/slideshow.js"></script>
+  <script src="static/bannercollapse.js"></script>
+  <script>$(".inline").attr("target","_blank")</script>
+</body>
+
+</html>
